@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "18703607703",
+    "project_id": "valli-di-comacchio",
+    "storage_bucket": "valli-di-comacchio.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:18703607703:android:55e1c4d70bb872f62bc6d2",
+        "android_client_info": {
+          "package_name": "com.example.valli_di_comacchio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1kNd1qZh4eNv81X-wlewOYdEL-hawzhE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
