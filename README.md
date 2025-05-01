@@ -11,3 +11,4 @@ flutter fire:
 1) dart pub global activate flutterfire_cli
 2) login flutter cli with and account with access to the project "valli-di-comacchio"
 3) flutterfire configure --project=valli-di-comacchio --account richy.gardenghi@gmail.com
+4) fluttergen

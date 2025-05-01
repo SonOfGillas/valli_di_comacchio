@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app.dart';
 import 'package:valli_di_comacchio/app/shared/core/app_state/app_bloc.dart';

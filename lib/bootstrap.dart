@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -47,7 +46,11 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       //   DartPingIOS.register();
       // }
 
-      await dotenv.load();
+      try {
+        await dotenv.load(fileName: ".env");
+      } catch (e) {
+        log('Error loading .env file: $e');
+      }
 
       return runApp(await builder());
     },
