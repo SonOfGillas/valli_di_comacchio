@@ -32,7 +32,7 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         log(details.exceptionAsString(), stackTrace: details.stack);
       };
 
-      final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      // final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
       // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       Bloc.observer = const AppBlocObserver();
