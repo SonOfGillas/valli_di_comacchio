@@ -5,6 +5,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('HomePage build');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Page'),
@@ -15,7 +16,9 @@ class HomePage extends StatelessWidget {
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
+              style: TextStyle(fontSize: 20, color: Colors.black),
             ),
+
             // const Text(
             //   '$_counter',
             //   style: Theme.of(context).textTheme.headlineMedium,

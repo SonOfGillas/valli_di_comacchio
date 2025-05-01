@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:valli_di_comacchio/app/shared/core/dependecy_injection/injection_container.dart';
+import 'package:valli_di_comacchio/firebase_options.dart';
 
 class AppBlocObserver extends BlocObserver {
   const AppBlocObserver();
@@ -31,14 +33,14 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       };
 
       final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+      // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       Bloc.observer = const AppBlocObserver();
       await initServiceLocator();
 
-      // await Firebase.initializeApp(
-      //   options: DefaultFirebaseOptions.currentPlatform,
-      // );
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
 
       // await FirebaseApi.instance.initNotification();
 
