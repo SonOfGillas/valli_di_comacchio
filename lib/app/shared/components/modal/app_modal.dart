@@ -43,7 +43,7 @@ class AppModal extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ColoredBox(
-                color: AppColors.palette_dark,
+                color: AppColors.palette_secondary,
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 16, horizontal: 16),

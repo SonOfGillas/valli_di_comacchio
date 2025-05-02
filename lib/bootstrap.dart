@@ -32,8 +32,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
         log(details.exceptionAsString(), stackTrace: details.stack);
       };
 
-      // final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-      // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+      final widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       Bloc.observer = const AppBlocObserver();
       await initServiceLocator();
@@ -53,6 +53,8 @@ Future<void> bootstrap(FutureOr<Widget> Function() builder) async {
       } catch (e) {
         log('Error loading .env file: $e');
       }
+
+      FlutterNativeSplash.remove();
 
       return runApp(await builder());
     },
