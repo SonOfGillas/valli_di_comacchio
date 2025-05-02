@@ -15,6 +15,4 @@ class Config {
   }
 
   String get baseUrl => env.dotenv.get('BASE_URL');
-  String? get startupPage => env.dotenv.get('STARTUP_PAGE');
-  String get baseAuthToken => env.dotenv.get('BASE_AUTH_TOKEN');
 }

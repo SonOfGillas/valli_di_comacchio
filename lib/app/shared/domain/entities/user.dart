@@ -11,6 +11,8 @@ class User {
   final String name;
   final String surname;
 
+  // fama? relazioni npc
+
   Map<String, dynamic> toJson() => {
         'code': code,
         'email': email,
