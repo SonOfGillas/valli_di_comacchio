@@ -1,5 +1,5 @@
 import 'package:get_it/get_it.dart';
-import 'package:valli_di_comacchio/app/shared/core/app_state/app_bloc.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_bloc.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 

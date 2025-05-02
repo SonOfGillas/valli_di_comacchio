@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:valli_di_comacchio/app/shared/core/app_state/app_state.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
