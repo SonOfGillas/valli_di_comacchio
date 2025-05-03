@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 abstract class TradeEvent extends Equatable {
   const TradeEvent();
@@ -6,13 +7,13 @@ abstract class TradeEvent extends Equatable {
 
 class LoadTradeData extends TradeEvent {
   const LoadTradeData({
-    required this.tradeId,
+    required this.npcId,
   });
 
-  final String tradeId;
+  final String npcId;
 
   @override
-  List<Object?> get props => [tradeId];
+  List<Object?> get props => [npcId];
 }
 
 class SelectTradeResource extends TradeEvent {
@@ -20,43 +21,31 @@ class SelectTradeResource extends TradeEvent {
     required this.resource,
   });
 
-  final String resource;
+  final TradeResourceInventory resource;
 
   @override
   List<Object?> get props => [resource];
 }
 
 class BuyTradeResource extends TradeEvent {
-  const BuyTradeResource({
-    required this.resource,
-  });
-
-  final String resource;
+  const BuyTradeResource();
 
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [];
 }
 
 class SellTradeResource extends TradeEvent {
-  const SellTradeResource({
-    required this.resource,
-  });
-
-  final String resource;
+  const SellTradeResource();
 
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [];
 }
 
 class TradeResourceAcceptOffert extends TradeEvent {
-  const TradeResourceAcceptOffert({
-    required this.resource,
-  });
-
-  final String resource;
+  const TradeResourceAcceptOffert();
 
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [];
 }
 
 class TradeResourceSetPrice extends TradeEvent {
@@ -93,12 +82,7 @@ class TradeResourceMotivation extends TradeEvent {
 }
 
 class TradeResourceCounterOffer extends TradeEvent {
-  const TradeResourceCounterOffer({
-    required this.resource,
-  });
-
-  final String resource;
-
+  const TradeResourceCounterOffer();
   @override
-  List<Object?> get props => [resource];
+  List<Object?> get props => [];
 }

@@ -1,6 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_bloc.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source_mock.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source_mock.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
 final sl = GetIt.instance;
@@ -14,5 +19,24 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<Config>(
       Config.new,
     )
-    ..registerLazySingleton<AppCubit>(() => AppCubit(appStorage: sl()));
+
+    // Data Sources
+    ..registerLazySingleton<UserDataSource>(
+      () => UserDataSourceMock(),
+    )
+    ..registerLazySingleton<ResourcesInventoryDataSource>(
+      () => ResourcesInventoryDataSourceMock(),
+    )
+
+    // Repositories
+    ..registerLazySingleton<UserRepository>(
+      () => UserRepository(
+        userDataSource: sl(),
+        resourcesInventoryDataSource: sl(),
+      ),
+    )
+
+    // AppState
+    ..registerLazySingleton<AppCubit>(
+        () => AppCubit(appStorage: sl(), userRepository: sl()));
 }
