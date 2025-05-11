@@ -1,5 +1,4 @@
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_offer.dart';
 
 class User {
   const User({

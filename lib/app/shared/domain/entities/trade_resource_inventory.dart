@@ -5,6 +5,11 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.da
 import 'package:valli_di_comacchio/app/shared/domain/utils/need_generation_functions.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/production_generation_functions.dart';
 
+/*
+* this class represents the trade resource in the inventory of an NPC .
+* it extends the information of the trade resource with the amount of resource that the npc has and needs.
+* it also has a method to calculate the demand of the resource.
+*/
 class TradeResourceInventory extends Equatable {
   const TradeResourceInventory._({
     required this.tradeResource,
@@ -57,17 +62,30 @@ class TradeResourceInventory extends Equatable {
   }
 
   /*
-  * demandNormalized is a number between -1 and 1 that represents the demand of the resource 
-  * 1 means that the resource is needed in a large amount
-  * -1 means that the npc wants to get rid of the resource
+  * the user is buying a resource from the npc
   */
-  double get demandNormalized {
-    final double min = -tradeResource.maxProduction;
-    final double max = tradeResource.maxNeed;
-    final double value = demand.toDouble();
+  int demandAfterBuingTransaction(int transactionAmount) {
+    if (needs == null || storage == null || transactionAmount < 0) {
+      return demand;
+    } else {
+      return (needs! - (storage! - transactionAmount));
+    }
+    // TODO: check NPC balance
+  }
 
-    // Normalize demand between -1 and 1
-    return (value - min) / (max - min) * 2 - 1;
+  /*
+  * the user is selling a resource to the npc
+  */
+  int demandAfterSellingTransaction(int transactionAmount) {
+    if (needs == null || storage == null || transactionAmount < 0) {
+      return demand;
+    } else if (storage! - transactionAmount < 0) {
+      // If the storage is less than the transaction amount, it means that the NPC can't sell that amount
+      // TODO: Throw and exception
+      return 0;
+    } else {
+      return (needs! - (storage! + transactionAmount));
+    }
   }
 
   @override

@@ -1,6 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/app_translations.dart';
 
+/*
+* this class represents the trade resource in the game.
+* it is used to define the resources that can be traded in the game.
+* it has a name, an icon, a base price and a maximum need.
+*/
 class TradeResource extends Equatable {
   const TradeResource({
     required this.id,

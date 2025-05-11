@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
+
 /*
 * This function calculates the price change based on the demand.
 * the price_change is a precentage of increase or decrease of the price
@@ -21,4 +23,11 @@ int getPriceChageFunction(double demandNormalized) {
   final term4 = 0.3 * demandPercentage - 10;
 
   return (term1 + term2 + term3 + term4).toInt();
+}
+
+int getPrice(TradeResource tradeResource, double demandNormalized) {
+  final priceChange = getPriceChageFunction(demandNormalized);
+  final basePrice = tradeResource.basePrice;
+  final price = basePrice + (basePrice * priceChange / 100);
+  return price.toInt();
 }
