@@ -1,11 +1,11 @@
-import 'dart:math';
-
-import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/need_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_generation.dart';
 
 class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
   @override
@@ -14,8 +14,8 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
         .map(
           (tradeResource) => TradeResourceInventory(
             tradeResource: tradeResource,
-            defultPrice: Random().nextInt(100),
-            totalQuantity: Random().nextInt(20),
+            defaultProductionLevel: getRndProductionLevel(),
+            defaultNeedLevel: getRndNeedLevel(),
           ),
         )
         .toList();
@@ -28,11 +28,61 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
         .map(
           (tradeResource) => TradeResourceInventory(
             tradeResource: tradeResource,
-            defultPrice: Random().nextInt(100),
-            totalQuantity: Random().nextInt(20),
+            defaultProductionLevel: getRndProductionLevel(),
+            defaultNeedLevel: getRndNeedLevel(),
           ),
         )
         .toList();
     return inventory;
+  }
+
+  NeedLevel getRndNeedLevel() {
+    final random = generateGaussianRandomNumberInRange(0, 40, 0, 100);
+    if (random < 10) {
+      return NeedLevel.notInterested;
+    } else if (random < 20) {
+      return NeedLevel.veryLow;
+    } else if (random < 30) {
+      return NeedLevel.low;
+    } else if (random < 40) {
+      return NeedLevel.avarege;
+    } else if (random < 50) {
+      return NeedLevel.aboveAverage;
+    } else if (random < 60) {
+      return NeedLevel.substatial;
+    } else if (random < 70) {
+      return NeedLevel.high;
+    } else if (random < 80) {
+      return NeedLevel.veryHigh;
+    } else if (random < 90) {
+      return NeedLevel.direNeed;
+    } else {
+      return NeedLevel.extremeNeed;
+    }
+  }
+
+  ProductionLevel getRndProductionLevel() {
+    final random = generateGaussianRandomNumberInRange(0, 40, 0, 100);
+    if (random < 10) {
+      return ProductionLevel.notProduced;
+    } else if (random < 20) {
+      return ProductionLevel.veryLow;
+    } else if (random < 30) {
+      return ProductionLevel.low;
+    } else if (random < 40) {
+      return ProductionLevel.avarege;
+    } else if (random < 50) {
+      return ProductionLevel.aboveAverage;
+    } else if (random < 60) {
+      return ProductionLevel.substatial;
+    } else if (random < 70) {
+      return ProductionLevel.high;
+    } else if (random < 80) {
+      return ProductionLevel.veryHigh;
+    } else if (random < 90) {
+      return ProductionLevel.overProduction;
+    } else {
+      return ProductionLevel.extremeOverProduction;
+    }
   }
 }

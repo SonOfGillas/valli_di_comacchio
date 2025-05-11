@@ -1,5 +1,5 @@
 enum ProductionLevel {
-  notPriduced,
+  notProduced,
   veryLow,
   low,
   avarege,
@@ -7,8 +7,8 @@ enum ProductionLevel {
   substatial,
   high,
   veryHigh,
-  highSurplus,
-  extremeSurplus,
+  overProduction,
+  extremeOverProduction,
 }
 
 const productionStandardDeviation = 0.1;
@@ -19,7 +19,7 @@ extension ProductionLevelExtension on ProductionLevel {
   // 0 = the npc doesn't care about the resource
   double get value {
     switch (this) {
-      case ProductionLevel.notPriduced:
+      case ProductionLevel.notProduced:
         return 0.0;
       case ProductionLevel.veryLow:
         return 0.1;
@@ -35,9 +35,9 @@ extension ProductionLevelExtension on ProductionLevel {
         return 0.6;
       case ProductionLevel.veryHigh:
         return 0.7;
-      case ProductionLevel.highSurplus:
+      case ProductionLevel.overProduction:
         return 0.8;
-      case ProductionLevel.extremeSurplus:
+      case ProductionLevel.extremeOverProduction:
         return 0.9;
     }
   }
