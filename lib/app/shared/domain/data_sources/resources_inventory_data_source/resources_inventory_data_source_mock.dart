@@ -1,7 +1,7 @@
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/need_level.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/need_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/production_level.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
@@ -29,7 +29,7 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
           (tradeResource) => TradeResourceInventory(
             tradeResource: tradeResource,
             defaultProductionLevel: getRndProductionLevel(),
-            defaultNeedLevel: getRndNeedLevel(),
+            defaultNeedLevel: NeedLevel.notInterested,
           ),
         )
         .toList();

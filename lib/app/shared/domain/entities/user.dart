@@ -7,12 +7,17 @@ class User {
     required this.name,
     required this.surname,
     this.inventory = const [],
+    this.wealth = 0,
   });
 
   final String id;
   final String email;
   final String name;
   final String surname;
+  /*
+  * wealth is the amount of game-money the user has
+  */
+  final int wealth;
 
   // fama? relazioni npc
   final List<TradeResourceInventory> inventory;

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_offer.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 
 class Npc extends Equatable {
   const Npc({
@@ -15,7 +15,7 @@ class Npc extends Equatable {
   final String name;
   final String image;
   final String description;
-  final int? wealth;
+  final int wealth;
   final List<TradeResourceOffer> goods;
 
   // mood -> quando è difficile commerciare quel giorno

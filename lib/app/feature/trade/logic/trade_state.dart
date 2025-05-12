@@ -1,7 +1,7 @@
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_offer.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 
 enum TradeStatus { idle, loading, succeeded, failure }
 

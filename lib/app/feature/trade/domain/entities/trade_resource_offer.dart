@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/prices.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_data.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
-import 'package:valli_di_comacchio/app/shared/domain/utils/price_functions.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/utils/price_functions.dart';
 
 enum OfferType {
   buy, // the user is buying the resource from the NPC
@@ -18,16 +20,42 @@ enum OfferType {
 class TradeResourceOffer extends Equatable {
   TradeResourceOffer({
     required this.tradeResourceInventory,
-    this.offerQuantity = 1,
     required this.offerType,
+    this.offerQuantity = 1, // by default is equal to demand, )
+    this.manualOfferPrice, // by defualt is equal to starting price
   }) {
-    prices = getPrices(offerQuantity);
+    tradeData = updateTradeData(offerQuantity);
   }
 
   final TradeResourceInventory tradeResourceInventory;
-  late final Prices prices;
-  final int offerQuantity;
   final OfferType offerType;
+  /*
+  * offerQuantity is the amount of resource that the user/npc wants to buy or sell.
+  * it must respect the User/NPC wealth and TradeData boundaries.
+  */
+  final int offerQuantity;
+  /*
+  * manualOfferPrice is the price of the resource that the user/npc wants to buy or sell.
+  * It must respect the TradeData boundaries.
+  */
+  int? manualOfferPrice;
+
+  int get offerPrice {
+    if (manualOfferPrice != null) {
+      return manualOfferPrice!;
+    } else {
+      return offerType == OfferType.buy
+          ? tradeData.buingStartingPrice
+          : tradeData.sellingStartingPrice;
+    }
+  }
+
+  /*
+  * tradeData are reference data for the trade resource.
+  * those data are used with the AI integration to generate 
+  * realistic exchanges between the user and the NPC.
+  */
+  late final TradeData tradeData;
 
   /*
   * demandNormalized is a number between -1 and 1 that represents the demand of the resource 
@@ -47,7 +75,7 @@ class TradeResourceOffer extends Equatable {
   /*
   * demandAfterTransactionNormalized is a number between -1 and 1 that represents the demand of the resource 
   * if this transactionOffer will be finalized. With the demandNormalized it's use to calculate the acceptable
-  * price of the resources for the NPC.
+  * price limits for the NPC.
   * 1 means that the resource is needed in a large amount
   * -1 means that the npc wants to get rid of the resource
   */
@@ -67,9 +95,9 @@ class TradeResourceOffer extends Equatable {
     return (demandAfterTransaction - min) / (max - min) * 2 - 1;
   }
 
-  Prices getPrices(int offerQuantity) {
+  TradeData updateTradeData(int offerQuantity) {
     final tradeResource = tradeResourceInventory.tradeResource;
-    return Prices(
+    return TradeData(
       buingStartingPrice: getPrice(tradeResource, demandNormalized),
       buingPriceMin: getPrice(tradeResource, demandAfterTransactionNormalized),
       sellingPriceMax: getPrice(tradeResource, demandNormalized),
@@ -78,10 +106,28 @@ class TradeResourceOffer extends Equatable {
     );
   }
 
+  bool isOfferValid(User user, Npc npc) {
+    if (offerType == OfferType.buy) {
+      final userWealthCheck = user.wealth >= offerPrice * offerQuantity;
+      final priceCheck = offerPrice <= tradeData.buingPriceMax &&
+          offerPrice >= tradeData.buingPriceMin;
+      final quantityCheck = false;
+      return userWealthCheck && priceCheck && quantityCheck;
+    } else if (offerType == OfferType.sell) {
+      final npcWealthCheck = npc.wealth >= offerPrice * offerQuantity;
+      final priceCheck = offerPrice <= tradeData.sellingPriceMax &&
+          offerPrice >= tradeData.sellingStartingPrice;
+      final quantityCheck = false;
+      return npcWealthCheck && priceCheck && quantityCheck;
+    } else {
+      return false;
+    }
+  }
+
   @override
   List<Object?> get props => [
         tradeResourceInventory,
-        prices,
+        tradeData,
         offerQuantity,
         offerType,
       ];

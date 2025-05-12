@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/need_level.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/production_level.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/need_level.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
-import 'package:valli_di_comacchio/app/shared/domain/utils/need_generation_functions.dart';
-import 'package:valli_di_comacchio/app/shared/domain/utils/production_generation_functions.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/utils/need_generation_functions.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/utils/production_generation_functions.dart';
 
 /*
 * this class represents the trade resource in the inventory of an NPC .

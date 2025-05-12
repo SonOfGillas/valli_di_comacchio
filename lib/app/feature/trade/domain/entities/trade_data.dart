@@ -1,7 +1,12 @@
-class Prices {
-  Prices({
+// BUY -> the user is buying the resource from the NPC
+// SELL -> the user is selling the resource to the NPC
+
+class TradeData {
+  TradeData({
+    // Buing
     required this.buingStartingPrice,
     required this.buingPriceMin,
+    // Selling
     required this.sellingPriceMax,
     required this.sellingStartingPrice,
   });
@@ -18,6 +23,8 @@ class Prices {
   */
   final int buingPriceMin;
 
+  final int buingStartingQuantity = 1;
+
   /*
   * the maximum price of the resource that the NPC is willing to pay 
   * for the resource that the user is selling
@@ -29,4 +36,8 @@ class Prices {
   */
   final int sellingStartingPrice;
   final int sellingPriceMin = 0;
+
+  final int sellingStartingQuantity = 1;
+
+  // TODO: add data about Selling and Buying Starting Quantity
 }

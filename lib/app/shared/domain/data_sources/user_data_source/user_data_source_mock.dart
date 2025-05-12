@@ -10,6 +10,7 @@ class UserDataSourceMock implements UserDataSource {
       name: 'John',
       surname: 'Doe',
       inventory: [],
+      wealth: 1000,
     );
   }
 }
