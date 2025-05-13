@@ -6,9 +6,11 @@ class TradeData {
     // Buing
     required this.buingStartingPrice,
     required this.buingPriceMin,
+    required this.buingOptinalQuantity,
     // Selling
     required this.sellingPriceMax,
     required this.sellingStartingPrice,
+    required this.sellingOptinalQuantity,
   });
 
   final int buingPriceMax = double.maxFinite.toInt();
@@ -26,6 +28,11 @@ class TradeData {
   final int buingStartingQuantity = 1;
 
   /*
+  * quantity that will satisfy the NPC needs
+  */
+  final int buingOptinalQuantity;
+
+  /*
   * the maximum price of the resource that the NPC is willing to pay 
   * for the resource that the user is selling
   */
@@ -37,7 +44,8 @@ class TradeData {
   final int sellingStartingPrice;
   final int sellingPriceMin = 0;
 
-  final int sellingStartingQuantity = 1;
-
-  // TODO: add data about Selling and Buying Starting Quantity
+  /*
+  * quantity that will satisfy the NPC needs
+  */
+  final int sellingOptinalQuantity;
 }

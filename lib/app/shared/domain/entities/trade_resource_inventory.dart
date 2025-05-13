@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/need_level.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/utils/need_generation_functions.dart';
@@ -71,7 +70,6 @@ class TradeResourceInventory extends Equatable {
     } else {
       return (needs! - (storage! - transactionAmount));
     }
-    // TODO: check NPC balance
   }
 
   /*
@@ -81,8 +79,6 @@ class TradeResourceInventory extends Equatable {
     if (needs == null || storage == null || transactionAmount < 0) {
       return demand;
     } else if (storage! - transactionAmount < 0) {
-      // If the storage is less than the transaction amount, it means that the NPC can't sell that amount
-      // TODO: Throw and exception
       return 0;
     } else {
       return (needs! - (storage! + transactionAmount));

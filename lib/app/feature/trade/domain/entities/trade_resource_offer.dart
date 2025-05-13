@@ -21,7 +21,7 @@ class TradeResourceOffer extends Equatable {
   TradeResourceOffer({
     required this.tradeResourceInventory,
     required this.offerType,
-    this.offerQuantity = 1, // by default is equal to demand, )
+    this.offerQuantity = 1, // by default should be equal to demand,
     this.manualOfferPrice, // by defualt is equal to starting price
   }) {
     tradeData = updateTradeData(offerQuantity);
@@ -38,7 +38,7 @@ class TradeResourceOffer extends Equatable {
   * manualOfferPrice is the price of the resource that the user/npc wants to buy or sell.
   * It must respect the TradeData boundaries.
   */
-  int? manualOfferPrice;
+  final int? manualOfferPrice;
 
   int get offerPrice {
     if (manualOfferPrice != null) {
@@ -100,10 +100,24 @@ class TradeResourceOffer extends Equatable {
     return TradeData(
       buingStartingPrice: getPrice(tradeResource, demandNormalized),
       buingPriceMin: getPrice(tradeResource, demandAfterTransactionNormalized),
+      buingOptinalQuantity: getBuingOptinalQuantity(),
       sellingPriceMax: getPrice(tradeResource, demandNormalized),
       sellingStartingPrice:
           getPrice(tradeResource, demandAfterTransactionNormalized),
+      sellingOptinalQuantity: getSellingOptinalQuantity(),
     );
+  }
+
+  int getBuingOptinalQuantity() {
+    return tradeResourceInventory.demand < 0
+        ? -tradeResourceInventory.demand
+        : 1;
+  }
+
+  int getSellingOptinalQuantity() {
+    return tradeResourceInventory.demand > 0
+        ? tradeResourceInventory.demand
+        : 1;
   }
 
   bool isOfferValid(User user, Npc npc) {
