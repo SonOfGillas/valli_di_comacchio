@@ -1,7 +1,6 @@
 import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
 
 class UserRepository {
@@ -45,13 +44,9 @@ class UserRepository {
   }
 
   // update user data
-  AsyncResult<void> updateUserData(
-      User user, List<TradeResourceInventory> inventory) async {
+  AsyncResult<void> updateUserData(User user) async {
     await userDataSource.updateUserData(user);
-    await resourcesInventoryDataSource.updateUserInventory(
-      user,
-      inventory,
-    );
+    await resourcesInventoryDataSource.updateUserInventory(user);
     return Success(null);
   }
 }

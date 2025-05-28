@@ -49,7 +49,9 @@ class TradeResourceInventory extends Equatable {
 
   /*
   * needs is a number between 0 and tradeResource.storageLimit
-  * it represents the amount of resource that the npc needs
+  * it represents the amount of resource that the npc needs.
+  * it is a fixed value, it change only after long periods of time
+  * it must not be confused with the demand of the resource.
   */
   final int? needs;
 
@@ -62,7 +64,8 @@ class TradeResourceInventory extends Equatable {
   }
 
   /*
-  * the user is buying a resource from the npc
+  * this method is used by the NPC to calculate the demand of the resource
+  * after a buying transaction. the user is buying a resource from the npc
   */
   int demandAfterBuingTransaction(int transactionAmount) {
     if (needs == null || storage == null || transactionAmount < 0) {
@@ -73,7 +76,8 @@ class TradeResourceInventory extends Equatable {
   }
 
   /*
-  * the user is selling a resource to the npc
+  * this method is used by the NPC to calculate the demand of the resource
+  * after a selling transaction. the user is selling a resource to the npc
   */
   int demandAfterSellingTransaction(int transactionAmount) {
     if (needs == null || storage == null || transactionAmount < 0) {

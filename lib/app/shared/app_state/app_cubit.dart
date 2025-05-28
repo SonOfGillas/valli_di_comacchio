@@ -24,7 +24,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Future<void> setUser(
+  Future<void> setLocalUser(
     User user,
     String password,
   ) async {
@@ -45,11 +45,12 @@ class AppCubit extends Cubit<AppState> {
     emit(const AppState(user: null));
   }
 
-  Future<void> loadUser() async {
+  Future<void> loadUserData() async {
     final user = await appStorage.read(key: AppStorage.userKey);
     if (user != null) {
       final localUserData = User.fromJson(jsonDecode(user));
       final userResult = await userRepository.getUserData(localUserData.email);
+      //TODO: add TradeResourceInventory to User
       userResult.fold(
         onSuccess: (user) {
           emit(state.copyWith(user: user));
@@ -59,5 +60,9 @@ class AppCubit extends Cubit<AppState> {
         },
       );
     }
+  }
+
+  Future<void> updateUser(User user) async {
+    emit(state.copyWith(user: user));
   }
 }

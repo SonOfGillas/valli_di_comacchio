@@ -25,13 +25,9 @@ class NpcRepository {
     ));
   }
 
-  AsyncResult<void> updateNpcData(
-      Npc npc, List<TradeResourceInventory> inventory) async {
+  AsyncResult<void> updateNpcData(Npc npc) async {
     await npcDataSource.updateNpcData(npc);
-    await resourcesInventoryDataSource.updateNpcInventory(
-      npc,
-      inventory,
-    );
+    await resourcesInventoryDataSource.updateNpcInventory(npc);
     return Success(null);
   }
 }

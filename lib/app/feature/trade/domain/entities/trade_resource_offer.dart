@@ -50,15 +50,20 @@ class TradeResourceOffer extends Equatable {
     }
   }
 
+  int get totalCost {
+    return offerPrice * offerQuantity;
+  }
+
   /*
-  * tradeData are reference data for the trade resource.
+  * tradeData are reference data for trade the resource.
   * those data are used with the AI integration to generate 
   * realistic exchanges between the user and the NPC.
   */
   late final TradeData tradeData;
 
   /*
-  * demandNormalized is a number between -1 and 1 that represents the demand of the resource 
+  * demandNormalized is a number between -1 and 1 that represents the demand of the resource,
+  * With the demandAfterTransactionNormalized it's use to calculate the acceptable price limits for the NPC.
   * 1 means that the resource is needed in a large amount
   * -1 means that the npc wants to get rid of the resource
   */
@@ -150,12 +155,13 @@ class TradeResourceOffer extends Equatable {
     int? offerQuantity,
     TradeResourceInventory? tradeResourceInventory,
     OfferType? offerType,
+    int? manualOfferPrice,
   }) {
     return TradeResourceOffer(
-      tradeResourceInventory:
-          tradeResourceInventory ?? this.tradeResourceInventory,
-      offerQuantity: offerQuantity ?? this.offerQuantity,
-      offerType: offerType ?? this.offerType,
-    );
+        tradeResourceInventory:
+            tradeResourceInventory ?? this.tradeResourceInventory,
+        offerQuantity: offerQuantity ?? this.offerQuantity,
+        offerType: offerType ?? this.offerType,
+        manualOfferPrice: manualOfferPrice ?? this.manualOfferPrice);
   }
 }

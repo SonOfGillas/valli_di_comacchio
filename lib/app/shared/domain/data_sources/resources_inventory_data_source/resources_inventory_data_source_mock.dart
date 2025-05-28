@@ -28,16 +28,14 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
   }
 
   @override
-  Future<void> updateNpcInventory(
-      Npc npc, List<TradeResourceInventory> inventory) {
-    mockNpcInventory = inventory;
+  Future<void> updateNpcInventory(Npc npc) {
+    mockNpcInventory = npc.inventory;
     return Future.value();
   }
 
   @override
-  Future<void> updateUserInventory(
-      User user, List<TradeResourceInventory> inventory) {
-    mockUserInventory = inventory;
+  Future<void> updateUserInventory(User user) {
+    mockUserInventory = user.inventory;
     return Future.value();
   }
 

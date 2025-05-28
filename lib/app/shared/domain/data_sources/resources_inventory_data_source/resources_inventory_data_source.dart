@@ -4,9 +4,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
 
 abstract class ResourcesInventoryDataSource {
   Future<List<TradeResourceInventory>> getNpcInventory(Npc npc);
-  Future<void> updateNpcInventory(
-      Npc npc, List<TradeResourceInventory> inventory);
+  Future<void> updateNpcInventory(Npc npc);
   Future<List<TradeResourceInventory>> getUserInventory(User user);
-  Future<void> updateUserInventory(
-      User user, List<TradeResourceInventory> inventory);
+  Future<void> updateUserInventory(User user);
 }

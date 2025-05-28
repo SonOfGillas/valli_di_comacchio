@@ -40,6 +40,7 @@ class User {
 
   copyWith({
     List<TradeResourceInventory>? inventory,
+    int? wealth,
   }) {
     return User(
       id: id,
@@ -47,6 +48,7 @@ class User {
       name: name,
       surname: surname,
       inventory: inventory ?? this.inventory,
+      wealth: wealth ?? this.wealth,
     );
   }
 }

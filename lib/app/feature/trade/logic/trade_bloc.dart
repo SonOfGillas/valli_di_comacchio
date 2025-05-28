@@ -1,30 +1,146 @@
 import 'package:bloc/bloc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/utils/change_resource_amount.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
+import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
+
+import '../../../shared/domain/entities/user.dart';
 
 class TradeBloc extends Bloc<TradeEvent, TradeState> {
-  TradeBloc() : super(const TradeState()) {
-    on<LoadTradeData>(_onLoadTradeData);
+  TradeBloc({
+    required this.appCubit,
+    required this.userRepository,
+    required this.npcRepository,
+  }) : super(const TradeState()) {
+    on<LoadData>(_onLoadData);
     on<SelectTradeResource>(_onSelectTradeResource);
-    on<BuyTradeResource>(_onBuyTradeResource);
-    on<SellTradeResource>(_onSellTradeResource);
-    on<TradeResourceAcceptOffert>(_onTradeResourceAcceptOffert);
-    on<TradeResourceSetPrice>(_onTradeResourceSetPrice);
+    on<SelectOfferType>(_onSelectOfferType);
+    on<AcceptOffert>(_onAcceptOffert);
+    on<SetCounterOffertPrice>(_onSetCounterOffertPrice);
+    on<SetCounterOfferAmount>(_onSetCounterOfferAmount);
+    on<SetCounterOfferMotivation>(_onSetCounterOfferMotivation);
+    on<SendCounterOffer>(_onSendCounterOffer);
   }
 
-  void _onLoadTradeData(LoadTradeData event, Emitter<TradeState> emit) {}
+  final AppCubit appCubit;
+  final UserRepository userRepository;
+  final NpcRepository npcRepository;
+
+  User? get user => appCubit.state.user;
+
+  void _onLoadData(LoadData event, Emitter<TradeState> emit) async {
+    await appCubit.loadUserData();
+    if (appCubit.state.user == null) {
+      emit(state.copyWith(
+        status: TradeStatus.failure,
+        failure: Failure.fromMessage('User not found'),
+      ));
+      return;
+    }
+    final npcResponse = await npcRepository.getNpcById(event.npcId);
+    npcResponse.fold(
+      onSuccess: (npc) {
+        emit(state.copyWith(
+          status: TradeStatus.idle,
+          npc: npc,
+          step: TradingStep.selectResource,
+        ));
+      },
+      onFailure: (error) {
+        emit(state.copyWith(
+          status: TradeStatus.failure,
+          failure: error,
+        ));
+      },
+    );
+  }
 
   void _onSelectTradeResource(
-      SelectTradeResource event, Emitter<TradeState> emit) {}
+      SelectTradeResource event, Emitter<TradeState> emit) {
+    emit(state.copyWith(
+      selectedResource: event.resource,
+      step: TradingStep.selectOfferType,
+    ));
+  }
 
-  void _onBuyTradeResource(BuyTradeResource event, Emitter<TradeState> emit) {}
+  void _onSelectOfferType(SelectOfferType event, Emitter<TradeState> emit) {
+    emit(state.copyWith(
+      step: TradingStep.setPrice,
+      userCounterOffert: TradeResourceOffer(
+        offerType: event.offerType,
+        tradeResourceInventory: state.selectedResource!,
+      ),
+      npcOffert: TradeResourceOffer(
+        offerType: event.offerType,
+        tradeResourceInventory: state.selectedResource!,
+      ),
+    ));
+  }
 
-  void _onSellTradeResource(
-      SellTradeResource event, Emitter<TradeState> emit) {}
+  void _onAcceptOffert(AcceptOffert event, Emitter<TradeState> emit) async {
+    if (state.npcOffert != null && user != null) {
+      final updatedUser =
+          applyOfferToUser(offer: state.npcOffert!, user: user!);
+      final updatedNpc = applyOfferToNpc(
+        offer: state.userCounterOffert!,
+        npc: state.npc!,
+      );
+      final userUpdateReponse =
+          await userRepository.updateUserData(updatedUser);
+      userUpdateReponse.fold(
+        onSuccess: (_) async {
+          final npcUpdateResponse =
+              await npcRepository.updateNpcData(updatedNpc);
+          npcUpdateResponse.fold(
+            onSuccess: (_) {
+              appCubit.updateUser(updatedUser);
+              emit(state.copyWith(
+                status: TradeStatus.idle,
+                npc: updatedNpc,
+                step: TradingStep.selectResource,
+                selectedResource: null,
+                npcOffert: null,
+                userCounterOffert: null,
+              ));
+            },
+            onFailure: (error) {
+              emit(state.copyWith(
+                status: TradeStatus.failure,
+                failure: error,
+              ));
+            },
+          );
+        },
+        onFailure: (error) {
+          emit(state.copyWith(
+            status: TradeStatus.failure,
+            failure: error,
+          ));
+        },
+      );
+    }
+  }
 
-  void _onTradeResourceAcceptOffert(
-      TradeResourceAcceptOffert event, Emitter<TradeState> emit) {}
+  void _onSetCounterOffertPrice(
+      SetCounterOffertPrice event, Emitter<TradeState> emit) {
+    if (state.userCounterOffert == null) {
+      // TODO: add here inizial offert creation
+    } else {
+      final newOffert =
+          state.userCounterOffert?.copyWith(manualOfferPrice: event.price);
+      emit(state.copyWith(userCounterOffert: newOffert));
+    }
+  }
 
-  void _onTradeResourceSetPrice(
-      TradeResourceSetPrice event, Emitter<TradeState> emit) {}
+  void _onSetCounterOfferAmount(
+      SetCounterOfferAmount event, Emitter<TradeState> emit) {}
+
+  void _onSetCounterOfferMotivation(
+      SetCounterOfferMotivation event, Emitter<TradeState> emit) {}
+
+  void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {}
 }

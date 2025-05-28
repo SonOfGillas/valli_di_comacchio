@@ -3,43 +3,49 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 
-enum TradeStatus { idle, loading, succeeded, failure }
+enum TradeStatus { idle, loading, failure }
+
+enum TradingStep { selectResource, selectOfferType, setPrice }
 
 class TradeState {
   final TradeStatus status;
-  final ServerFailure? failure;
+  final TradingStep step;
+  final Failure? failure;
   final Npc? npc;
   final TradeResourceInventory? selectedResource;
   final TradeResourceOffer? npcOffert;
-  final TradeResourceOffer? userOffert;
+  final TradeResourceOffer? userCounterOffert;
   final String motivation;
 
   const TradeState({
     this.status = TradeStatus.idle,
+    this.step = TradingStep.selectResource,
     this.failure,
     this.npc,
     this.selectedResource,
     this.npcOffert,
-    this.userOffert,
+    this.userCounterOffert,
     this.motivation = '',
   });
 
   TradeState copyWith({
     TradeStatus? status,
-    ServerFailure? failure,
+    TradingStep? step,
+    Failure? failure,
     Npc? npc,
     TradeResourceInventory? selectedResource,
     TradeResourceOffer? npcOffert,
-    TradeResourceOffer? userOffert,
+    TradeResourceOffer? userCounterOffert,
     String? motivation,
   }) {
     return TradeState(
       status: status ?? this.status,
+      step: step ?? this.step,
       failure: failure ?? this.failure,
       npc: npc ?? this.npc,
       selectedResource: selectedResource ?? this.selectedResource,
       npcOffert: npcOffert ?? this.npcOffert,
-      userOffert: userOffert ?? this.userOffert,
+      userCounterOffert: userCounterOffert ?? this.userCounterOffert,
       motivation: motivation ?? this.motivation,
     );
   }

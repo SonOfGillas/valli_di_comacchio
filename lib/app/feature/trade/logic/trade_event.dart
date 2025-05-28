@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
+import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 abstract class TradeEvent extends Equatable {
   const TradeEvent();
 }
 
-class LoadTradeData extends TradeEvent {
-  const LoadTradeData({
+class LoadData extends TradeEvent {
+  const LoadData({
     required this.npcId,
   });
 
@@ -27,29 +28,41 @@ class SelectTradeResource extends TradeEvent {
   List<Object?> get props => [resource];
 }
 
-class BuyTradeResource extends TradeEvent {
-  const BuyTradeResource();
+class SelectOfferType extends TradeEvent {
+  const SelectOfferType({
+    required this.offerType,
+  });
+
+  final OfferType offerType;
+
+  @override
+  List<Object?> get props => [offerType];
+}
+
+class BuyTradeResource extends SelectOfferType {
+  const BuyTradeResource() : super(offerType: OfferType.buy);
 
   @override
   List<Object?> get props => [];
 }
 
-class SellTradeResource extends TradeEvent {
-  const SellTradeResource();
+class SellTradeResource extends SelectOfferType {
+  const SellTradeResource() : super(offerType: OfferType.sell);
+  final offerTyper = OfferType.sell;
 
   @override
   List<Object?> get props => [];
 }
 
-class TradeResourceAcceptOffert extends TradeEvent {
-  const TradeResourceAcceptOffert();
+class AcceptOffert extends TradeEvent {
+  const AcceptOffert();
 
   @override
   List<Object?> get props => [];
 }
 
-class TradeResourceSetPrice extends TradeEvent {
-  const TradeResourceSetPrice({
+class SetCounterOffertPrice extends TradeEvent {
+  const SetCounterOffertPrice({
     required this.price,
   });
 
@@ -59,8 +72,8 @@ class TradeResourceSetPrice extends TradeEvent {
   List<Object?> get props => [price];
 }
 
-class TradeResourceSetAmount extends TradeEvent {
-  const TradeResourceSetAmount({
+class SetCounterOfferAmount extends TradeEvent {
+  const SetCounterOfferAmount({
     required this.amount,
   });
 
@@ -70,8 +83,8 @@ class TradeResourceSetAmount extends TradeEvent {
   List<Object?> get props => [amount];
 }
 
-class TradeResourceMotivation extends TradeEvent {
-  const TradeResourceMotivation({
+class SetCounterOfferMotivation extends TradeEvent {
+  const SetCounterOfferMotivation({
     required this.motivation,
   });
 
@@ -81,8 +94,8 @@ class TradeResourceMotivation extends TradeEvent {
   List<Object?> get props => [motivation];
 }
 
-class TradeResourceCounterOffer extends TradeEvent {
-  const TradeResourceCounterOffer();
+class SendCounterOffer extends TradeEvent {
+  const SendCounterOffer();
   @override
   List<Object?> get props => [];
 }
