@@ -1,27 +1,39 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 class Npc extends Equatable {
   const Npc({
     required this.id,
     required this.name,
-    required this.image,
-    required this.description,
+    required this.imageUrl,
     required this.wealth,
-    required this.goods,
+    required this.inventory,
   });
 
   final String id;
   final String name;
-  final String image;
-  final String description;
+  final String imageUrl;
   final int wealth;
-  final List<TradeResourceOffer> goods;
+  final List<TradeResourceInventory> inventory;
 
   // mood -> quando è difficile commerciare quel giorno
   // personality -> quanto è difficile commerciare con quel npc in generale
   // opinion -> opinione del npc sul giocatore
 
   @override
-  List<Object?> get props => [id, name, image, description, goods];
+  List<Object?> get props => [id, name, imageUrl, inventory];
+
+  @override
+  Npc copyWith({
+    int? wealth,
+    List<TradeResourceInventory>? inventory,
+  }) {
+    return Npc(
+      id: id,
+      name: name,
+      imageUrl: imageUrl,
+      wealth: wealth ?? this.wealth,
+      inventory: inventory ?? this.inventory,
+    );
+  }
 }

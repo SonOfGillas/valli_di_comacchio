@@ -8,35 +8,52 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_generation.dart';
 
 class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
+  var mockUserInventory = <TradeResourceInventory>[];
+  var mockNpcInventory = <TradeResourceInventory>[];
+
   @override
   Future<List<TradeResourceInventory>> getNpcInventory(Npc npc) async {
-    final inventory = tradeResourcesList
-        .map(
-          (tradeResource) => TradeResourceInventory(
-            tradeResource: tradeResource,
-            defaultProductionLevel: getRndProductionLevel(),
-            defaultNeedLevel: getRndNeedLevel(),
-          ),
-        )
-        .toList();
-    return inventory;
+    if (mockNpcInventory.isEmpty) {
+      mockNpcInventory = _generateMockInventory();
+    }
+    return mockNpcInventory;
   }
 
   @override
   Future<List<TradeResourceInventory>> getUserInventory(User user) async {
-    final inventory = tradeResourcesList
+    if (mockUserInventory.isEmpty) {
+      mockUserInventory = _generateMockInventory();
+    }
+    return mockUserInventory;
+  }
+
+  @override
+  Future<void> updateNpcInventory(
+      Npc npc, List<TradeResourceInventory> inventory) {
+    mockNpcInventory = inventory;
+    return Future.value();
+  }
+
+  @override
+  Future<void> updateUserInventory(
+      User user, List<TradeResourceInventory> inventory) {
+    mockUserInventory = inventory;
+    return Future.value();
+  }
+
+  _generateMockInventory() {
+    return tradeResourcesList
         .map(
           (tradeResource) => TradeResourceInventory(
             tradeResource: tradeResource,
-            defaultProductionLevel: getRndProductionLevel(),
-            defaultNeedLevel: NeedLevel.notInterested,
+            defaultProductionLevel: _getRndProductionLevel(),
+            defaultNeedLevel: _getRndNeedLevel(),
           ),
         )
         .toList();
-    return inventory;
   }
 
-  NeedLevel getRndNeedLevel() {
+  NeedLevel _getRndNeedLevel() {
     final random = generateGaussianRandomNumberInRange(0, 40, 0, 100);
     if (random < 10) {
       return NeedLevel.notInterested;
@@ -61,7 +78,7 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
     }
   }
 
-  ProductionLevel getRndProductionLevel() {
+  ProductionLevel _getRndProductionLevel() {
     final random = generateGaussianRandomNumberInRange(0, 40, 0, 100);
     if (random < 10) {
       return ProductionLevel.notProduced;
