@@ -46,12 +46,10 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       ));
       return;
     }
-    print('Loading NPC with ID: ${event.npcId}');
     final npcResponse = await npcRepository.getNpcById(event.npcId);
-    print('NPC response: $npcResponse');
+
     npcResponse.fold(
       onSuccess: (npc) {
-        print('NPC loaded successfully: $npc');
         emit(state.copyWith(
           status: TradeStatus.idle,
           npc: npc,

@@ -2,7 +2,6 @@ import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 class NpcRepository {
   NpcRepository({

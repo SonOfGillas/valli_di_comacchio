@@ -68,13 +68,7 @@ class TradeResourceOffer extends Equatable {
   * -1 means that the npc wants to get rid of the resource
   */
   double get demandNormalized {
-    final tradeResource = tradeResourceInventory.tradeResource;
-    final double min = -tradeResource.maxProduction;
-    final double max = tradeResource.maxNeed;
-    final double value = tradeResourceInventory.demand.toDouble();
-
-    // Normalize demand between -1 and 1
-    return (value - min) / (max - min) * 2 - 1;
+    return tradeResourceInventory.demandNormalized;
   }
 
   /*

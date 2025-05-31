@@ -4,7 +4,11 @@ import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_g
 
 int generateRandomNeedsAmount(
     TradeResource tradeResource, NeedLevel needLevel) {
-  final randomNumber = generateGaussianRandomNumberInRange(
-      needLevel.value, needStandardDeviation, 0, tradeResource.maxNeed);
+  final min = 0.0;
+  final max = tradeResource.maxNeed;
+  final mean = needLevel.value * max;
+  final standardDeviation = needStandardDeviation * max;
+  final randomNumber =
+      generateGaussianRandomNumberInRange(mean, standardDeviation, min, max);
   return randomNumber.toInt();
 }

@@ -64,6 +64,21 @@ class TradeResourceInventory extends Equatable {
   }
 
   /*
+  * demandNormalized is a number between -1 and 1 that represents the demand of the resource,
+  * With the demandAfterTransactionNormalized it's use to calculate the acceptable price limits for the NPC.
+  * 1 means that the resource is needed in a large amount
+  * -1 means that the npc wants to get rid of the resource
+  */
+  double get demandNormalized {
+    final double min = -tradeResource.maxProduction;
+    final double max = tradeResource.maxNeed;
+    final double value = demand.toDouble();
+
+    // Normalize demand between -1 and 1
+    return (value - min) / (max - min) * 2 - 1;
+  }
+
+  /*
   * this method is used by the NPC to calculate the demand of the resource
   * after a buying transaction. the user is buying a resource from the npc
   */

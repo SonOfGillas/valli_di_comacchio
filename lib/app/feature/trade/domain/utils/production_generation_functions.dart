@@ -4,10 +4,11 @@ import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_g
 
 int generateRandomStorageAmount(
     TradeResource tradeResource, ProductionLevel productionLevel) {
-  final randomNumber = generateGaussianRandomNumberInRange(
-      productionLevel.value,
-      productionStandardDeviation,
-      0,
-      tradeResource.maxProduction);
+  final min = 0.0;
+  final max = tradeResource.maxProduction;
+  final mean = productionLevel.value * max;
+  final standardDeviation = productionStandardDeviation * max;
+  final randomNumber =
+      generateGaussianRandomNumberInRange(mean, standardDeviation, min, max);
   return randomNumber.toInt();
 }
