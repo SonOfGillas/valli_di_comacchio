@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
@@ -52,11 +53,12 @@ Future<void> initServiceLocator() async {
         () => AppCubit(appStorage: sl(), userRepository: sl()))
 
     // TRADE
-    ..registerFactory<TradeBloc>(
-      () => TradeBloc(
+    ..registerFactoryParam<TradeBloc, TradePageParameters, void>(
+      (param, _) => TradeBloc(
         appCubit: sl(),
         userRepository: sl(),
         npcRepository: sl(),
+        tradePageParameters: param,
       ),
     );
 }

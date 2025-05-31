@@ -3,6 +3,7 @@ import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resou
 import 'package:valli_di_comacchio/app/feature/trade/domain/utils/change_resource_amount.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
+import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
@@ -15,6 +16,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     required this.appCubit,
     required this.userRepository,
     required this.npcRepository,
+    required this.tradePageParameters,
   }) : super(const TradeState()) {
     on<LoadData>(_onLoadData);
     on<SelectTradeResource>(_onSelectTradeResource);
@@ -24,11 +26,14 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<SetCounterOfferAmount>(_onSetCounterOfferAmount);
     on<SetCounterOfferMotivation>(_onSetCounterOfferMotivation);
     on<SendCounterOffer>(_onSendCounterOffer);
+
+    add(LoadData(npcId: tradePageParameters.npcId));
   }
 
   final AppCubit appCubit;
   final UserRepository userRepository;
   final NpcRepository npcRepository;
+  final TradePageParameters tradePageParameters;
 
   User? get user => appCubit.state.user;
 
@@ -41,9 +46,12 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       ));
       return;
     }
+    print('Loading NPC with ID: ${event.npcId}');
     final npcResponse = await npcRepository.getNpcById(event.npcId);
+    print('NPC response: $npcResponse');
     npcResponse.fold(
       onSuccess: (npc) {
+        print('NPC loaded successfully: $npc');
         emit(state.copyWith(
           status: TradeStatus.idle,
           npc: npc,
@@ -128,7 +136,10 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   void _onSetCounterOffertPrice(
       SetCounterOffertPrice event, Emitter<TradeState> emit) {
     if (state.userCounterOffert == null) {
-      // TODO: add here inizial offert creation
+      emit(state.copyWith(
+          status: TradeStatus.failure,
+          failure: Failure.fromMessage('No counter offer available'),
+          step: TradingStep.selectOfferType));
     } else {
       final newOffert =
           state.userCounterOffert?.copyWith(manualOfferPrice: event.price);
@@ -137,10 +148,25 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   }
 
   void _onSetCounterOfferAmount(
-      SetCounterOfferAmount event, Emitter<TradeState> emit) {}
+      SetCounterOfferAmount event, Emitter<TradeState> emit) {
+    if (state.userCounterOffert == null) {
+      emit(state.copyWith(
+          status: TradeStatus.failure,
+          failure: Failure.fromMessage('No counter offer available'),
+          step: TradingStep.selectOfferType));
+    } else {
+      final newOffert =
+          state.userCounterOffert?.copyWith(offerQuantity: event.amount);
+      emit(state.copyWith(userCounterOffert: newOffert));
+    }
+  }
 
   void _onSetCounterOfferMotivation(
-      SetCounterOfferMotivation event, Emitter<TradeState> emit) {}
+      SetCounterOfferMotivation event, Emitter<TradeState> emit) {
+    emit(state.copyWith(motivation: event.motivation));
+  }
 
-  void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {}
+  void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {
+    //TODO implement send counter offer logic
+  }
 }

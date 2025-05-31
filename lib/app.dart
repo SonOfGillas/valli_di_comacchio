@@ -3,6 +3,7 @@ import 'package:valli_di_comacchio/app/shared/core/routes/routes.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/app_translations.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/l10n.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -13,7 +14,7 @@ class App extends StatelessWidget {
       routerConfig: router,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: AppColors.palette_primary),
+        appBarTheme: AppBarTheme(color: AppColors.palette_primary),
       ),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,

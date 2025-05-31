@@ -8,6 +8,8 @@ class AppColors {
   static const palette_tertiary = Color(0xff9ffcdf);
   static const primary_light = Color(0xff006989);
 
+  static const black_shadow_80 = Color(0xFF080206);
+
   static const background_black = Color(0xff252525);
   static const palette_accent = Color(0xfff3bc00);
   static const background_dark_gray = Color(0xff535353);

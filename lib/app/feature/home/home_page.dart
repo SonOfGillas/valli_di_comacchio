@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:valli_di_comacchio/app.dart';
+import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
+import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -31,6 +35,8 @@ class HomePage extends StatelessWidget {
           // setState(() {
           //   _counter++;
           // });
+          context.go(RoutesPaths.trade,
+              extra: const TradePageParameters(npcId: 'npc_1'));
         },
         tooltip: 'Increment',
         child: const Icon(Icons.add),

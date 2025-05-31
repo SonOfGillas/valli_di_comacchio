@@ -26,7 +26,7 @@
   "@commonErrorTimeoutFailureMessage": {
     "description": "Error message shown to the user when a response from the server is taking too long"
   },
-
+  "tradePageTitle":"Trade",
   "tradeResourceFlowers": "Flower",
   "tradeResourceLogs": "Logs",
   "tradeResourceSeeds": "Seed",
