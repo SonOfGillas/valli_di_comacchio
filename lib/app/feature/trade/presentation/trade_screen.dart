@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/demand_info_gradient.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc_dislay_header.dart';
-import 'package:valli_di_comacchio/app/feature/trade/presentation/components/trade_resource_element.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_offer_type_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_resource_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/set_price_step.dart';
