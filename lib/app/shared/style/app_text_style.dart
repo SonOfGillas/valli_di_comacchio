@@ -51,24 +51,58 @@ class AppTextStyles {
       ..color = AppColors.black_shadow_80,
   );
 
-  static final h3OnBackground = GoogleFonts.lilitaOne(
+  static final h3FontSize = 20.0;
+  static final h3Height = 32 / 20;
+  static final h3LetterSpacing = -0.035 * 20;
+
+  static final h3WithBoarder = GoogleFonts.lilitaOne(
     color: AppColors.background_white,
     fontWeight: FontWeight.w400,
-    fontSize: 20,
-    height: 32 / 24,
-    letterSpacing: -0.035 * 24,
+    fontSize: h3FontSize,
+    height: h3Height,
+    letterSpacing: h3LetterSpacing,
+  );
+
+  static final h3Border = GoogleFonts.lilitaOne(
+    fontWeight: FontWeight.w400,
+    fontSize: h3FontSize,
+    height: h3Height,
+    letterSpacing: h3LetterSpacing,
     foreground: Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.39
       ..color = AppColors.black_shadow_80,
   );
 
-  static final h4OnBackground = GoogleFonts.lilitaOne(
+  static final labelTextFontSize = 16.0;
+  static final labelTextHeight = 20 / 16;
+  static final labelTextLetterSpacing = -0.035 * 20;
+
+  static final labelText = GoogleFonts.lilitaOne(
     color: AppColors.palette_primary,
     fontWeight: FontWeight.w400,
-    fontSize: 14,
-    height: 48 / 20,
-    letterSpacing: -0.035 * 20,
+    fontSize: labelTextFontSize,
+    height: labelTextHeight,
+    letterSpacing: labelTextLetterSpacing,
+  );
+
+  static final labelTextWithBoarder = GoogleFonts.lilitaOne(
+    color: AppColors.background_white,
+    fontWeight: FontWeight.w400,
+    fontSize: labelTextFontSize,
+    height: labelTextHeight,
+    letterSpacing: labelTextLetterSpacing,
+  );
+
+  static final labelTextBorder = GoogleFonts.lilitaOne(
+    fontWeight: FontWeight.w400,
+    fontSize: labelTextFontSize,
+    height: labelTextHeight,
+    letterSpacing: labelTextLetterSpacing,
+    foreground: Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.39
+      ..color = AppColors.black_shadow_80,
   );
 
   static final buttonSectionTitle = GoogleFonts.roboto(

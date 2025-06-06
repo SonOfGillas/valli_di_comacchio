@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h1_on_primary/h1_on_primary.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
+import 'package:valli_di_comacchio/app/shared/components/npc_dialog_box/npc_dialog_box.dart';
+import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/l10n.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -18,13 +22,55 @@ class TradeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.palette_secondary,
       appBar: AppBar(
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new,
+                color: AppColors.background_white),
+            onPressed: () => context.go(RoutesPaths.home)),
         title: H1OnPrimary(l10n.tradePageTitle),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Image.asset(
-            AppImages.rosario,
-            height: 200,
+          BlocBuilder<TradeBloc, TradeState>(
+            buildWhen: (previous, current) => previous.npc != current.npc,
+            builder: (context, state) {
+              return Stack(
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        AppImages.rosario,
+                        height: 200,
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Text(
+                          (state.npc?.wealth ?? '').toString(),
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.palette_primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: NpcDialogueBox(
+                      speaker: state.npc?.name ?? '',
+                      text:
+                          'lorem ipsum dolor sit amet lorem ipsum dolor sit ame lorem ipsum dolor sit ame. test frase two, test frace tree. test frase four.', // l10n.tradeNpcDialogue,
+                      onTap: () {
+                        // Handle tap
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
           Expanded(
             child: Padding(
@@ -110,12 +156,9 @@ class _InfoGradient extends StatelessWidget {
               bottom: 0,
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Text(
+                child: LabelText(
                   'good to buy',
-                  style: TextStyle(
-                    color: AppColors.palette_primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  withBoarder: true,
                 ),
               ),
             ),
@@ -125,12 +168,9 @@ class _InfoGradient extends StatelessWidget {
               bottom: 0,
               child: Align(
                 alignment: Alignment.centerRight,
-                child: Text(
+                child: LabelText(
                   'good to sell',
-                  style: TextStyle(
-                    color: AppColors.palette_primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  withBoarder: true,
                 ),
               ),
             ),
@@ -155,8 +195,8 @@ class _TradeResourceGridElment extends StatelessWidget {
         color: _backgroundColor,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: AppColors.black_shadow_80,
-          width: 1.0,
+          color: AppColors.background_white,
+          width: 3.0,
         ),
         boxShadow: [
           BoxShadow(
@@ -173,12 +213,7 @@ class _TradeResourceGridElment extends StatelessWidget {
             resource.tradeResource.icon,
             style: const TextStyle(fontSize: 32),
           ),
-          const SizedBox(height: 4),
-          Text(
-            resource.tradeResource.name,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          LabelText(resource.tradeResource.name, textAlign: TextAlign.center),
           const SizedBox(height: 4),
         ],
       ),
