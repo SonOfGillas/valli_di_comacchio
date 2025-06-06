@@ -23,7 +23,7 @@ class NpcDisplayHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TradeBloc, TradeState>(
       buildWhen: (previous, current) =>
-          (previous.npc != current.npc) || previous.step != current.step,
+          (previous.npc != current.npc) || (previous.step != current.step),
       builder: (context, state) {
         return Stack(
           children: [
@@ -72,9 +72,6 @@ class NpcDisplayHeader extends StatelessWidget {
               child: NpcDialogueBox(
                 speaker: state.npc?.name ?? '',
                 text: npcMessage(state),
-                onTap: () {
-                  // Handle tap
-                },
               ),
             ),
           ],

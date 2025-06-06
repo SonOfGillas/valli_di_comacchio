@@ -6,7 +6,6 @@ import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart
 class NpcDialogueBox extends StatefulWidget {
   final String speaker;
   final String text;
-  final VoidCallback? onTap;
   final Duration speed;
 
   late final List<String> textList;
@@ -15,8 +14,7 @@ class NpcDialogueBox extends StatefulWidget {
     super.key,
     required this.text,
     required this.speaker,
-    this.onTap,
-    this.speed = const Duration(milliseconds: 60),
+    this.speed = const Duration(milliseconds: 50),
   }) {
     textList = text
         .split('.')
@@ -63,6 +61,19 @@ class _NpcDialogueBoxState extends State<NpcDialogueBox>
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant NpcDialogueBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.text != oldWidget.text) {
+      // Reset state for new text
+      _sentenceIndex = 0;
+      _charIndex = 0;
+      _visibleText = '';
+      _typingTimer?.cancel();
+      _startTyping();
+    }
+  }
+
   void _startTyping() {
     _charIndex = 0;
     _visibleText = '';
@@ -95,8 +106,6 @@ class _NpcDialogueBoxState extends State<NpcDialogueBox>
       _startTyping();
       _bounceController.stop();
       _bounceController.value = 1.0;
-    } else {
-      widget.onTap?.call();
     }
   }
 
