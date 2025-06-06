@@ -44,5 +44,7 @@
   "tradeResourceFruits": "Fruits",
   "tradeResourceStone": "Stone",
   "tradeInfoGradientGreen": "good to buy",
-  "tradeInfoGradientRed": "good to sell"
+  "tradeInfoGradientRed": "good to sell",
+
+  "mapPageTitle": "Map"
 }

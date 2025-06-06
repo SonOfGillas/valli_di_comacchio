@@ -22,7 +22,7 @@ class _SlashScreenState extends State<SlashScreen> {
 
     // Navigate to the home page after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.go(RoutesPaths.home);
+      context.go(RoutesPaths.map);
     });
   }
 

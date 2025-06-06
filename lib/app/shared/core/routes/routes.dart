@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:valli_di_comacchio/app/feature/home/home_page.dart';
+import 'package:valli_di_comacchio/app/feature/map/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/slash/slash_screen.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
@@ -15,9 +15,9 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: RoutesPaths.home,
+      path: RoutesPaths.map,
       builder: (BuildContext context, GoRouterState state) {
-        return const HomePage();
+        return const MapPage();
       },
     ),
     GoRoute(

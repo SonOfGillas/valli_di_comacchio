@@ -34,7 +34,7 @@
   "tradeResourceWine": "Vino",
   "tradeResourceVegetable": "Verdure",
   "tradeResourceFish": "Pesci",
-  "tradeResourceBirds": "Uccelli", 
+  "tradeResourceBirds": "Anatre", 
   "tradeResourceInsects": "Insetti",
   "tradeResourceBoot": "Barche",
   "tradeResourceTools": "Strumenti",
@@ -44,5 +44,7 @@
   "tradeResourceFruits": "Frutta",
   "tradeResourceStone": "Pietre",
   "tradeInfoGradientGreen": "meglio comprare",
-  "tradeInfoGradientRed": "meglio vendere"
+  "tradeInfoGradientRed": "meglio vendere",
+
+  "mapPageTitle": "Mappa"
 }
