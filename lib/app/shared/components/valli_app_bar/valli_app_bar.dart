@@ -14,7 +14,10 @@ import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
   const ValliAppBar({
     super.key,
+    this.onBackPressed,
   });
+
+  final VoidCallback? onBackPressed;
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -40,9 +43,13 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
       return path == RoutesPaths.trade;
     }
 
-    onBackPressed() {
+    goBack() {
       if (showBackButton()) {
-        context.pop();
+        if (onBackPressed != null) {
+          onBackPressed!();
+        } else {
+          context.pop();
+        }
       }
     }
 
@@ -51,7 +58,7 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? IconButton(
               icon: const Icon(Icons.arrow_back_ios_new,
                   color: AppColors.background_white),
-              onPressed: () => onBackPressed())
+              onPressed: () => goBack())
           : null,
       title: H1OnPrimary(getTitle()),
       actions: [

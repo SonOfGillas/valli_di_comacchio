@@ -10,10 +10,20 @@ class NpcDisplayHeader extends StatelessWidget {
     super.key,
   });
 
+  String npcMessage(TradeState state) {
+    if (state.step == TradingStep.selectOfferType) {
+      return 'Scegli un tipo di offerta:';
+    } else if (state.step == TradingStep.setPrice) {
+      return 'Imposta il prezzo per la tua offerta:';
+    }
+    return 'Sarebbe comodo se potessi vendermi le risorse segnate in rosso. Scegli una risorsa che vuoi scambiare con me.';
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TradeBloc, TradeState>(
-      buildWhen: (previous, current) => previous.npc != current.npc,
+      buildWhen: (previous, current) =>
+          (previous.npc != current.npc) || previous.step != current.step,
       builder: (context, state) {
         return Stack(
           children: [
@@ -61,8 +71,7 @@ class NpcDisplayHeader extends StatelessWidget {
               bottom: 0,
               child: NpcDialogueBox(
                 speaker: state.npc?.name ?? '',
-                text:
-                    'Sarebbe comodo se potessi vendermi le risorse segnate in rosso. Scegli una risorsa che vuoi scambiare con me. ', // l10n.tradeNpcDialogue,
+                text: npcMessage(state),
                 onTap: () {
                   // Handle tap
                 },

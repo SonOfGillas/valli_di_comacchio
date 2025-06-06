@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -13,32 +16,37 @@ class TradeResourceGridElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: _backgroundColor,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: AppColors.background_white,
-          width: 3.0,
+    return InkWell(
+      onTap: () {
+        context.read<TradeBloc>().add(SelectTradeResource(resource: resource));
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: _backgroundColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: AppColors.background_white,
+            width: 3.0,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.black_shadow_80,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.black_shadow_80,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            resource.tradeResource.icon,
-            style: const TextStyle(fontSize: 32),
-          ),
-          LabelText(resource.tradeResource.name, textAlign: TextAlign.center),
-          const SizedBox(height: 4),
-        ],
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              resource.tradeResource.icon,
+              style: const TextStyle(fontSize: 32),
+            ),
+            LabelText(resource.tradeResource.name, textAlign: TextAlign.center),
+            const SizedBox(height: 4),
+          ],
+        ),
       ),
     );
   }

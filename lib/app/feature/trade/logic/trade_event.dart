@@ -39,6 +39,13 @@ class SelectOfferType extends TradeEvent {
   List<Object?> get props => [offerType];
 }
 
+class GoBack extends TradeEvent {
+  const GoBack();
+
+  @override
+  List<Object?> get props => [];
+}
+
 class BuyTradeResource extends SelectOfferType {
   const BuyTradeResource() : super(offerType: OfferType.buy);
 

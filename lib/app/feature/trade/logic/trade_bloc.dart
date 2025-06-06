@@ -21,6 +21,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<LoadData>(_onLoadData);
     on<SelectTradeResource>(_onSelectTradeResource);
     on<SelectOfferType>(_onSelectOfferType);
+    on<GoBack>(_onGoBack);
     on<AcceptOffert>(_onAcceptOffert);
     on<SetCounterOffertPrice>(_onSetCounterOffertPrice);
     on<SetCounterOfferAmount>(_onSetCounterOfferAmount);
@@ -85,6 +86,20 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         tradeResourceInventory: state.selectedResource!,
       ),
     ));
+  }
+
+  void _onGoBack(GoBack event, Emitter<TradeState> emit) {
+    if (state.step == TradingStep.setPrice) {
+      emit(state.copyWith(
+        step: TradingStep.selectOfferType,
+        userCounterOffert: null,
+      ));
+    } else if (state.step == TradingStep.selectOfferType) {
+      emit(state.copyWith(
+        step: TradingStep.selectResource,
+        userCounterOffert: null,
+      ));
+    }
   }
 
   void _onAcceptOffert(AcceptOffert event, Emitter<TradeState> emit) async {
