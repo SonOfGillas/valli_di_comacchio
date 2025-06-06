@@ -12,7 +12,8 @@ class NpcDisplayHeader extends StatelessWidget {
 
   String npcMessage(TradeState state) {
     if (state.step == TradingStep.selectOfferType) {
-      return 'Scegli un tipo di offerta:';
+      final resourceName = state.selectedResource?.tradeResource.name ?? '';
+      return 'Dunque sei interessato a scambiare $resourceName con me?. bene, allora scegli se vuoi comprare o vendere';
     } else if (state.step == TradingStep.setPrice) {
       return 'Imposta il prezzo per la tua offerta:';
     }

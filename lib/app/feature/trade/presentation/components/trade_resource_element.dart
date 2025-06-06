@@ -2,25 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
+import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
-class TradeResourceGridElement extends StatelessWidget {
-  const TradeResourceGridElement({
+class TradeResourceElement extends StatelessWidget {
+  const TradeResourceElement({
     super.key,
     required this.resource,
+    this.expanded = false,
   });
 
   final TradeResourceInventory resource;
+  final bool expanded;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<TradeBloc>().add(SelectTradeResource(resource: resource));
+        final TradeBloc tradeBloc = context.read<TradeBloc>();
+        if (tradeBloc.state.step == TradingStep.selectResource) {
+          tradeBloc.add(SelectTradeResource(resource: resource));
+        }
       },
       child: Container(
+        width: expanded ? 100 : null,
+        height: expanded ? 100 : null,
         decoration: BoxDecoration(
           color: _backgroundColor,
           borderRadius: BorderRadius.circular(12),
@@ -41,7 +49,7 @@ class TradeResourceGridElement extends StatelessWidget {
           children: [
             Text(
               resource.tradeResource.icon,
-              style: const TextStyle(fontSize: 32),
+              style: TextStyle(fontSize: expanded ? 48 : 32),
             ),
             LabelText(resource.tradeResource.name, textAlign: TextAlign.center),
             const SizedBox(height: 4),
