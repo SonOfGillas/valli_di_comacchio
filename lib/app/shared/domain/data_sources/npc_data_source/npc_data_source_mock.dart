@@ -5,6 +5,7 @@ class NpcDataSourceMock implements NpcDataSource {
   var npcDataMock = Npc(
     id: '1',
     name: 'Rosario',
+    location: 'Comacchio',
     imageUrl: 'https://example.com/test.png',
     wealth: 0,
     inventory: [],

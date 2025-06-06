@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 
 class NpcDialogueBox extends StatefulWidget {
   final String speaker;

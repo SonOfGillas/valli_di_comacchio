@@ -6,6 +6,7 @@ class Npc extends Equatable {
     required this.id,
     required this.name,
     required this.imageUrl,
+    required this.location,
     required this.wealth,
     required this.inventory,
   });
@@ -13,6 +14,7 @@ class Npc extends Equatable {
   final String id;
   final String name;
   final String imageUrl;
+  final String location;
   final int wealth;
   final List<TradeResourceInventory> inventory;
 
@@ -21,9 +23,8 @@ class Npc extends Equatable {
   // opinion -> opinione del npc sul giocatore
 
   @override
-  List<Object?> get props => [id, name, imageUrl, inventory];
+  List<Object?> get props => [id, name, imageUrl, location, inventory];
 
-  @override
   Npc copyWith({
     int? wealth,
     List<TradeResourceInventory>? inventory,
@@ -31,6 +32,7 @@ class Npc extends Equatable {
     return Npc(
       id: id,
       name: name,
+      location: location,
       imageUrl: imageUrl,
       wealth: wealth ?? this.wealth,
       inventory: inventory ?? this.inventory,

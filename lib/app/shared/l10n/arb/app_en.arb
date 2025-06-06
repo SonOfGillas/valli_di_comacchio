@@ -42,5 +42,7 @@
   "tradeResourceBread": "Bread",
   "tradeResourceHoney": "Honey",
   "tradeResourceFruits": "Fruits",
-  "tradeResourceStone": "Stone"
+  "tradeResourceStone": "Stone",
+  "tradeInfoGradientGreen": "good to buy",
+  "tradeInfoGradientRed": "good to sell"
 }
