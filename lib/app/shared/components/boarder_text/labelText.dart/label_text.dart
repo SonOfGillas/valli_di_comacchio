@@ -3,7 +3,7 @@ import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
 class LabelText extends StatelessWidget {
   const LabelText(this.text,
-      {super.key, this.withBoarder = false, this.textAlign});
+      {super.key, this.withBoarder = true, this.textAlign});
 
   final String text;
   final bool withBoarder;

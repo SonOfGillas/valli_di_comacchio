@@ -13,10 +13,12 @@ class TradeResourceElement extends StatelessWidget {
     super.key,
     required this.resource,
     this.expanded = false,
+    this.isUserResource = false,
   });
 
   final TradeResourceInventory resource;
   final bool expanded;
+  final bool isUserResource;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +69,10 @@ class TradeResourceElement extends StatelessWidget {
   }
 
   Color get _backgroundColor {
+    if (isUserResource) {
+      return AppColors.shades_white_75;
+    }
+
     final demandNormalized = resource.demandNormalized;
     if (demandNormalized < -0.9) {
       return AppColors.shade_green_100;

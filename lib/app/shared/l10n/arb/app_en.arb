@@ -18,6 +18,7 @@
   "commonError": "Error",
   "commonTitle": "Title",
   "commonServerTimeoutError": "Unable to connect to the server, please retry.",
+
   "loginPasswordHint": "Password",
   "loginPasswordForgot": "have you forgotten your password?",
   "loginLoginButton": "LOGIN",
@@ -26,6 +27,7 @@
   "@commonErrorTimeoutFailureMessage": {
     "description": "Error message shown to the user when a response from the server is taking too long"
   },
+  
   "tradePageTitle":"Trade",
   "tradeResourceFlowers": "Flower",
   "tradeResourceLogs": "Logs",
@@ -45,6 +47,13 @@
   "tradeResourceStone": "Stone",
   "tradeInfoGradientGreen": "good to buy",
   "tradeInfoGradientRed": "good to sell",
+  "tradeNpcWealth": "{name}'s wealth",
+  "@tradeNpcWealth": {
+    "description": "Label showing the wealth of the NPC, where {name} is replaced by the NPC's name",
+    "placeholders": {
+      "name": {}
+    }
+  },
 
   "mapPageTitle": "Map"
 }

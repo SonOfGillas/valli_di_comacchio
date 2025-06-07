@@ -6,8 +6,12 @@ import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/demand_info_gradient.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/trade_resource_element.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_button.dart';
-import 'package:valli_di_comacchio/app/shared/components/appButton/retro_gold_button.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class SelectOfferTypeStep extends StatelessWidget {
   const SelectOfferTypeStep({
@@ -27,14 +31,47 @@ class SelectOfferTypeStep extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    //H3('${state.npc?.name} possiede:'),
-                    TradeResourceElement(
-                        resource: state.selectedResource!, expanded: true),
-                    //H3('x ${state.selectedResource!.storage}'),
+                    Column(
+                      children: [
+                        H3('${state.npc?.name} possiede:'),
+                        TradeResourceElement(
+                            resource: state.selectedResource!, expanded: true),
+                        Image.asset(
+                          AppImages.rosario,
+                          height: 80,
+                        ),
+                      ],
+                    ),
+                    Builder(builder: (context) {
+                      return BlocBuilder<AppCubit, AppState>(
+                        builder: (context, appState) {
+                          final userResource =
+                              appState.user?.inventory.firstWhere(
+                            (element) =>
+                                element.tradeResource ==
+                                state.selectedResource!.tradeResource,
+                          );
+                          return Column(
+                            children: [
+                              H3('Tu possiedi:'),
+                              if (userResource != null)
+                                TradeResourceElement(
+                                    resource: userResource,
+                                    isUserResource: true,
+                                    expanded: true),
+                              // Account Icon
+                              const Icon(Icons.person,
+                                  size: 80, color: AppColors.palette_primary),
+                            ],
+                          );
+                        },
+                      );
+                    }),
                   ],
                 ),
               ),

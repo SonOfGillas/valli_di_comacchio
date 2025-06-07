@@ -28,7 +28,7 @@
   },
   "tradePageTitle":"Commercia",
   "tradeResourceFlowers": "Fiori",
-  "tradeResourceLogs": "Legni",
+  "tradeResourceLogs": "Legna",
   "tradeResourceSeeds": "Semi",
   "tradeResourceSalt": "Sale",
   "tradeResourceWine": "Vino",
@@ -45,6 +45,13 @@
   "tradeResourceStone": "Pietre",
   "tradeInfoGradientGreen": "meglio comprare",
   "tradeInfoGradientRed": "meglio vendere",
+  "tradeNpcWealth": "fondi di {name}",
+  "@tradeNpcWealth": {
+    "description": "Label showing the wealth of the NPC, where {name} is replaced by the NPC's name",
+    "placeholders": {
+      "name": {}
+    }
+  },
 
   "mapPageTitle": "Mappa"
 }

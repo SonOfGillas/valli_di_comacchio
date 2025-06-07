@@ -22,7 +22,7 @@ class AppTextStyles {
   );
 
   static final defaultLetterSpacing = -0.060;
-  static final defaultBorderWidth = 3.0;
+  static final defaultBorderWidth = 4.0;
   static final shadowXoffset = -0.08;
   static final shadowYoffset = 0.10;
 
