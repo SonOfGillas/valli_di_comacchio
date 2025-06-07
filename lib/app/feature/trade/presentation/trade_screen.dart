@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
-import 'package:valli_di_comacchio/app/feature/trade/presentation/components/demand_info_gradient.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc_dislay_header.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_offer_type_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_resource_step.dart';
@@ -43,7 +42,6 @@ class TradeScreen extends StatelessWidget {
               if (state.step == TradingStep.selectOfferType)
                 SelectOfferTypeStep(),
               if (state.step == TradingStep.setPrice) SetPriceStep(),
-              DemandInfoGradient(),
             ],
           ),
         );

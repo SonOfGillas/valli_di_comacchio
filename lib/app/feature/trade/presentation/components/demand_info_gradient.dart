@@ -11,7 +11,7 @@ class DemandInfoGradient extends StatelessWidget {
     final l10n = context.l10n;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 16.0),
+      padding: const EdgeInsets.only(left: 24.0, right: 24.0),
       child: SizedBox(
         height: 32,
         child: Stack(
