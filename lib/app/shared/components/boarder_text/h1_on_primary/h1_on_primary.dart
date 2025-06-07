@@ -10,8 +10,8 @@ class H1OnPrimary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Text(text, style: AppTextStyles.h1OnPrimaryBorder),
         Text(text, style: AppTextStyles.h1OnPrimary),
-        Text(text, style: AppTextStyles.h1OnPrimaryBorder)
       ],
     );
   }

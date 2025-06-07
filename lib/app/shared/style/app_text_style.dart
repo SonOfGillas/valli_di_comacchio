@@ -21,9 +21,14 @@ class AppTextStyles {
     ],
   );
 
+  static final defaultLetterSpacing = -0.060;
+  static final defaultBorderWidth = 3.0;
+  static final shadowXoffset = -0.08;
+  static final shadowYoffset = 0.10;
+
   static final h1FontSize = 32.0;
   static final h1Height = 48 / 32;
-  static final h1LetterSpacing = -0.035 * 32;
+  static final h1LetterSpacing = defaultLetterSpacing * (h1FontSize);
 
   static final h1OnPrimary = GoogleFonts.lilitaOne(
     color: AppColors.background_white,
@@ -31,29 +36,29 @@ class AppTextStyles {
     fontSize: h1FontSize,
     height: h1Height,
     letterSpacing: h1LetterSpacing,
-    shadows: const [
+    shadows: [
       Shadow(
-        color: Color(0xFF080206),
-        offset: Offset(0, 2.79),
+        color: AppColors.black_shadow_80,
+        offset: Offset(shadowXoffset * h1FontSize, shadowYoffset * h1FontSize),
         blurRadius: 0,
       ),
     ],
   );
 
   static final h1OnPrimaryBorder = GoogleFonts.lilitaOne(
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w900,
     fontSize: h1FontSize,
     height: h1Height,
     letterSpacing: h1LetterSpacing,
     foreground: Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.39
+      ..strokeWidth = defaultBorderWidth
       ..color = AppColors.black_shadow_80,
   );
 
-  static final h3FontSize = 20.0;
-  static final h3Height = 32 / 20;
-  static final h3LetterSpacing = -0.035 * 20;
+  static final h3FontSize = 22.0;
+  static final h3Height = 32 / 22;
+  static final h3LetterSpacing = defaultLetterSpacing * h3FontSize;
 
   static final h3WithBoarder = GoogleFonts.lilitaOne(
     color: AppColors.background_white,
@@ -61,22 +66,30 @@ class AppTextStyles {
     fontSize: h3FontSize,
     height: h3Height,
     letterSpacing: h3LetterSpacing,
+    shadows: [
+      Shadow(
+        color: AppColors.black_shadow_80,
+        offset: Offset(shadowXoffset * h3FontSize, shadowYoffset * h3FontSize),
+        blurRadius: 0,
+      ),
+    ],
   );
 
   static final h3Border = GoogleFonts.lilitaOne(
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w900,
     fontSize: h3FontSize,
     height: h3Height,
     letterSpacing: h3LetterSpacing,
     foreground: Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.39
+      ..strokeWidth = defaultBorderWidth
       ..color = AppColors.black_shadow_80,
   );
 
-  static final labelTextFontSize = 16.0;
-  static final labelTextHeight = 20 / 16;
-  static final labelTextLetterSpacing = -0.035 * 20;
+  static final labelTextFontSize = 18.0;
+  static final labelTextHeight = 24 / 18;
+  static final labelTextLetterSpacing =
+      defaultLetterSpacing * labelTextFontSize;
 
   static final labelText = GoogleFonts.lilitaOne(
     color: AppColors.palette_primary,
@@ -92,16 +105,24 @@ class AppTextStyles {
     fontSize: labelTextFontSize,
     height: labelTextHeight,
     letterSpacing: labelTextLetterSpacing,
+    shadows: [
+      Shadow(
+        color: AppColors.black_shadow_80,
+        offset: Offset(shadowXoffset * labelTextFontSize,
+            shadowYoffset * labelTextFontSize),
+        blurRadius: 0,
+      ),
+    ],
   );
 
   static final labelTextBorder = GoogleFonts.lilitaOne(
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w900,
     fontSize: labelTextFontSize,
     height: labelTextHeight,
     letterSpacing: labelTextLetterSpacing,
     foreground: Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.39
+      ..strokeWidth = defaultBorderWidth
       ..color = AppColors.black_shadow_80,
   );
 

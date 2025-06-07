@@ -10,8 +10,8 @@ class H3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Text(text, style: AppTextStyles.h3Border),
         Text(text, style: AppTextStyles.h3WithBoarder),
-        Text(text, style: AppTextStyles.h3Border)
       ],
     );
   }

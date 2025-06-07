@@ -23,8 +23,8 @@ class SelectResourceStep extends StatelessWidget {
               itemCount: inventory.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
                 childAspectRatio: 1,
               ),
               itemBuilder: (context, index) {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -27,8 +28,8 @@ class TradeResourceElement extends StatelessWidget {
         }
       },
       child: Container(
-        width: expanded ? 100 : null,
-        height: expanded ? 100 : null,
+        width: expanded ? 130 : null,
+        height: expanded ? 130 : null,
         decoration: BoxDecoration(
           color: _backgroundColor,
           borderRadius: BorderRadius.circular(12),
@@ -47,12 +48,18 @@ class TradeResourceElement extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (expanded) H3(resource.tradeResource.name),
             Text(
               resource.tradeResource.icon,
-              style: TextStyle(fontSize: expanded ? 48 : 32),
+              style: TextStyle(fontSize: expanded ? 42 : 32),
             ),
-            LabelText(resource.tradeResource.name, textAlign: TextAlign.center),
-            const SizedBox(height: 4),
+            if (expanded) H3('x${resource.storage}'),
+            if (!expanded)
+              LabelText(
+                resource.tradeResource.name,
+                textAlign: TextAlign.center,
+                withBoarder: true,
+              ),
           ],
         ),
       ),

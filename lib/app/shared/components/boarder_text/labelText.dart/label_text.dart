@@ -15,13 +15,14 @@ class LabelText extends StatelessWidget {
   ) {
     return Stack(
       children: [
+        if (withBoarder)
+          Text(text,
+              style: AppTextStyles.labelTextBorder, textAlign: textAlign),
         Text(text,
             style: (withBoarder)
                 ? AppTextStyles.labelTextWithBoarder
                 : AppTextStyles.labelText,
             textAlign: textAlign),
-        if (withBoarder)
-          Text(text, style: AppTextStyles.labelTextBorder, textAlign: textAlign)
       ],
     );
   }

@@ -68,8 +68,8 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               SvgPicture.asset(
                 AppIcons.money,
-                width: 34,
-                height: 34,
+                width: 30,
+                height: 30,
                 colorFilter: ColorFilter.mode(
                   AppColors.background_white,
                   BlendMode.srcIn,
