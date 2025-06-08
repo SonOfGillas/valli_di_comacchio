@@ -33,16 +33,20 @@ class TradeScreen extends StatelessWidget {
               }
             },
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              NpcDisplayHeader(),
-              if (state.step == TradingStep.selectResource)
-                SelectResourceStep(),
-              if (state.step == TradingStep.selectOfferType)
-                SelectOfferTypeStep(),
-              if (state.step == TradingStep.setPrice) SetPriceStep(),
-            ],
+          body: SingleChildScrollView(
+            child: Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  NpcDisplayHeader(),
+                  if (state.step == TradingStep.selectResource)
+                    SelectResourceStep(),
+                  if (state.step == TradingStep.selectOfferType)
+                    SelectOfferTypeStep(),
+                  if (state.step == TradingStep.setPrice) SetPriceStep(),
+                ],
+              ),
+            ),
           ),
         );
       },

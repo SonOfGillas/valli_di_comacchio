@@ -22,7 +22,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<SelectTradeResource>(_onSelectTradeResource);
     on<SelectOfferType>(_onSelectOfferType);
     on<GoBack>(_onGoBack);
-    on<AcceptOffert>(_onAcceptOffert);
+    on<AcceptOffer>(_onAcceptOffert);
     on<SetCounterOffertPrice>(_onSetCounterOffertPrice);
     on<SetCounterOfferAmount>(_onSetCounterOfferAmount);
     on<SetCounterOfferMotivation>(_onSetCounterOfferMotivation);
@@ -39,6 +39,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   User? get user => appCubit.state.user;
 
   void _onLoadData(LoadData event, Emitter<TradeState> emit) async {
+    _getNpcMessage(emit);
     await appCubit.loadUserData();
     if (appCubit.state.user == null) {
       emit(state.copyWith(
@@ -72,6 +73,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       selectedResource: event.resource,
       step: TradingStep.selectOfferType,
     ));
+    _getNpcMessage(emit);
   }
 
   void _onSelectOfferType(SelectOfferType event, Emitter<TradeState> emit) {
@@ -86,6 +88,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         tradeResourceInventory: state.selectedResource!,
       ),
     ));
+    _getNpcMessage(emit);
   }
 
   void _onGoBack(GoBack event, Emitter<TradeState> emit) {
@@ -100,9 +103,10 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         userCounterOffert: null,
       ));
     }
+    _getNpcMessage(emit);
   }
 
-  void _onAcceptOffert(AcceptOffert event, Emitter<TradeState> emit) async {
+  void _onAcceptOffert(AcceptOffer event, Emitter<TradeState> emit) async {
     if (state.npcOffert != null && user != null) {
       final updatedUser =
           applyOfferToUser(offer: state.npcOffert!, user: user!);
@@ -181,5 +185,23 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
 
   void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {
     //TODO implement send counter offer logic
+  }
+
+  void _getNpcMessage(Emitter<TradeState> emit) {
+    if (state.step == TradingStep.selectResource) {
+      emit(state.copyWith(
+          npcMessage:
+              'Sarebbe comodo se potessi vendermi le risorse segnate in rosso. Scegli una risorsa che vuoi scambiare con me.'));
+    } else if (state.step == TradingStep.selectOfferType) {
+      emit(state.copyWith(
+          npcMessage:
+              'Dunque sei interessato a scambiare ${state.selectedResource?.tradeResource.name} con me?. bene, allora scegli se vuoi comprare o vendere'));
+    } else if (state.step == TradingStep.setPrice) {
+      emit(state.copyWith(
+          npcMessage:
+              'Ecco la mia offerta per ${state.selectedResource?.tradeResource.name}. Se ti va bene, accetta l\'offerta. Altrimenti, puoi fare una controfferta.'));
+    } else {
+      emit(state.copyWith(npcMessage: ''));
+    }
   }
 }

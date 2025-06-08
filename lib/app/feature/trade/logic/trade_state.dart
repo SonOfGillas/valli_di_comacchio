@@ -12,6 +12,7 @@ class TradeState {
   final TradingStep step;
   final Failure? failure;
   final Npc? npc;
+  final String npcMessage;
   final TradeResourceInventory? selectedResource;
   final TradeResourceOffer? npcOffert;
   final TradeResourceOffer? userCounterOffert;
@@ -22,6 +23,7 @@ class TradeState {
     this.step = TradingStep.selectResource,
     this.failure,
     this.npc,
+    this.npcMessage = '',
     this.selectedResource,
     this.npcOffert,
     this.userCounterOffert,
@@ -33,6 +35,7 @@ class TradeState {
     TradingStep? step,
     Failure? failure,
     Npc? npc,
+    String? npcMessage,
     TradeResourceInventory? selectedResource,
     TradeResourceOffer? npcOffert,
     TradeResourceOffer? userCounterOffert,
@@ -43,6 +46,7 @@ class TradeState {
       step: step ?? this.step,
       failure: failure ?? this.failure,
       npc: npc ?? this.npc,
+      npcMessage: npcMessage ?? this.npcMessage,
       selectedResource: selectedResource ?? this.selectedResource,
       npcOffert: npcOffert ?? this.npcOffert,
       userCounterOffert: userCounterOffert ?? this.userCounterOffert,

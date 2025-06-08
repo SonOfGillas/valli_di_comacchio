@@ -105,12 +105,24 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final lblStyle = _getLabelStyle(labelStyle);
 
+    final getKeyboardType = () {
+      switch (type) {
+        case AppTextFieldType.text:
+          return TextInputType.text;
+        case AppTextFieldType.number:
+          return TextInputType.number;
+        case AppTextFieldType.password:
+          return TextInputType.visiblePassword;
+        case AppTextFieldType.textArea:
+          return TextInputType.multiline;
+      }
+    }();
+
     final textfield = SizedBox(
       height: height,
       child: TextField(
         maxLength: maxLength,
-        keyboardType:
-            type == AppTextFieldType.textArea ? TextInputType.multiline : null,
+        keyboardType: getKeyboardType,
         obscureText: type == AppTextFieldType.password,
         maxLines: type == AppTextFieldType.textArea ? 4 : 1,
         enabled: !disabled,
@@ -118,7 +130,7 @@ class AppTextField extends StatelessWidget {
         onSubmitted: (val) => onSubmit?.call(val),
         readOnly: readOnly,
         controller: controller,
-        style: AppTextStyles.label,
+        style: AppTextStyles.labelText,
         decoration: InputDecoration(
           //isDense: true,
           contentPadding: EdgeInsets.only(
@@ -137,6 +149,7 @@ class AppTextField extends StatelessWidget {
                     DecoratedBox(
                       decoration: BoxDecoration(
                         border: Border.all(
+                          width: appTextFieldBorderWidth,
                           color: AppTextFieldColors.border,
                         ),
                         color: AppTextFieldColors.iconBackground,
@@ -163,6 +176,7 @@ class AppTextField extends StatelessWidget {
                   decoration: const BoxDecoration(
                     border: Border(
                       left: BorderSide(
+                        width: appTextFieldBorderWidth,
                         color: AppTextFieldColors.border,
                       ),
                     ),
@@ -185,18 +199,25 @@ class AppTextField extends StatelessWidget {
                 )
               : null,
           border: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppTextFieldColors.border),
+            borderRadius: appTextFieldBorderRadius,
+            borderSide: BorderSide(
+                width: appTextFieldBorderWidth,
+                color: AppTextFieldColors.border),
           ),
           enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppTextFieldColors.border),
-            borderRadius: BorderRadius.zero,
+            borderRadius: appTextFieldBorderRadius,
+            borderSide: BorderSide(
+                width: appTextFieldBorderWidth,
+                color: AppTextFieldColors.border),
           ),
           hintText: placeHolder,
           hintStyle: placeholderStyle ?? textFieldPlaceHolderStyle,
           errorText: errorMessage,
           errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppTextFieldColors.borderError),
-            borderRadius: BorderRadius.zero,
+            borderRadius: appTextFieldBorderRadius,
+            borderSide: BorderSide(
+                width: appTextFieldBorderWidth,
+                color: AppTextFieldColors.borderError),
           ),
           counterText: '',
         ),

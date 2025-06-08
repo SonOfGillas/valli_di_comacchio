@@ -61,8 +61,8 @@ class SellTradeResource extends SelectOfferType {
   List<Object?> get props => [];
 }
 
-class AcceptOffert extends TradeEvent {
-  const AcceptOffert();
+class AcceptOffer extends TradeEvent {
+  const AcceptOffer();
 
   @override
   List<Object?> get props => [];

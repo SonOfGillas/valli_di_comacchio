@@ -16,6 +16,7 @@ enum AppTextFieldLabelPosition {
 
 enum AppTextFieldType {
   text,
+  number,
   password,
   textArea;
 }
@@ -34,16 +35,19 @@ TextStyle boldItalicsLabelStyle =
     boldLabelStyle.copyWith(fontStyle: FontStyle.italic);
 
 abstract class AppTextFieldColors {
-  static const Color border = AppColors.shade_shade_white_25;
+  static const Color border = AppColors.palette_primary;
   static const Color borderError = AppColors.utility_allert;
-  static const Color text = AppColors.background_white;
+  static const Color text = AppColors.palette_primary;
   static const Color textError = AppColors.utility_allert;
-  static const Color leftIcon = AppColors.background_white;
-  static const Color rightIcon = AppColors.background_white;
+  static const Color leftIcon = AppColors.palette_primary;
+  static const Color rightIcon = AppColors.palette_primary;
   static const Color iconBackground = AppColors.shade_shade_white_50;
   static const Color fill = AppColors.shade_shade_gray_50;
-  static const Color background = AppColors.shade_shade_white_15;
+  static const Color background = AppColors.palette_secondary;
 }
 
 TextStyle textFieldPlaceHolderStyle =
     AppTextStyles.label.copyWith(color: AppColors.shade_shade_gray_50);
+
+const appTextFieldBorderWidth = 3.0;
+const appTextFieldBorderRadius = BorderRadius.all(Radius.circular(30));

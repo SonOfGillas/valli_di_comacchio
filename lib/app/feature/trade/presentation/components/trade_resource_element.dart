@@ -30,8 +30,8 @@ class TradeResourceElement extends StatelessWidget {
         }
       },
       child: Container(
-        width: expanded ? 130 : null,
-        height: expanded ? 130 : null,
+        width: expanded ? 130 : 80,
+        height: expanded ? 130 : 80,
         decoration: BoxDecoration(
           color: _backgroundColor,
           borderRadius: BorderRadius.circular(12),

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/npc_dialog_box/npc_dialog_box.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/l10n.dart';
@@ -16,23 +15,15 @@ class NpcDisplayHeader extends StatelessWidget {
     super.key,
   });
 
-  String npcMessage(TradeState state) {
-    if (state.step == TradingStep.selectOfferType) {
-      final resourceName = state.selectedResource?.tradeResource.name ?? '';
-      return 'Dunque sei interessato a scambiare $resourceName con me?. bene, allora scegli se vuoi comprare o vendere';
-    } else if (state.step == TradingStep.setPrice) {
-      return 'Imposta il prezzo per la tua offerta:';
-    }
-    return 'Sarebbe comodo se potessi vendermi le risorse segnate in rosso. Scegli una risorsa che vuoi scambiare con me.';
-  }
-
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
 
     return BlocBuilder<TradeBloc, TradeState>(
       buildWhen: (previous, current) =>
-          (previous.npc != current.npc) || (previous.step != current.step),
+          (previous.npc != current.npc) ||
+          (previous.step != current.step) ||
+          (previous.npcMessage != current.npcMessage),
       builder: (context, state) {
         return Stack(
           children: [
@@ -79,15 +70,16 @@ class NpcDisplayHeader extends StatelessWidget {
                 ),
               ],
             ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: NpcDialogueBox(
-                speaker: state.npc?.name ?? '',
-                text: npcMessage(state),
+            if (state.npcMessage.isNotEmpty)
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: NpcDialogueBox(
+                  speaker: state.npc?.name ?? '',
+                  text: state.npcMessage,
+                ),
               ),
-            ),
           ],
         );
       },
