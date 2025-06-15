@@ -68,8 +68,8 @@ class AcceptOffer extends TradeEvent {
   List<Object?> get props => [];
 }
 
-class SetCounterOffertPrice extends TradeEvent {
-  const SetCounterOffertPrice({
+class SetCounterOfferPrice extends TradeEvent {
+  const SetCounterOfferPrice({
     required this.price,
   });
 
@@ -79,15 +79,15 @@ class SetCounterOffertPrice extends TradeEvent {
   List<Object?> get props => [price];
 }
 
-class SetCounterOfferAmount extends TradeEvent {
-  const SetCounterOfferAmount({
-    required this.amount,
+class SetCounterOfferQuantity extends TradeEvent {
+  const SetCounterOfferQuantity({
+    required this.quantity,
   });
 
-  final int amount;
+  final int quantity;
 
   @override
-  List<Object?> get props => [amount];
+  List<Object?> get props => [quantity];
 }
 
 class SetCounterOfferMotivation extends TradeEvent {

@@ -39,7 +39,8 @@ class SelectOfferTypeStep extends StatelessWidget {
                     children: [
                       H3('${state.npc?.name} possiede:'),
                       TradeResourceElement(
-                          resource: state.selectedResource!, expanded: true),
+                          resource: state.selectedResource!,
+                          size: TradeResourceElmentSize.large),
                       Image.asset(
                         AppImages.rosario,
                         height: 80,
@@ -62,7 +63,7 @@ class SelectOfferTypeStep extends StatelessWidget {
                               TradeResourceElement(
                                   resource: userResource,
                                   isUserResource: true,
-                                  expanded: true),
+                                  size: TradeResourceElmentSize.large),
                             // Account Icon
                             const Icon(Icons.person,
                                 size: 80, color: AppColors.palette_primary),

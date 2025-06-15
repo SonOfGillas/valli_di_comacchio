@@ -131,10 +131,13 @@ class AppTextField extends StatelessWidget {
         readOnly: readOnly,
         controller: controller,
         style: AppTextStyles.labelText,
+        textAlign: type == AppTextFieldType.number
+            ? TextAlign.center
+            : TextAlign.start,
         decoration: InputDecoration(
           //isDense: true,
           contentPadding: EdgeInsets.only(
-            left: conententLeftPadding,
+            left: type == AppTextFieldType.number ? 0 : conententLeftPadding,
             top: type == AppTextFieldType.textArea ? 20 : 0,
           ),
           filled: variant == AppTextFieldVariant.filled ||
@@ -225,37 +228,40 @@ class AppTextField extends StatelessWidget {
       ),
     );
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: (label?.isEmpty ?? true)
-          ? <Widget>[Expanded(child: textfield)]
-          : labelPosition == AppTextFieldLabelPosition.top
-              ? <Widget>[
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 3),
-                          child: Text(label!, style: lblStyle),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: textfield,
-                        ),
-                      ],
+    return SizedBox(
+      width: type == AppTextFieldType.number ? 60 : double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: (label?.isEmpty ?? true)
+            ? <Widget>[Expanded(child: textfield)]
+            : labelPosition == AppTextFieldLabelPosition.top
+                ? <Widget>[
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 3),
+                            child: Text(label!, style: lblStyle),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: textfield,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ]
-              : <Widget>[
-                  Text(label!, style: lblStyle),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: textfield,
+                  ]
+                : <Widget>[
+                    Text(label!, style: lblStyle),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8),
+                        child: textfield,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+      ),
     );
   }
 

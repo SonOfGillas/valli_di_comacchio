@@ -23,7 +23,7 @@ class SetPriceStep extends StatelessWidget {
     return BlocBuilder<TradeBloc, TradeState>(
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -163,22 +163,58 @@ class SetPriceStep extends StatelessWidget {
                                 BlendMode.srcIn,
                               ),
                             ),
-                            const SizedBox(width: 4),
-                            H3(state.npcOffert!.offerPrice.toString()),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: AppTextField(
+                                placeHolder:
+                                    '${state.userCounterOffert?.offerPrice}',
+                                type: AppTextFieldType.number,
+                                onChange: (value) {
+                                  context.read<TradeBloc>().add(
+                                        SetCounterOfferPrice(
+                                          price: int.tryParse(value) ?? 0,
+                                        ),
+                                      );
+                                },
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TradeResourceElement(
-                                resource:
-                                    state.npcOffert!.tradeResourceInventory),
-                            const SizedBox(width: 4),
-                            H3('x${state.npcOffert!.offerQuantity}'),
-                          ],
+                        child: SizedBox(
+                          height: 70,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: TradeResourceElement(
+                                  resource:
+                                      state.npcOffert!.tradeResourceInventory,
+                                  size: TradeResourceElmentSize.small,
+                                ),
+                              ),
+                              H3('x'),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: AppTextField(
+                                  placeHolder:
+                                      '${state.userCounterOffert?.offerQuantity}',
+                                  type: AppTextFieldType.number,
+                                  onChange: (value) {
+                                    context.read<TradeBloc>().add(
+                                          SetCounterOfferQuantity(
+                                            quantity: int.tryParse(value) ?? 0,
+                                          ),
+                                        );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Padding(
@@ -203,7 +239,7 @@ class SetPriceStep extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                H3('${state.npcOffert!.offerPrice}'),
+                                H3('${state.userCounterOffert?.totalCost}'),
                               ],
                             ),
                           ],
@@ -213,10 +249,7 @@ class SetPriceStep extends StatelessWidget {
                   ),
                 ],
               ),
-              AppTextField(
-                type: AppTextFieldType.number,
-                onChange: (value) {},
-              ),
+
               // Padding(
               //   padding: const EdgeInsets.only(top: 8.0),
               //   child: Row(

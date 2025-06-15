@@ -8,17 +8,45 @@ import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
+enum TradeResourceElmentSize {
+  small,
+  medium,
+  large,
+}
+
 class TradeResourceElement extends StatelessWidget {
   const TradeResourceElement({
     super.key,
     required this.resource,
-    this.expanded = false,
+    this.size = TradeResourceElmentSize.medium,
     this.isUserResource = false,
   });
 
   final TradeResourceInventory resource;
-  final bool expanded;
+  final TradeResourceElmentSize size;
   final bool isUserResource;
+
+  double get containerDimension {
+    switch (size) {
+      case TradeResourceElmentSize.small:
+        return 50.0;
+      case TradeResourceElmentSize.medium:
+        return 80.0;
+      case TradeResourceElmentSize.large:
+        return 130.0;
+    }
+  }
+
+  double get iconSize {
+    switch (size) {
+      case TradeResourceElmentSize.small:
+        return 24.0;
+      case TradeResourceElmentSize.medium:
+        return 32.0;
+      case TradeResourceElmentSize.large:
+        return 42.0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +58,8 @@ class TradeResourceElement extends StatelessWidget {
         }
       },
       child: Container(
-        width: expanded ? 130 : 80,
-        height: expanded ? 130 : 80,
+        width: containerDimension,
+        height: containerDimension,
         decoration: BoxDecoration(
           color: _backgroundColor,
           borderRadius: BorderRadius.circular(12),
@@ -50,13 +78,15 @@ class TradeResourceElement extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (expanded) H3(resource.tradeResource.name),
+            if (size == TradeResourceElmentSize.large)
+              H3(resource.tradeResource.name),
             Text(
               resource.tradeResource.icon,
-              style: TextStyle(fontSize: expanded ? 42 : 32),
+              style: TextStyle(fontSize: iconSize),
             ),
-            if (expanded) H3('x${resource.storage}'),
-            if (!expanded)
+            if (size == TradeResourceElmentSize.large)
+              H3('x${resource.storage}'),
+            if (size == TradeResourceElmentSize.medium)
               LabelText(
                 resource.tradeResource.name,
                 textAlign: TextAlign.center,

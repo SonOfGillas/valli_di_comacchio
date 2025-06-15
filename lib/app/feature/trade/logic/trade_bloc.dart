@@ -23,8 +23,8 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<SelectOfferType>(_onSelectOfferType);
     on<GoBack>(_onGoBack);
     on<AcceptOffer>(_onAcceptOffert);
-    on<SetCounterOffertPrice>(_onSetCounterOffertPrice);
-    on<SetCounterOfferAmount>(_onSetCounterOfferAmount);
+    on<SetCounterOfferPrice>(_onSetCounterOffertPrice);
+    on<SetCounterOfferQuantity>(_onSetCounterOfferQuantity);
     on<SetCounterOfferMotivation>(_onSetCounterOfferMotivation);
     on<SendCounterOffer>(_onSendCounterOffer);
 
@@ -151,7 +151,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   }
 
   void _onSetCounterOffertPrice(
-      SetCounterOffertPrice event, Emitter<TradeState> emit) {
+      SetCounterOfferPrice event, Emitter<TradeState> emit) {
     if (state.userCounterOffert == null) {
       emit(state.copyWith(
           status: TradeStatus.failure,
@@ -164,8 +164,8 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     }
   }
 
-  void _onSetCounterOfferAmount(
-      SetCounterOfferAmount event, Emitter<TradeState> emit) {
+  void _onSetCounterOfferQuantity(
+      SetCounterOfferQuantity event, Emitter<TradeState> emit) {
     if (state.userCounterOffert == null) {
       emit(state.copyWith(
           status: TradeStatus.failure,
@@ -173,7 +173,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           step: TradingStep.selectOfferType));
     } else {
       final newOffert =
-          state.userCounterOffert?.copyWith(offerQuantity: event.amount);
+          state.userCounterOffert?.copyWith(offerQuantity: event.quantity);
       emit(state.copyWith(userCounterOffert: newOffert));
     }
   }
