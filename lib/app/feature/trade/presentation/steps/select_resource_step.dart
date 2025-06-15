@@ -12,41 +12,39 @@ class SelectResourceStep extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: DemandInfoGradient(),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: BlocBuilder<TradeBloc, TradeState>(
-                buildWhen: (previous, current) =>
-                    previous.npc?.inventory != current.npc?.inventory,
-                builder: (context, state) {
-                  final inventory = state.npc?.inventory ?? [];
-                  return GridView.builder(
-                    itemCount: inventory.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 8,
-                      crossAxisSpacing: 8,
-                      childAspectRatio: 1,
-                    ),
-                    itemBuilder: (context, index) {
-                      final resource = inventory[index];
-                      return TradeResourceElement(resource: resource);
-                    },
-                  );
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: DemandInfoGradient(),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: BlocBuilder<TradeBloc, TradeState>(
+            buildWhen: (previous, current) =>
+                previous.npc?.inventory != current.npc?.inventory,
+            builder: (context, state) {
+              final inventory = state.npc?.inventory ?? [];
+              return GridView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: inventory.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 1,
+                ),
+                itemBuilder: (context, index) {
+                  final resource = inventory[index];
+                  return TradeResourceElement(resource: resource);
                 },
-              ),
-            ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -22,62 +22,60 @@ class SelectOfferTypeStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TradeBloc, TradeState>(
       builder: (context, state) {
-        return Expanded(
-            child: Column(
+        return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: DemandInfoGradient(),
             ),
-            Expanded(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        H3('${state.npc?.name} possiede:'),
-                        TradeResourceElement(
-                            resource: state.selectedResource!, expanded: true),
-                        Image.asset(
-                          AppImages.rosario,
-                          height: 80,
-                        ),
-                      ],
-                    ),
-                    Builder(builder: (context) {
-                      return BlocBuilder<AppCubit, AppState>(
-                        builder: (context, appState) {
-                          final userResource =
-                              appState.user?.inventory.firstWhere(
-                            (element) =>
-                                element.tradeResource ==
-                                state.selectedResource!.tradeResource,
-                          );
-                          return Column(
-                            children: [
-                              H3('Tu possiedi:'),
-                              if (userResource != null)
-                                TradeResourceElement(
-                                    resource: userResource,
-                                    isUserResource: true,
-                                    expanded: true),
-                              // Account Icon
-                              const Icon(Icons.person,
-                                  size: 80, color: AppColors.palette_primary),
-                            ],
-                          );
-                        },
-                      );
-                    }),
-                  ],
-                ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      H3('${state.npc?.name} possiede:'),
+                      TradeResourceElement(
+                          resource: state.selectedResource!, expanded: true),
+                      Image.asset(
+                        AppImages.rosario,
+                        height: 80,
+                      ),
+                    ],
+                  ),
+                  Builder(builder: (context) {
+                    return BlocBuilder<AppCubit, AppState>(
+                      builder: (context, appState) {
+                        final userResource =
+                            appState.user?.inventory.firstWhere(
+                          (element) =>
+                              element.tradeResource ==
+                              state.selectedResource!.tradeResource,
+                        );
+                        return Column(
+                          children: [
+                            H3('Tu possiedi:'),
+                            if (userResource != null)
+                              TradeResourceElement(
+                                  resource: userResource,
+                                  isUserResource: true,
+                                  expanded: true),
+                            // Account Icon
+                            const Icon(Icons.person,
+                                size: 80, color: AppColors.palette_primary),
+                          ],
+                        );
+                      },
+                    );
+                  }),
+                ],
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
+              padding: const EdgeInsets.only(top: 32.0, bottom: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -106,7 +104,7 @@ class SelectOfferTypeStep extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        );
       },
     );
   }

@@ -22,10 +22,10 @@ class SetPriceStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TradeBloc, TradeState>(
       builder: (context, state) {
-        return Expanded(
-            child: Padding(
+        return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               // NPC Offer
               Table(
@@ -232,7 +232,7 @@ class SetPriceStep extends StatelessWidget {
               // ),
             ],
           ),
-        ));
+        );
       },
     );
   }

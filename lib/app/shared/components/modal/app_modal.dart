@@ -89,20 +89,17 @@ class AppModal extends StatelessWidget {
                         variant: AppButtonVariant.secondary,
                         coverHorizontalSpace: false,
                       ),
-                    Expanded(
-                      flex: 4,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: showCloseButton ? 8 : 0,
-                        ),
-                        child: AppButton(
-                          text: buttonText,
-                          icon: buttonIcon,
-                          onClick: () {
-                            onButtonPressed();
-                            closeModal(context);
-                          },
-                        ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: showCloseButton ? 8 : 0,
+                      ),
+                      child: AppButton(
+                        text: buttonText,
+                        icon: buttonIcon,
+                        onClick: () {
+                          onButtonPressed();
+                          closeModal(context);
+                        },
                       ),
                     ),
                   ],
