@@ -15,8 +15,8 @@ class TradeResourceInventory extends Equatable {
     required this.tradeResource,
     required this.defaultProductionLevel,
     required this.defaultNeedLevel,
-    this.storage,
-    this.needs,
+    required this.storage,
+    required this.needs,
   });
 
   factory TradeResourceInventory({
@@ -45,7 +45,7 @@ class TradeResourceInventory extends Equatable {
   * storage is a number between 0 and tradeResource.storageLimit
   * it represents the amount of resource that the npc has
   */
-  final int? storage;
+  final int storage;
 
   /*
   * needs is a number between 0 and tradeResource.storageLimit
@@ -53,29 +53,27 @@ class TradeResourceInventory extends Equatable {
   * it is a fixed value, it change only after long periods of time
   * it must not be confused with the demand of the resource.
   */
-  final int? needs;
+  final int needs;
 
   int get demand {
-    if (needs == null || storage == null) {
-      return 0;
-    } else {
-      return (needs! - storage!);
-    }
+    return (needs - storage);
   }
 
   /*
-  * demandNormalized is a number between -1 and 1 that represents the demand of the resource,
+  * demandNormalized is a number that represents the demand of the resource as a percentage
+  * this is compared to the overall need of that resource by the NPC.
+  * for example: 
+  * 1 means that the NPC miss the 100% of the resource he needs,
+  * -1 means that the NPC has the double amount of resource he needs
+  * this value can't never be more than 1 but it can be less than -1.
   * With the demandAfterTransactionNormalized it's use to calculate the acceptable price limits for the NPC.
-  * 1 means that the resource is needed in a large amount
-  * -1 means that the npc wants to get rid of the resource
   */
   double get demandNormalized {
-    final double min = -tradeResource.maxProduction;
-    final double max = tradeResource.maxNeed;
-    final double value = demand.toDouble();
-
-    // Normalize demand between -1 and 1
-    return (value - min) / (max - min) * 2 - 1;
+    if (needs == 0) {
+      // considered as if need is 1 to avoid division by zero
+      return demand.toDouble();
+    }
+    return demand / needs;
   }
 
   /*
@@ -83,10 +81,10 @@ class TradeResourceInventory extends Equatable {
   * after a buying transaction. the user is buying a resource from the npc
   */
   int demandAfterBuingTransaction(int transactionAmount) {
-    if (needs == null || storage == null || transactionAmount < 0) {
+    if (transactionAmount < 0) {
       return demand;
     } else {
-      return (needs! - (storage! - transactionAmount));
+      return (needs - (storage - transactionAmount));
     }
   }
 
@@ -95,12 +93,13 @@ class TradeResourceInventory extends Equatable {
   * after a selling transaction. the user is selling a resource to the npc
   */
   int demandAfterSellingTransaction(int transactionAmount) {
-    if (needs == null || storage == null || transactionAmount < 0) {
+    if (transactionAmount < 0) {
       return demand;
-    } else if (storage! - transactionAmount < 0) {
+    } else if (storage - transactionAmount < 0) {
+      // TODO implement a check for the storage limit
       return 0;
     } else {
-      return (needs! - (storage! + transactionAmount));
+      return (needs - (storage + transactionAmount));
     }
   }
 

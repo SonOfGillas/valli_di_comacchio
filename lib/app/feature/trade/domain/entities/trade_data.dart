@@ -2,50 +2,72 @@
 // SELL -> the user is selling the resource to the NPC
 
 class TradeData {
-  TradeData({
-    // Buing
-    required this.buingStartingPrice,
-    required this.buingPriceMin,
-    required this.buingOptinalQuantity,
-    // Selling
-    required this.sellingPriceMax,
-    required this.sellingStartingPrice,
-    required this.sellingOptinalQuantity,
+  const TradeData._({
+    required this.maxPrice,
+    required this.minPrice,
+    required this.startingPrice,
+    required this.maxExchangebleQuantity,
+    required this.idealExchangebleQuantity,
   });
 
-  final int buingPriceMax = double.maxFinite.toInt();
-  /*
-  * the price to buy the NPC resources at
-  * the beginning of the trading process
-  */
-  final int buingStartingPrice;
-  /*
-  * the minimum price that the NPC is willing to accept 
-  * for the resource that the user wants to buy
-  */
-  final int buingPriceMin;
+  factory TradeData.buy({
+    required int minPrice,
+    required int startingPrice,
+    required int maxExchangebleQuantity,
+    required int idealExchangebleQuantity,
+  }) {
+    return TradeData._(
+      maxPrice: double.maxFinite.toInt(),
+      minPrice: minPrice,
+      startingPrice: startingPrice,
+      maxExchangebleQuantity: maxExchangebleQuantity,
+      idealExchangebleQuantity: idealExchangebleQuantity,
+    );
+  }
 
-  final int buingStartingQuantity = 1;
-
-  /*
-  * quantity that will satisfy the NPC needs
-  */
-  final int buingOptinalQuantity;
+  factory TradeData.sell({
+    required int maxPrice,
+    required int startingPrice,
+    required int maxExchangebleQuantity,
+    required int idealExchangebleQuantity,
+  }) {
+    return TradeData._(
+      maxPrice: maxPrice,
+      minPrice: 0,
+      startingPrice: startingPrice,
+      maxExchangebleQuantity: maxExchangebleQuantity,
+      idealExchangebleQuantity: idealExchangebleQuantity,
+    );
+  }
 
   /*
   * the maximum price of the resource that the NPC is willing to pay 
-  * for the resource that the user is selling
+  * for the resource that the user is buing/selling
   */
-  final int sellingPriceMax;
+  final int maxPrice;
+  /*
+  * the minimum price that the NPC is willing to accept 
+  * for the resource that the user wants to buy/sell
+  */
+  final int minPrice;
   /*
   * the price that the NPC offer for buing the resource 
   * at the beginning of the trading process
   */
-  final int sellingStartingPrice;
-  final int sellingPriceMin = 0;
+  final int startingPrice;
 
   /*
-  * quantity that will satisfy the NPC needs
+  * the maximum quantity of the resource that can be exchanged
   */
-  final int sellingOptinalQuantity;
+  final int maxExchangebleQuantity;
+
+  /*
+  * the minimum quantity of the resource that can be exchanged
+  */
+  final int minExchangebleQuantity = 1;
+
+  /*
+  * the ideal quantity of the resource that the NPC wants to exchange
+  */
+  final int idealExchangebleQuantity;
 }

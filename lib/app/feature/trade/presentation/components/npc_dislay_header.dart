@@ -5,6 +5,7 @@ import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/npc_dialog_box/npc_dialog_box.dart';
+import 'package:valli_di_comacchio/app/shared/domain/utils/number_formatter.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/l10n.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
@@ -48,7 +49,7 @@ class NpcDisplayHeader extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               LabelText(
-                                state.npc?.wealth.toString() ?? '0',
+                                formatNumber(state.npc?.wealth ?? 0),
                                 withBoarder: false,
                               ),
                               SizedBox(width: 8),

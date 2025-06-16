@@ -7,6 +7,7 @@ import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h1_on_primary/h1_on_primary.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
+import 'package:valli_di_comacchio/app/shared/domain/utils/number_formatter.dart';
 import 'package:valli_di_comacchio/app/shared/l10n/l10n.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
@@ -77,8 +78,10 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               BlocBuilder<AppCubit, AppState>(
                 builder: (context, state) {
-                  return LabelText((state.user?.wealth ?? '').toString(),
-                      withBoarder: true);
+                  return LabelText(
+                    formatNumber(state.user?.wealth ?? 0),
+                    withBoarder: true,
+                  );
                 },
               ),
             ],

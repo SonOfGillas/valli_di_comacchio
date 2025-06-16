@@ -10,6 +10,7 @@ import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield_style.dart';
+import 'package:valli_di_comacchio/app/shared/domain/utils/number_formatter.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 
@@ -64,7 +65,7 @@ class SetPriceStep extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 4),
-                            H3(state.npcOffert!.offerPrice.toString()),
+                            H3(formatNumber(state.npcOffert!.offerPrice)),
                           ],
                         ),
                       ),
@@ -74,10 +75,11 @@ class SetPriceStep extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             TradeResourceElement(
-                                resource:
-                                    state.npcOffert!.tradeResourceInventory),
+                              resource: state.npcOffert!.tradeResourceInventory,
+                              size: TradeResourceElmentSize.small,
+                            ),
                             const SizedBox(width: 4),
-                            H3('x${state.npcOffert!.offerQuantity}'),
+                            H3('x${formatNumber(state.npcOffert!.offerQuantity)}'),
                           ],
                         ),
                       ),
@@ -103,7 +105,7 @@ class SetPriceStep extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                H3('${state.npcOffert!.offerPrice}'),
+                                H3(formatNumber(state.npcOffert!.totalCost)),
                               ],
                             ),
                           ],
@@ -126,7 +128,7 @@ class SetPriceStep extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 24),
               // User Counter Offer
               Table(
                 columnWidths: const {
@@ -250,9 +252,9 @@ class SetPriceStep extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: AppTextField(
-                  placeHolder: 'inserisci un messaggio per l\'NPC',
+                  placeHolder: 'inserisci un messaggio per ${state.npc?.name}',
                   type: state.messageToTheNpc.length < 40
                       ? AppTextFieldType.text
                       : AppTextFieldType.textArea,
@@ -264,7 +266,7 @@ class SetPriceStep extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

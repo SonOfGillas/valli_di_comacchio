@@ -27,6 +27,8 @@ int getPriceChageFunction(double demandNormalized) {
 
 int getPrice(TradeResource tradeResource, double demandNormalized) {
   final priceChange = getPriceChageFunction(demandNormalized);
+  print(
+      'Price change: ${priceChange / 100}% for ${demandNormalized} demand normalized');
   final basePrice = tradeResource.basePrice;
   final price = basePrice + (basePrice * priceChange / 100);
   return price.toInt();

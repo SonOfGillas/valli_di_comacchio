@@ -172,8 +172,8 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           failure: Failure.fromMessage('No counter offer available'),
           step: TradingStep.selectOfferType));
     } else {
-      final newOffert =
-          state.userCounterOffert?.copyWith(offerQuantity: event.quantity);
+      final newOffert = state.userCounterOffert
+          ?.copyWith(manualOfferQuantity: event.quantity);
       emit(state.copyWith(userCounterOffert: newOffert));
     }
   }
