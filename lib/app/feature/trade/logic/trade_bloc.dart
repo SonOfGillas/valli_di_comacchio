@@ -25,7 +25,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<AcceptOffer>(_onAcceptOffert);
     on<SetCounterOfferPrice>(_onSetCounterOffertPrice);
     on<SetCounterOfferQuantity>(_onSetCounterOfferQuantity);
-    on<SetCounterOfferMotivation>(_onSetCounterOfferMotivation);
+    on<SetCounterOfferMessage>(_onSetCounterOfferMessage);
     on<SendCounterOffer>(_onSendCounterOffer);
 
     add(LoadData(npcId: tradePageParameters.npcId));
@@ -178,9 +178,9 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     }
   }
 
-  void _onSetCounterOfferMotivation(
-      SetCounterOfferMotivation event, Emitter<TradeState> emit) {
-    emit(state.copyWith(motivation: event.motivation));
+  void _onSetCounterOfferMessage(
+      SetCounterOfferMessage event, Emitter<TradeState> emit) {
+    emit(state.copyWith(messageToTheNpc: event.message));
   }
 
   void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {

@@ -138,6 +138,7 @@ class AppTextField extends StatelessWidget {
           //isDense: true,
           contentPadding: EdgeInsets.only(
             left: type == AppTextFieldType.number ? 0 : conententLeftPadding,
+            right: type == AppTextFieldType.textArea ? conententLeftPadding : 0,
             top: type == AppTextFieldType.textArea ? 20 : 0,
           ),
           filled: variant == AppTextFieldVariant.filled ||

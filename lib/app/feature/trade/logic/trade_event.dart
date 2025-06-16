@@ -90,15 +90,15 @@ class SetCounterOfferQuantity extends TradeEvent {
   List<Object?> get props => [quantity];
 }
 
-class SetCounterOfferMotivation extends TradeEvent {
-  const SetCounterOfferMotivation({
-    required this.motivation,
+class SetCounterOfferMessage extends TradeEvent {
+  const SetCounterOfferMessage({
+    required this.message,
   });
 
-  final String motivation;
+  final String message;
 
   @override
-  List<Object?> get props => [motivation];
+  List<Object?> get props => [message];
 }
 
 class SendCounterOffer extends TradeEvent {

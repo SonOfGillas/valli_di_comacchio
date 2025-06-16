@@ -16,7 +16,7 @@ class TradeState {
   final TradeResourceInventory? selectedResource;
   final TradeResourceOffer? npcOffert;
   final TradeResourceOffer? userCounterOffert;
-  final String motivation;
+  final String messageToTheNpc;
 
   const TradeState({
     this.status = TradeStatus.idle,
@@ -27,7 +27,7 @@ class TradeState {
     this.selectedResource,
     this.npcOffert,
     this.userCounterOffert,
-    this.motivation = '',
+    this.messageToTheNpc = '',
   });
 
   TradeState copyWith({
@@ -39,7 +39,7 @@ class TradeState {
     TradeResourceInventory? selectedResource,
     TradeResourceOffer? npcOffert,
     TradeResourceOffer? userCounterOffert,
-    String? motivation,
+    String? messageToTheNpc,
   }) {
     return TradeState(
       status: status ?? this.status,
@@ -50,7 +50,7 @@ class TradeState {
       selectedResource: selectedResource ?? this.selectedResource,
       npcOffert: npcOffert ?? this.npcOffert,
       userCounterOffert: userCounterOffert ?? this.userCounterOffert,
-      motivation: motivation ?? this.motivation,
+      messageToTheNpc: messageToTheNpc ?? this.messageToTheNpc,
     );
   }
 }

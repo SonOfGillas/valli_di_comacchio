@@ -249,20 +249,33 @@ class SetPriceStep extends StatelessWidget {
                   ),
                 ],
               ),
-
-              // Padding(
-              //   padding: const EdgeInsets.only(top: 8.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       GlowingButton(
-              //           text: 'ACCETTA',
-              //           onPressed: () {
-              //             context.read<TradeBloc>().add(AcceptOffer());
-              //           }),
-              //     ],
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: AppTextField(
+                  placeHolder: 'inserisci un messaggio per l\'NPC',
+                  type: state.messageToTheNpc.length < 40
+                      ? AppTextFieldType.text
+                      : AppTextFieldType.textArea,
+                  onChange: (value) {
+                    context.read<TradeBloc>().add(
+                          SetCounterOfferMessage(message: value),
+                        );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GlowingButton(
+                        text: 'CONTROFFERTA',
+                        onPressed: () {
+                          context.read<TradeBloc>().add(SendCounterOffer());
+                        }),
+                  ],
+                ),
+              ),
             ],
           ),
         );
