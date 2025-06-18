@@ -44,9 +44,6 @@ class TradeResourceOffer extends Equatable {
   }) : offerQuantity = manualOfferQuantity ??
             getDefaultQuantity(tradeResourceInventory, offerType) {
     tradeData = updateTradeData(offerQuantity);
-    print(
-        'Needs: ${tradeResourceInventory.needs} Storage: ${tradeResourceInventory.storage} demand: ${tradeResourceInventory.demand}');
-    print(tradeData);
   }
 
   final TradeResourceInventory tradeResourceInventory;
@@ -89,7 +86,8 @@ class TradeResourceOffer extends Equatable {
   * -1 means that the npc wants to get rid of the resource
   */
   double get demandNormalized {
-    return tradeResourceInventory.demandNormalized;
+    final x = tradeResourceInventory.demandNormalized;
+    return x;
   }
 
   /*
@@ -153,15 +151,20 @@ class TradeResourceOffer extends Equatable {
       final userWealthCheck = user.wealth >= offerPrice * offerQuantity;
       final priceCheck =
           offerPrice <= tradeData.maxPrice && offerPrice >= tradeData.minPrice;
-      // TODO fix quantity check
-      final quantityCheck = false;
+      final quantityCheck = tradeResourceInventory.storage >= offerQuantity;
       return userWealthCheck && priceCheck && quantityCheck;
     } else if (offerType == OfferType.sell) {
       final npcWealthCheck = npc.wealth >= offerPrice * offerQuantity;
       final priceCheck =
           offerPrice <= tradeData.maxPrice && offerPrice >= tradeData.minPrice;
-      // TODO fix quantity check
-      final quantityCheck = false;
+      final quantityCheck = user.inventory
+              .firstWhere(
+                (element) =>
+                    element.tradeResource.id ==
+                    tradeResourceInventory.tradeResource.id,
+              )
+              .storage >=
+          offerQuantity;
       return npcWealthCheck && priceCheck && quantityCheck;
     } else {
       return false;

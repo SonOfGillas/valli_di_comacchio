@@ -77,18 +77,45 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   }
 
   void _onSelectOfferType(SelectOfferType event, Emitter<TradeState> emit) {
-    emit(state.copyWith(
-      step: TradingStep.setPrice,
-      userCounterOffert: TradeResourceOffer(
+    if (event.offerType == OfferType.buy &&
+        (state.selectedResource?.storage ?? 0) <= 0) {
+      emit(state.copyWith(
+        status: TradeStatus.failure,
+        failure: Failure.fromMessage(
+            'You cannot buy this resource because NPC have no storage left.'),
+      ));
+    } else if (event.offerType == OfferType.sell &&
+        (user?.inventory
+                    .firstWhere(
+                      (element) =>
+                          element.tradeResource.id ==
+                          state.selectedResource?.tradeResource.id,
+                    )
+                    .storage ??
+                0) <=
+            0) {
+      emit(state.copyWith(
+        status: TradeStatus.failure,
+        failure: Failure.fromMessage(
+            'You cannot sell this resource because you have no storage left.'),
+      ));
+    } else {
+      var npcOffer = TradeResourceOffer(
         offerType: event.offerType,
         tradeResourceInventory: state.selectedResource!,
-      ),
-      npcOffert: TradeResourceOffer(
-        offerType: event.offerType,
-        tradeResourceInventory: state.selectedResource!,
-      ),
-    ));
-    _getNpcMessage(emit);
+      );
+      while (!npcOffer.isOfferValid(user!, state.npc!)) {
+        npcOffer = npcOffer.copyWith(
+          manualOfferQuantity: npcOffer.offerQuantity - 1,
+        );
+      }
+      emit(state.copyWith(
+        step: TradingStep.setPrice,
+        npcOffert: npcOffer,
+        userCounterOffert: npcOffer.copyWith(),
+      ));
+      _getNpcMessage(emit);
+    }
   }
 
   void _onGoBack(GoBack event, Emitter<TradeState> emit) {
@@ -160,7 +187,18 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     } else {
       final newOffert =
           state.userCounterOffert?.copyWith(manualOfferPrice: event.price);
-      emit(state.copyWith(userCounterOffert: newOffert));
+      if (!(newOffert!.isOfferValid(user!, state.npc!))) {
+        emit(state.copyWith(
+            status: TradeStatus.failure,
+            failure: Failure.fromMessage(
+              (newOffert.offerType == OfferType.buy)
+                  ? 'Invalid counter offer: you don\'t have enough coins to buy at this price'
+                  : 'Invalid counter offer: the NPC doesn\'t have enough coins to at this price',
+            )));
+        return;
+      } else {
+        emit(state.copyWith(userCounterOffert: newOffert));
+      }
     }
   }
 
@@ -174,6 +212,15 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     } else {
       final newOffert = state.userCounterOffert
           ?.copyWith(manualOfferQuantity: event.quantity);
+      if (!(newOffert!.isOfferValid(user!, state.npc!))) {
+        emit(state.copyWith(
+            status: TradeStatus.failure,
+            failure: Failure.fromMessage(
+              (newOffert.offerType == OfferType.buy)
+                  ? 'Invalid counter offer: the NPC doesn\'t have enough resources in storage'
+                  : 'Invalid counter offer: you don\'t have enough resources in storage',
+            )));
+      }
       emit(state.copyWith(userCounterOffert: newOffert));
     }
   }

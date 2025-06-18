@@ -6,6 +6,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.da
 * This function calculates the price change based on the demand.
 * the price_change is a precentage of increase or decrease of the price
 * that will be applied to the base price of the resource. 
+* the result is between -39 (when demandNormalized is <=-1) and 161 (when demandNormalized is >=1).
 */
 int getPriceChageFunction(double demandNormalized) {
   late final double demandPercentage;
@@ -27,8 +28,6 @@ int getPriceChageFunction(double demandNormalized) {
 
 int getPrice(TradeResource tradeResource, double demandNormalized) {
   final priceChange = getPriceChageFunction(demandNormalized);
-  print(
-      'Price change: ${priceChange / 100}% for ${demandNormalized} demand normalized');
   final basePrice = tradeResource.basePrice;
   final price = basePrice + (basePrice * priceChange / 100);
   return price.toInt();
