@@ -106,3 +106,10 @@ class SendCounterOffer extends TradeEvent {
   @override
   List<Object?> get props => [];
 }
+
+class CloseError extends TradeEvent {
+  const CloseError();
+
+  @override
+  List<Object?> get props => [];
+}

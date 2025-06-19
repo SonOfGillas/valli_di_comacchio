@@ -27,6 +27,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<SetCounterOfferQuantity>(_onSetCounterOfferQuantity);
     on<SetCounterOfferMessage>(_onSetCounterOfferMessage);
     on<SendCounterOffer>(_onSendCounterOffer);
+    on<CloseError>(_onCloseError);
 
     add(LoadData(npcId: tradePageParameters.npcId));
   }
@@ -232,6 +233,10 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
 
   void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {
     //TODO implement send counter offer logic
+  }
+
+  void _onCloseError(CloseError event, Emitter<TradeState> emit) {
+    emit(state.copyWith(status: TradeStatus.idle, failure: null));
   }
 
   void _getNpcMessage(Emitter<TradeState> emit) {

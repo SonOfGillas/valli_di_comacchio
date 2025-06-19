@@ -16,7 +16,18 @@ class TradeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TradeBloc, TradeState>(
+    return BlocConsumer<TradeBloc, TradeState>(
+      listener: (context, state) {
+        if (state.status == TradeStatus.failure) {
+          context.read<TradeBloc>().add(CloseError());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.failure?.message() ?? 'An error occurred'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
       buildWhen: (previous, current) =>
           previous.step != current.step ||
           previous.npc?.inventory != current.npc?.inventory,
