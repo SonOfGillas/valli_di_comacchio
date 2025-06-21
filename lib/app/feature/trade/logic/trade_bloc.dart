@@ -121,6 +121,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         npcOffert: npcOffer,
         userCounterOffert: npcOffer.copyWith(),
         pastConversation: [],
+        isCounterOfferValid: true,
       ));
       _getNpcMessage(emit);
     }

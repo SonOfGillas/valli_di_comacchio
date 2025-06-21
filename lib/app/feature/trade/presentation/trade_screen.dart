@@ -8,6 +8,7 @@ import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_offer_type_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_resource_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/set_price_step.dart';
+import 'package:valli_di_comacchio/app/shared/components/npc_loading_modal/npc_loading_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
@@ -28,11 +29,11 @@ class TradeScreen extends StatelessWidget {
             ),
           );
         } else if (state.status == TradeStatus.loading) {
-          // showDialog(
-          //   context: context,
-          //   barrierDismissible: false,
-          //   builder: (context) => const NpcLoadingModal(),
-          // );
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => const NpcLoadingModal(),
+          );
         }
       },
       buildWhen: (previous, current) =>

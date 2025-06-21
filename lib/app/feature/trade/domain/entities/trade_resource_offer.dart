@@ -117,9 +117,10 @@ class TradeResourceOffer extends Equatable {
       // the user is buying the resource from the NPC
       return TradeData.buy(
         resource: tradeResource,
-        minPrice: getPrice(tradeResource, demandAfterTransactionNormalized),
+        minPrice: getPrice(tradeResource, demandNormalized),
         //set the starting price as if the npc will never lose the resource in the transaction
-        startingPrice: getPrice(tradeResource, demandNormalized),
+        startingPrice:
+            getPrice(tradeResource, demandAfterTransactionNormalized),
         maxExchangebleQuantity: tradeResourceInventory.storage,
         idealExchangebleQuantity: getDefaultQuantity(
           tradeResourceInventory,
