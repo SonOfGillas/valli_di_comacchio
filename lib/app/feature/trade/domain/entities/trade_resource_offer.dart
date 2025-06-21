@@ -32,6 +32,7 @@ int getDefaultQuantity(
 */
 class TradeResourceOffer extends Equatable {
   TradeResourceOffer({
+    required this.isUserOffer,
     required this.tradeResourceInventory,
     required this.offerType,
     int? manualOfferQuantity,
@@ -40,6 +41,11 @@ class TradeResourceOffer extends Equatable {
             getDefaultQuantity(tradeResourceInventory, offerType) {
     tradeData = updateTradeData(offerQuantity);
   }
+
+  /*
+  * isUserOffer is true if the offer is made by the user, false if it is made by the NPC.
+  */
+  final bool isUserOffer;
 
   final TradeResourceInventory tradeResourceInventory;
   final OfferType offerType;
@@ -147,14 +153,16 @@ class TradeResourceOffer extends Equatable {
   bool isOfferValid(User user, Npc npc) {
     if (offerType == OfferType.buy) {
       final userWealthCheck = user.wealth >= offerPrice * offerQuantity;
-      final priceCheck =
-          offerPrice <= tradeData.maxPrice && offerPrice >= tradeData.minPrice;
+      final priceCheck = isUserOffer ||
+          (offerPrice <= tradeData.maxPrice &&
+              offerPrice >= tradeData.minPrice);
       final quantityCheck = tradeResourceInventory.storage >= offerQuantity;
       return userWealthCheck && priceCheck && quantityCheck;
     } else if (offerType == OfferType.sell) {
       final npcWealthCheck = npc.wealth >= offerPrice * offerQuantity;
-      final priceCheck =
-          offerPrice <= tradeData.maxPrice && offerPrice >= tradeData.minPrice;
+      final priceCheck = isUserOffer ||
+          (offerPrice <= tradeData.maxPrice &&
+              offerPrice >= tradeData.minPrice);
       final quantityCheck = user.inventory
               .firstWhere(
                 (element) =>
@@ -178,12 +186,14 @@ class TradeResourceOffer extends Equatable {
       ];
 
   TradeResourceOffer copyWith({
+    bool? isUserOffer,
     int? manualOfferQuantity,
     TradeResourceInventory? tradeResourceInventory,
     OfferType? offerType,
     int? manualOfferPrice,
   }) {
     return TradeResourceOffer(
+      isUserOffer: isUserOffer ?? this.isUserOffer,
       tradeResourceInventory:
           tradeResourceInventory ?? this.tradeResourceInventory,
       manualOfferQuantity: manualOfferQuantity ?? offerQuantity,

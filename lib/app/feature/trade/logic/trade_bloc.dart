@@ -106,11 +106,13 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       ));
     } else {
       var npcOffer = TradeResourceOffer(
+        isUserOffer: false,
         offerType: event.offerType,
         tradeResourceInventory: state.selectedResource!,
       );
       while (!npcOffer.isOfferValid(user!, state.npc!)) {
         npcOffer = npcOffer.copyWith(
+          isUserOffer: true,
           manualOfferQuantity: npcOffer.offerQuantity - 1,
         );
       }
