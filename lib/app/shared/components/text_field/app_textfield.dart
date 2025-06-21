@@ -154,7 +154,9 @@ class AppTextField extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border.all(
                           width: appTextFieldBorderWidth,
-                          color: AppTextFieldColors.border,
+                          color: (errorMessage?.isNotEmpty == true)
+                              ? AppTextFieldColors.borderError
+                              : AppTextFieldColors.border,
                         ),
                         color: AppTextFieldColors.iconBackground,
                       ),
@@ -177,26 +179,25 @@ class AppTextField extends StatelessWidget {
               : null, // otherwise default padding is applied,
           suffixIcon: (!(rightIcon?.isEmpty ?? true))
               ? DecoratedBox(
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
                         width: appTextFieldBorderWidth,
-                        color: AppTextFieldColors.border,
+                        color: (errorMessage?.isNotEmpty == true)
+                            ? AppTextFieldColors.borderError
+                            : AppTextFieldColors.border,
                       ),
                     ),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(rightIconPadding ?? 8),
-                    child: InkWell(
-                      onTap: onRightIconTap,
-                      child: SvgPicture.asset(
-                        rightIcon!,
-                        width: 24,
-                        height: 24,
-                        colorFilter: ColorFilter.mode(
-                          rightIconColor ?? AppTextFieldColors.rightIcon,
-                          BlendMode.srcIn,
-                        ),
+                    child: SvgPicture.asset(
+                      rightIcon!,
+                      width: 34,
+                      height: 34,
+                      colorFilter: ColorFilter.mode(
+                        rightIconColor ?? AppTextFieldColors.rightIcon,
+                        BlendMode.srcIn,
                       ),
                     ),
                   ),

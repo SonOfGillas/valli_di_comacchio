@@ -8,7 +8,6 @@ import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_offer_type_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_resource_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/set_price_step.dart';
-import 'package:valli_di_comacchio/app/shared/components/npc_loading_modal/npc_loading_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
@@ -29,40 +28,49 @@ class TradeScreen extends StatelessWidget {
             ),
           );
         } else if (state.status == TradeStatus.loading) {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) => const NpcLoadingModal(),
-          );
+          // showDialog(
+          //   context: context,
+          //   barrierDismissible: false,
+          //   builder: (context) => const NpcLoadingModal(),
+          // );
         }
       },
       buildWhen: (previous, current) =>
           previous.step != current.step ||
           previous.npc?.inventory != current.npc?.inventory,
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: AppColors.palette_secondary,
-          appBar: ValliAppBar(
-            onBackPressed: () {
-              if (state.step == TradingStep.selectOfferType ||
-                  state.step == TradingStep.setPrice) {
-                context.read<TradeBloc>().add(GoBack());
-              } else {
-                context.pop();
-              }
-            },
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                NpcDisplayHeader(),
-                if (state.step == TradingStep.selectResource)
-                  SelectResourceStep(),
-                if (state.step == TradingStep.selectOfferType)
-                  SelectOfferTypeStep(),
-                if (state.step == TradingStep.setPrice) SetPriceStep(),
-              ],
+        return BlocListener<TradeBloc, TradeState>(
+          listenWhen: (previous, current) =>
+              previous.status == TradeStatus.loading &&
+              current.status == TradeStatus.idle,
+          listener: (context, state) {
+            Navigator.of(context, rootNavigator: true)
+                .pop(); // Close the loading dialog
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.palette_secondary,
+            appBar: ValliAppBar(
+              onBackPressed: () {
+                if (state.step == TradingStep.selectOfferType ||
+                    state.step == TradingStep.setPrice) {
+                  context.read<TradeBloc>().add(GoBack());
+                } else {
+                  context.pop();
+                }
+              },
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  NpcDisplayHeader(),
+                  if (state.step == TradingStep.selectResource)
+                    SelectResourceStep(),
+                  if (state.step == TradingStep.selectOfferType)
+                    SelectOfferTypeStep(),
+                  if (state.step == TradingStep.setPrice) SetPriceStep(),
+                ],
+              ),
             ),
           ),
         );

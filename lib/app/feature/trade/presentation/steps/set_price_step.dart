@@ -8,6 +8,7 @@ import 'package:valli_di_comacchio/app/feature/trade/presentation/components/tra
 import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_button.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
+import 'package:valli_di_comacchio/app/shared/components/debounce_text_field/debounce_text_field.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield_style.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/number_formatter.dart';
@@ -167,17 +168,22 @@ class SetPriceStep extends StatelessWidget {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 4.0),
-                              child: AppTextField(
-                                placeHolder:
-                                    '${state.userCounterOffert?.offerPrice}',
-                                type: AppTextFieldType.number,
-                                onChange: (value) {
+                              child: DebouncedTextField(
+                                onDebouncedChange: (value) {
                                   context.read<TradeBloc>().add(
                                         SetCounterOfferPrice(
                                           price: int.tryParse(value) ?? 0,
                                         ),
                                       );
                                 },
+                                textField: AppTextField(
+                                  errorMessage: state.isCounterOfferValid
+                                      ? null
+                                      : 'non valido',
+                                  placeHolder:
+                                      '${state.userCounterOffert?.offerPrice}',
+                                  type: AppTextFieldType.number,
+                                ),
                               ),
                             ),
                           ],
@@ -202,17 +208,22 @@ class SetPriceStep extends StatelessWidget {
                               H3('x'),
                               Padding(
                                 padding: const EdgeInsets.only(left: 4.0),
-                                child: AppTextField(
-                                  placeHolder:
-                                      '${state.userCounterOffert?.offerQuantity}',
-                                  type: AppTextFieldType.number,
-                                  onChange: (value) {
+                                child: DebouncedTextField(
+                                  onDebouncedChange: (value) {
                                     context.read<TradeBloc>().add(
                                           SetCounterOfferQuantity(
                                             quantity: int.tryParse(value) ?? 0,
                                           ),
                                         );
                                   },
+                                  textField: AppTextField(
+                                    errorMessage: state.isCounterOfferValid
+                                        ? null
+                                        : 'non valido',
+                                    placeHolder:
+                                        '${state.userCounterOffert?.offerQuantity}',
+                                    type: AppTextFieldType.number,
+                                  ),
                                 ),
                               ),
                             ],

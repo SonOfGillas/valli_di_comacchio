@@ -116,6 +116,7 @@ class TradeResourceOffer extends Equatable {
     if (offerType == OfferType.buy) {
       // the user is buying the resource from the NPC
       return TradeData.buy(
+        resource: tradeResource,
         minPrice: getPrice(tradeResource, demandAfterTransactionNormalized),
         //set the starting price as if the npc will never lose the resource in the transaction
         startingPrice: getPrice(tradeResource, demandNormalized),
@@ -128,6 +129,7 @@ class TradeResourceOffer extends Equatable {
     } else {
       // the user is selling the resource to the NPC
       return TradeData.sell(
+        resource: tradeResource,
         maxPrice: getPrice(tradeResource, demandNormalized),
         //set the starting price as if the npc has already that much resources
         startingPrice:

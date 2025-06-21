@@ -46,8 +46,8 @@ abstract class AppTextFieldColors {
   static const Color background = AppColors.palette_secondary;
 }
 
-TextStyle textFieldPlaceHolderStyle = AppTextStyles.label
-    .copyWith(color: AppColors.palette_primary, fontWeight: FontWeight.bold);
+TextStyle textFieldPlaceHolderStyle =
+    AppTextStyles.labelText.copyWith(color: AppColors.primary_light);
 
 const appTextFieldBorderWidth = 3.0;
 const appTextFieldBorderRadius = BorderRadius.all(Radius.circular(30));

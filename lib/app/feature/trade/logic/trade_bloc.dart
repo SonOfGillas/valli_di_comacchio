@@ -195,18 +195,20 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     } else {
       final newOffert =
           state.userCounterOffert?.copyWith(manualOfferPrice: event.price);
-      if (!(newOffert!.isOfferValid(user!, state.npc!))) {
-        emit(state.copyWith(
-            status: TradeStatus.failure,
-            failure: Failure.fromMessage(
-              (newOffert.offerType == OfferType.buy)
-                  ? 'Invalid counter offer: you don\'t have enough coins to buy at this price'
-                  : 'Invalid counter offer: the NPC doesn\'t have enough coins to at this price',
-            )));
-        return;
-      } else {
-        emit(state.copyWith(userCounterOffert: newOffert));
-      }
+
+      final isOffertValid = newOffert!.isOfferValid(user!, state.npc!);
+
+      emit(state.copyWith(
+          status: isOffertValid ? null : TradeStatus.failure,
+          isCounterOfferValid: isOffertValid,
+          userCounterOffert: newOffert,
+          failure: isOffertValid
+              ? Failure.fromMessage(
+                  (newOffert.offerType == OfferType.buy)
+                      ? 'Invalid counter offer: you don\'t have enough coins to buy at this price'
+                      : 'Invalid counter offer: the NPC doesn\'t have enough coins to at this price',
+                )
+              : null));
     }
   }
 
@@ -220,16 +222,22 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     } else {
       final newOffert = state.userCounterOffert
           ?.copyWith(manualOfferQuantity: event.quantity);
-      if (!(newOffert!.isOfferValid(user!, state.npc!))) {
+
+      final isOffertValid = newOffert!.isOfferValid(user!, state.npc!);
+
+      if (!(newOffert.isOfferValid(user!, state.npc!))) {
         emit(state.copyWith(
-            status: TradeStatus.failure,
-            failure: Failure.fromMessage(
-              (newOffert.offerType == OfferType.buy)
-                  ? 'Invalid counter offer: the NPC doesn\'t have enough resources in storage'
-                  : 'Invalid counter offer: you don\'t have enough resources in storage',
-            )));
+            status: isOffertValid ? null : TradeStatus.failure,
+            isCounterOfferValid: isOffertValid,
+            userCounterOffert: newOffert,
+            failure: isOffertValid
+                ? Failure.fromMessage(
+                    (newOffert.offerType == OfferType.buy)
+                        ? 'Invalid counter offer: the NPC doesn\'t have enough resources in storage'
+                        : 'Invalid counter offer: you don\'t have enough resources in storage',
+                  )
+                : null));
       }
-      emit(state.copyWith(userCounterOffert: newOffert));
     }
   }
 

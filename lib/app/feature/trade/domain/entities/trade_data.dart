@@ -1,6 +1,8 @@
 // BUY -> the user is buying the resource from the NPC
 // SELL -> the user is selling the resource to the NPC
 
+import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
+
 class TradeData {
   const TradeData._({
     required this.maxPrice,
@@ -11,13 +13,14 @@ class TradeData {
   });
 
   factory TradeData.buy({
+    required TradeResource resource,
     required int minPrice,
     required int startingPrice,
     required int maxExchangebleQuantity,
     required int idealExchangebleQuantity,
   }) {
     return TradeData._(
-      maxPrice: double.maxFinite.toInt(),
+      maxPrice: resource.basePrice * 3,
       minPrice: minPrice,
       startingPrice: startingPrice,
       maxExchangebleQuantity: maxExchangebleQuantity,
@@ -26,6 +29,7 @@ class TradeData {
   }
 
   factory TradeData.sell({
+    required TradeResource resource,
     required int maxPrice,
     required int startingPrice,
     required int maxExchangebleQuantity,
@@ -33,7 +37,7 @@ class TradeData {
   }) {
     return TradeData._(
       maxPrice: maxPrice,
-      minPrice: 0,
+      minPrice: resource.basePrice ~/ 3,
       startingPrice: startingPrice,
       maxExchangebleQuantity: maxExchangebleQuantity,
       idealExchangebleQuantity: idealExchangebleQuantity,
