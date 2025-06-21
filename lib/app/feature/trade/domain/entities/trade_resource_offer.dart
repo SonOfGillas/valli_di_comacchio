@@ -1,19 +1,14 @@
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_data.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/utils/price_functions.dart';
 
-enum OfferType {
-  buy, // the user is buying the resource from the NPC
-  sell, // the user is selling the resource to the NPC
-}
-
 //this generates the default quantity of the resource that the NPC wants to buy or sell
 int getDefaultQuantity(
     TradeResourceInventory tradeResourceInventory, OfferType offerType) {
-  //TODO: ad here logic to calculate the optimal quantity based also on wealth
   if (offerType == OfferType.buy) {
     // a negative demand means that the NPC has a surplus of the resource
     return tradeResourceInventory.demand < 0

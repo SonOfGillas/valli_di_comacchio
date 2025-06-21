@@ -6,6 +6,9 @@ import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/counter_offer_request.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/past_conversation_entry.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
@@ -38,6 +41,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   final TradePageParameters tradePageParameters;
 
   User? get user => appCubit.state.user;
+  String? aiGeneratedNpcMessage;
 
   void _onLoadData(LoadData event, Emitter<TradeState> emit) async {
     _getNpcMessage(emit);
@@ -110,10 +114,13 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           manualOfferQuantity: npcOffer.offerQuantity - 1,
         );
       }
+      // reset all past conversation with the NPC
+      aiGeneratedNpcMessage = null;
       emit(state.copyWith(
         step: TradingStep.setPrice,
         npcOffert: npcOffer,
         userCounterOffert: npcOffer.copyWith(),
+        pastConversation: [],
       ));
       _getNpcMessage(emit);
     }
@@ -231,8 +238,61 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     emit(state.copyWith(messageToTheNpc: event.message));
   }
 
-  void _onSendCounterOffer(SendCounterOffer event, Emitter<TradeState> emit) {
-    //TODO implement send counter offer logic
+  void _onSendCounterOffer(
+      SendCounterOffer event, Emitter<TradeState> emit) async {
+    final userCounterOffert = CounterOfferRequest(
+      resource: state.selectedResource?.tradeResource.name ?? '',
+      intent: state.userCounterOffert?.offerType ?? OfferType.buy,
+      minPrice: state.npcOffert?.tradeData.minPrice ?? 0,
+      maxPrice: state.npcOffert?.tradeData.maxPrice ?? 0,
+      targetQuantity: state.npcOffert?.tradeData.idealExchangebleQuantity ?? 0,
+      maxQuantity: state.npcOffert?.tradeData.maxExchangebleQuantity ?? 0,
+      userOfferPrice: state.userCounterOffert?.offerPrice ?? 0,
+      userOfferQuantity: state.userCounterOffert?.offerQuantity ?? 0,
+      userMessage: state.messageToTheNpc,
+      pastConversation: state.pastConversation,
+    );
+    emit(state.copyWith(status: TradeStatus.loading));
+    final response =
+        await npcRepository.getNpcReponseToCounterOffer(userCounterOffert);
+    emit(state.copyWith(status: TradeStatus.idle));
+
+    response.fold(
+      onSuccess: (npcResponse) {
+        final lastMessageIndex = state.pastConversation.length - 1;
+        final newPastConversation = state.pastConversation
+          ..add(PastConversationEntry(
+            order: lastMessageIndex + 1,
+            entity: ConversationEntity.user,
+            message: state.messageToTheNpc,
+            quantity: state.userCounterOffert?.offerQuantity ?? 0,
+            price: state.userCounterOffert?.offerPrice ?? 0,
+          ))
+          ..add(PastConversationEntry(
+            order: lastMessageIndex + 2,
+            entity: ConversationEntity.merchant,
+            message: npcResponse.npcMessage,
+            quantity: npcResponse.npcOfferQuantity,
+            price: npcResponse.npcOfferPrice,
+          ));
+        aiGeneratedNpcMessage = npcResponse.npcMessage;
+        final newNpcOffer = state.npcOffert?.copyWith(
+            manualOfferPrice: npcResponse.npcOfferPrice,
+            manualOfferQuantity: npcResponse.npcOfferQuantity);
+        emit(state.copyWith(
+          npcOffert: newNpcOffer,
+          messageToTheNpc: '',
+          pastConversation: newPastConversation,
+        ));
+        _getNpcMessage(emit);
+      },
+      onFailure: (error) {
+        emit(state.copyWith(
+          status: TradeStatus.failure,
+          failure: error,
+        ));
+      },
+    );
   }
 
   void _onCloseError(CloseError event, Emitter<TradeState> emit) {
@@ -249,6 +309,10 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           npcMessage:
               'Dunque sei interessato a scambiare ${state.selectedResource?.tradeResource.name} con me?. bene, allora scegli se vuoi comprare o vendere'));
     } else if (state.step == TradingStep.setPrice) {
+      if (aiGeneratedNpcMessage != null) {
+        emit(state.copyWith(npcMessage: aiGeneratedNpcMessage!));
+        return;
+      }
       emit(state.copyWith(
           npcMessage:
               'Ecco la mia offerta per ${state.selectedResource?.tradeResource.name}. Se ti va bene, accetta l\'offerta. Altrimenti, puoi fare una controfferta.'));

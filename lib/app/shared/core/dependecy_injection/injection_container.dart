@@ -3,6 +3,8 @@ import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/chatgbt_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source_mock.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
@@ -33,6 +35,8 @@ Future<void> initServiceLocator() async {
       () => ResourcesInventoryDataSourceMock(),
     )
     ..registerLazySingleton<NpcDataSource>(() => NpcDataSourceMock())
+    ..registerLazySingleton<AiGenerationDataSource>(
+        () => ChatGbtDataSource(config: sl()))
 
     // Repositories
     ..registerLazySingleton<UserRepository>(
@@ -43,9 +47,9 @@ Future<void> initServiceLocator() async {
     )
     ..registerLazySingleton<NpcRepository>(
       () => NpcRepository(
-        npcDataSource: sl(),
-        resourcesInventoryDataSource: sl(),
-      ),
+          npcDataSource: sl(),
+          resourcesInventoryDataSource: sl(),
+          aiGenerationDataSource: sl()),
     )
 
     // AppState

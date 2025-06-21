@@ -15,4 +15,5 @@ class Config {
   }
 
   String get baseUrl => env.dotenv.get('BASE_URL');
+  String get chatGbtApiKey => env.dotenv.get('CHAT_GBT_API_KEY', fallback: '');
 }

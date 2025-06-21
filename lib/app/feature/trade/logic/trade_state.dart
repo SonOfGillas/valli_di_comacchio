@@ -1,5 +1,6 @@
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/past_conversation_entry.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 
@@ -17,6 +18,7 @@ class TradeState {
   final TradeResourceOffer? npcOffert;
   final TradeResourceOffer? userCounterOffert;
   final String messageToTheNpc;
+  final List<PastConversationEntry> pastConversation;
 
   const TradeState({
     this.status = TradeStatus.idle,
@@ -28,6 +30,7 @@ class TradeState {
     this.npcOffert,
     this.userCounterOffert,
     this.messageToTheNpc = '',
+    this.pastConversation = const [],
   });
 
   TradeState copyWith({
@@ -40,6 +43,7 @@ class TradeState {
     TradeResourceOffer? npcOffert,
     TradeResourceOffer? userCounterOffert,
     String? messageToTheNpc,
+    List<PastConversationEntry>? pastConversation,
   }) {
     return TradeState(
       status: status ?? this.status,
@@ -51,6 +55,7 @@ class TradeState {
       npcOffert: npcOffert ?? this.npcOffert,
       userCounterOffert: userCounterOffert ?? this.userCounterOffert,
       messageToTheNpc: messageToTheNpc ?? this.messageToTheNpc,
+      pastConversation: pastConversation ?? this.pastConversation,
     );
   }
 }
