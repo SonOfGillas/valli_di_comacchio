@@ -6,21 +6,21 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/counter_offer_requ
 import 'package:valli_di_comacchio/app/shared/domain/entities/counter_offer_response.dart';
 
 class ChatGbtDataSource extends AiGenerationDataSource {
-  ChatGbtDataSource({required Config config}) : apiKey = config.chatGbtApiKey;
+  ChatGbtDataSource({required this.config});
 
-  final String apiKey;
+  final Config config;
   static const String model = "gpt-4.1-nano";
   static const String promptId =
       'pmpt_68543f419af88196a0a3684219d9f35b0236302a7c1f8e25';
-  static const String promptVersion = '6';
+  static const String promptVersion = '7';
 
   @override
   Future<CounterOfferResponse> getNpcReponseToCounterOffer(
       CounterOfferRequest counterOfferRequest) async {
-    final url = Uri.parse('https://api.openai.com/v1/chat/completions');
+    final url = Uri.parse('https://api.openai.com/v1/responses');
     final headers = {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer $apiKey',
+      'Authorization': 'Bearer ${config.openaiApiKey}',
     };
     final body = jsonEncode({
       "model": model,

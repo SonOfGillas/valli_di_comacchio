@@ -112,7 +112,6 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       );
       while (!npcOffer.isOfferValid(user!, state.npc!)) {
         npcOffer = npcOffer.copyWith(
-          isUserOffer: true,
           manualOfferQuantity: npcOffer.offerQuantity - 1,
         );
       }
@@ -121,7 +120,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       emit(state.copyWith(
         step: TradingStep.setPrice,
         npcOffert: npcOffer,
-        userCounterOffert: npcOffer.copyWith(),
+        userCounterOffert: npcOffer.copyWith(isUserOffer: true),
         pastConversation: [],
         isCounterOfferValid: true,
       ));
@@ -228,19 +227,17 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
 
       final isOffertValid = newOffert!.isOfferValid(user!, state.npc!);
 
-      if (!(newOffert.isOfferValid(user!, state.npc!))) {
-        emit(state.copyWith(
-            status: isOffertValid ? null : TradeStatus.failure,
-            isCounterOfferValid: isOffertValid,
-            userCounterOffert: newOffert,
-            failure: isOffertValid
-                ? Failure.fromMessage(
-                    (newOffert.offerType == OfferType.buy)
-                        ? 'Invalid counter offer: the NPC doesn\'t have enough resources in storage'
-                        : 'Invalid counter offer: you don\'t have enough resources in storage',
-                  )
-                : null));
-      }
+      emit(state.copyWith(
+          status: isOffertValid ? null : TradeStatus.failure,
+          isCounterOfferValid: isOffertValid,
+          userCounterOffert: newOffert,
+          failure: isOffertValid
+              ? Failure.fromMessage(
+                  (newOffert.offerType == OfferType.buy)
+                      ? 'Invalid counter offer: the NPC doesn\'t have enough resources in storage'
+                      : 'Invalid counter offer: you don\'t have enough resources in storage',
+                )
+              : null));
     }
   }
 
