@@ -12,7 +12,8 @@ class ChatGbtDataSource extends AiGenerationDataSource {
   static const String model = "gpt-4.1-nano";
   static const String promptId =
       'pmpt_68543f419af88196a0a3684219d9f35b0236302a7c1f8e25';
-  static const String promptVersion = '10';
+  static const String promptVersion =
+      '11'; // english prompt 10, italian prompt 11
 
   @override
   Future<CounterOfferResponse> getNpcReponseToCounterOffer(
