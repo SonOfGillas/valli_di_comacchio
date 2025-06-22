@@ -115,7 +115,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           manualOfferQuantity: npcOffer.offerQuantity - 1,
         );
       }
-      // reset all past conversation with the NPC
+      // reset all past conversation with the NPC, and errors
       aiGeneratedNpcMessage = null;
       emit(state.copyWith(
         step: TradingStep.setPrice,
@@ -123,6 +123,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         userCounterOffert: npcOffer.copyWith(isUserOffer: true),
         pastConversation: [],
         isCounterOfferValid: true,
+        tradeFailed: false,
       ));
       _getNpcMessage(emit);
     }
@@ -246,9 +247,26 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     emit(state.copyWith(messageToTheNpc: event.message));
   }
 
+  List<PastConversationEntry> _getDefaultOfferConversation() {
+    return [
+      PastConversationEntry(
+        order: 0,
+        entity: ConversationEntity.merchant,
+        message: state.npcMessage,
+        quantity: state.npcOffert?.offerQuantity ?? 1,
+        price: state.npcOffert?.offerPrice ?? 0,
+      )
+    ];
+  }
+
   void _onSendCounterOffer(
       SendCounterOffer event, Emitter<TradeState> emit) async {
+    final pastConversation = state.pastConversation.isEmpty
+        ? _getDefaultOfferConversation()
+        : state.pastConversation;
+
     final userCounterOffert = CounterOfferRequest(
+      name: state.npc?.name ?? '',
       resource: state.selectedResource?.tradeResource.name ?? '',
       intent: state.userCounterOffert?.offerType ?? OfferType.buy,
       minPrice: state.npcOffert?.tradeData.minPrice ?? 0,
@@ -258,7 +276,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       userOfferPrice: state.userCounterOffert?.offerPrice ?? 0,
       userOfferQuantity: state.userCounterOffert?.offerQuantity ?? 0,
       userMessage: state.messageToTheNpc,
-      pastConversation: state.pastConversation,
+      pastConversation: pastConversation,
     );
     emit(state.copyWith(status: TradeStatus.loading));
     final response =
@@ -291,6 +309,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           npcOffert: newNpcOffer,
           messageToTheNpc: '',
           pastConversation: newPastConversation,
+          tradeFailed: npcResponse.stopTheTrade,
         ));
         _getNpcMessage(emit);
       },

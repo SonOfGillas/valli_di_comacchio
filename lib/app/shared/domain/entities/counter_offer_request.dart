@@ -2,6 +2,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/past_conversation_entry.dart';
 
 class CounterOfferRequest {
+  final String name;
   final String resource; // resource name, e.g., "fish", "grain"
   final OfferType intent;
   final int minPrice;
@@ -14,6 +15,7 @@ class CounterOfferRequest {
   final List<PastConversationEntry> pastConversation;
 
   CounterOfferRequest({
+    required this.name,
     required this.resource,
     required this.intent,
     required this.minPrice,
@@ -27,6 +29,7 @@ class CounterOfferRequest {
   });
 
   Map<String, dynamic> toJson() => {
+        'name': name,
         'resource': resource,
         'intent': intent == OfferType.buy ? 'buy' : 'sell',
         'min_price': minPrice,

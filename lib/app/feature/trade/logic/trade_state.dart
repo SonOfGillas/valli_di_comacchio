@@ -20,6 +20,7 @@ class TradeState {
   final String messageToTheNpc;
   final List<PastConversationEntry> pastConversation;
   final bool isCounterOfferValid;
+  final bool tradeFailed;
 
   const TradeState({
     this.status = TradeStatus.idle,
@@ -33,6 +34,7 @@ class TradeState {
     this.messageToTheNpc = '',
     this.pastConversation = const [],
     this.isCounterOfferValid = true,
+    this.tradeFailed = false,
   });
 
   TradeState copyWith({
@@ -47,6 +49,7 @@ class TradeState {
     String? messageToTheNpc,
     List<PastConversationEntry>? pastConversation,
     bool? isCounterOfferValid,
+    bool? tradeFailed,
   }) {
     return TradeState(
       status: status ?? this.status,
@@ -60,6 +63,7 @@ class TradeState {
       messageToTheNpc: messageToTheNpc ?? this.messageToTheNpc,
       pastConversation: pastConversation ?? this.pastConversation,
       isCounterOfferValid: isCounterOfferValid ?? this.isCounterOfferValid,
+      tradeFailed: tradeFailed ?? this.tradeFailed,
     );
   }
 }
