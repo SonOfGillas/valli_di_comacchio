@@ -28,9 +28,9 @@ class MapPage extends StatelessWidget {
                       extra: const TradePageParameters(npcId: 'npc_1'));
                 },
                 child: LabelText('Go to Trade DEMO')),
-            H1OnPrimary('h1'),
-            H3('h3'),
-            LabelText('labelText', withBoarder: true),
+            // H1OnPrimary('h1'),
+            // H3('h3'),
+            // LabelText('labelText', withBoarder: true),
           ],
         ),
       ),

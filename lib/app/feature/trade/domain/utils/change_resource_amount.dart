@@ -38,13 +38,12 @@ Npc applyOfferToNpc({required TradeResourceOffer offer, required Npc npc}) {
       resourceAmountVariationFactorNpc * offer.offerQuantity;
 
   return npc.copyWith(
-    wealth: npc.wealth + wealthVariation,
-    inventory: _updateInventoryAmount(
-      offer.tradeResourceInventory.tradeResource,
-      npc.inventory,
-      resourceAmountVariation,
-    ),
-  );
+      wealth: npc.wealth + wealthVariation,
+      inventory: _updateInventoryAmount(
+        offer.tradeResourceInventory.tradeResource,
+        npc.inventory,
+        resourceAmountVariation,
+      ));
 }
 
 List<TradeResourceInventory> _updateInventoryAmount(
@@ -54,7 +53,7 @@ List<TradeResourceInventory> _updateInventoryAmount(
   final updatedInventory = inventory.map((inventoryItem) {
     if (inventoryItem.tradeResource.id == selectedResource.id) {
       return inventoryItem.copyWith(
-          storage: inventoryItem.storage ?? 0 + resourceAmountVariation);
+          storage: inventoryItem.storage + resourceAmountVariation);
     }
     return inventoryItem;
   }).toList();

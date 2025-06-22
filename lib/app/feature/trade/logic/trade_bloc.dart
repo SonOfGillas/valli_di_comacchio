@@ -149,36 +149,46 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       final updatedUser =
           applyOfferToUser(offer: state.npcOffert!, user: user!);
       final updatedNpc = applyOfferToNpc(
-        offer: state.userCounterOffert!,
+        offer: state.npcOffert!,
         npc: state.npc!,
       );
+
+      final npcUpdateResponse = await npcRepository.updateNpcData(updatedNpc);
+      late final bool npcUpdatedCorrectly;
+
+      npcUpdateResponse.fold(
+        onSuccess: (_) {
+          npcUpdatedCorrectly = true;
+        },
+        onFailure: (error) async {
+          npcUpdatedCorrectly = false;
+          emit(state.copyWith(
+            status: TradeStatus.failure,
+            failure: error,
+          ));
+        },
+      );
+
+      if (!npcUpdatedCorrectly) {
+        return;
+      }
+
       final userUpdateReponse =
           await userRepository.updateUserData(updatedUser);
+
       userUpdateReponse.fold(
         onSuccess: (_) async {
-          final npcUpdateResponse =
-              await npcRepository.updateNpcData(updatedNpc);
-          npcUpdateResponse.fold(
-            onSuccess: (_) {
-              appCubit.updateUser(updatedUser);
-              emit(state.copyWith(
-                status: TradeStatus.idle,
-                npc: updatedNpc,
-                step: TradingStep.selectResource,
-                selectedResource: null,
-                npcOffert: null,
-                userCounterOffert: null,
-              ));
-            },
-            onFailure: (error) {
-              emit(state.copyWith(
-                status: TradeStatus.failure,
-                failure: error,
-              ));
-            },
-          );
+          emit(state.copyWith(
+            status: TradeStatus.idle,
+            npc: updatedNpc,
+            step: TradingStep.selectResource,
+            selectedResource: null,
+            npcOffert: null,
+            userCounterOffert: null,
+          ));
+          await appCubit.updateUser(updatedUser);
         },
-        onFailure: (error) {
+        onFailure: (error) async {
           emit(state.copyWith(
             status: TradeStatus.failure,
             failure: error,
