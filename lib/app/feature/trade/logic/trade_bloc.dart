@@ -355,6 +355,12 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         emit(state.copyWith(npcMessage: aiGeneratedNpcMessage!));
         return;
       }
+      if (state.npcOffert?.offerQuantity == 0) {
+        emit(state.copyWith(
+            npcMessage:
+                'Non posso fare un\'offerta per ${state.selectedResource?.tradeResource.name} perché non ho abbastanza monete.'));
+        return;
+      }
       emit(state.copyWith(
           npcMessage:
               'Ecco la mia offerta per ${state.selectedResource?.tradeResource.name}. Se ti va bene, accetta l\'offerta. Altrimenti, puoi fare una controfferta.'));

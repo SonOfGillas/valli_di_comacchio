@@ -124,6 +124,7 @@ class SetPriceStep extends StatelessWidget {
                   children: [
                     GlowingButton(
                         text: 'ACCETTA',
+                        disabled: state.npcOfferIsNotAcceptable,
                         onPressed: () {
                           context.read<TradeBloc>().add(AcceptOffer());
                         }),

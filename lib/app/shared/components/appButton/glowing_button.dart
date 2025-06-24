@@ -8,6 +8,7 @@ class GlowingButton extends StatefulWidget {
   final Color color1;
   final Color color2;
   final bool expanded;
+  final bool disabled;
 
   const GlowingButton({
     super.key,
@@ -17,6 +18,7 @@ class GlowingButton extends StatefulWidget {
     this.color1 = const Color(0xfff3bc00), // Gold
     this.color2 = const Color(0xfff7e09e),
     this.expanded = false,
+    this.disabled = false,
   });
 
   @override
@@ -63,56 +65,56 @@ class GlowingButtonState extends State<GlowingButton>
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: widget.onPressed,
+      onTap: widget.disabled ? null : widget.onPressed,
       child: AnimatedBuilder(
         animation: _pulse,
         builder: (context, child) {
-          return Transform.scale(
-            scale: _pulse.value,
-            child: Container(
-              height: 48,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40),
-                gradient: LinearGradient(
-                  colors: [
-                    widget.color1,
-                    widget.color2,
+          return Opacity(
+            opacity: widget.disabled ? 0.5 : 1.0,
+            child: Transform.scale(
+              scale: _pulse.value,
+              child: Container(
+                height: 48,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(40),
+                  gradient: LinearGradient(
+                    colors: [
+                      widget.color1,
+                      widget.color2,
+                    ],
+                  ),
+                  boxShadow: widget.disabled
+                      ? []
+                      : [
+                          BoxShadow(
+                            color: widget.color1.withOpacity(0.6),
+                            spreadRadius: 20 * (_pulse.value - 1) + 4 * (_pulse.value - 1) * 10,
+                            blurRadius: 32 * (_pulse.value - 1) + 24 * (_pulse.value - 1) * 10,
+                            offset: const Offset(-8, 0),
+                          ),
+                          BoxShadow(
+                            color: widget.color2.withOpacity(0.6),
+                            spreadRadius: 20 * (_pulse.value - 1) + 4 * (_pulse.value - 1) * 10,
+                            blurRadius: 32 * (_pulse.value - 1) + 24 * (_pulse.value - 1) * 10,
+                            offset: const Offset(8, 0),
+                          ),
+                        ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+                  children: [
+                    if (widget.icon != null)
+                      Icon(
+                        Icons.lightbulb,
+                        color: Colors.white,
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: H3(widget.text),
+                    ),
                   ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.color1.withValues(alpha: 0.6),
-                    spreadRadius:
-                        20 * (_pulse.value - 1) + 4 * (_pulse.value - 1) * 10,
-                    blurRadius:
-                        32 * (_pulse.value - 1) + 24 * (_pulse.value - 1) * 10,
-                    offset: const Offset(-8, 0),
-                  ),
-                  BoxShadow(
-                    color: widget.color2.withValues(alpha: 0.6),
-                    spreadRadius:
-                        20 * (_pulse.value - 1) + 4 * (_pulse.value - 1) * 10,
-                    blurRadius:
-                        32 * (_pulse.value - 1) + 24 * (_pulse.value - 1) * 10,
-                    offset: const Offset(8, 0),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize:
-                    widget.expanded ? MainAxisSize.max : MainAxisSize.min,
-                children: [
-                  if (widget.icon != null)
-                    Icon(
-                      Icons.lightbulb,
-                      color: Colors.white,
-                    ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                    child: H3(widget.text),
-                  ),
-                ],
               ),
             ),
           );
