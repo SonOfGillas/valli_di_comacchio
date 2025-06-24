@@ -4,7 +4,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/past_conversation_
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 
-enum TradeStatus { idle, loading, failure }
+enum TradeStatus { idle, loading, failure, success }
 
 enum TradingStep { selectResource, selectOfferType, setPrice }
 

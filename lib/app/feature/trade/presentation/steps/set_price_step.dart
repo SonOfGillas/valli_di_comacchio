@@ -9,6 +9,7 @@ import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_butto
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/debounce_text_field/debounce_text_field.dart';
+import 'package:valli_di_comacchio/app/shared/components/success_modal/trade_success_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield_style.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/number_formatter.dart';

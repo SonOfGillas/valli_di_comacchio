@@ -18,6 +18,7 @@ class TradeResourceElement extends StatelessWidget {
   const TradeResourceElement({
     super.key,
     required this.resource,
+    this.onTap,
     this.size = TradeResourceElmentSize.medium,
     this.isUserResource = false,
   });
@@ -25,6 +26,7 @@ class TradeResourceElement extends StatelessWidget {
   final TradeResourceInventory resource;
   final TradeResourceElmentSize size;
   final bool isUserResource;
+  final VoidCallback? onTap;
 
   double get containerDimension {
     switch (size) {
@@ -52,9 +54,8 @@ class TradeResourceElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        final TradeBloc tradeBloc = context.read<TradeBloc>();
-        if (tradeBloc.state.step == TradingStep.selectResource) {
-          tradeBloc.add(SelectTradeResource(resource: resource));
+        if (onTap != null) {
+          onTap!();
         }
       },
       child: Container(

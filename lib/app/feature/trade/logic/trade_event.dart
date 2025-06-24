@@ -114,3 +114,10 @@ class CloseError extends TradeEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SuccessResolve extends TradeEvent {
+  const SuccessResolve();
+
+  @override
+  List<Object?> get props => [];
+}

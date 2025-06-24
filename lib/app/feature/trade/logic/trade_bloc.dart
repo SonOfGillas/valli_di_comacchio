@@ -31,6 +31,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     on<SetCounterOfferMessage>(_onSetCounterOfferMessage);
     on<SendCounterOffer>(_onSendCounterOffer);
     on<CloseError>(_onCloseError);
+    on<SuccessResolve>(_onSuccessResolve);
 
     add(LoadData(npcId: tradePageParameters.npcId));
   }
@@ -115,15 +116,11 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
           manualOfferQuantity: npcOffer.offerQuantity - 1,
         );
       }
-      // reset all past conversation with the NPC, and errors
-      aiGeneratedNpcMessage = null;
+      _resetAllPastConversationAndErrors(emit);
       emit(state.copyWith(
         step: TradingStep.setPrice,
         npcOffert: npcOffer,
         userCounterOffert: npcOffer.copyWith(isUserOffer: true),
-        pastConversation: [],
-        isCounterOfferValid: true,
-        tradeFailed: false,
       ));
       _getNpcMessage(emit);
     }
@@ -179,12 +176,8 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       userUpdateReponse.fold(
         onSuccess: (_) async {
           emit(state.copyWith(
-            status: TradeStatus.idle,
+            status: TradeStatus.success,
             npc: updatedNpc,
-            step: TradingStep.selectResource,
-            selectedResource: null,
-            npcOffert: null,
-            userCounterOffert: null,
           ));
           await appCubit.updateUser(updatedUser);
         },
@@ -196,6 +189,18 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         },
       );
     }
+  }
+
+  void _onSuccessResolve(SuccessResolve event, Emitter<TradeState> emit) {
+    _resetAllPastConversationAndErrors(emit);
+    emit(state.copyWith(
+      status: TradeStatus.idle,
+      step: TradingStep.selectResource,
+      selectedResource: null,
+      npcOffert: null,
+      userCounterOffert: null,
+    ));
+    _getNpcMessage(emit);
   }
 
   void _onSetCounterOffertPrice(
@@ -356,5 +361,15 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
     } else {
       emit(state.copyWith(npcMessage: ''));
     }
+  }
+
+  void _resetAllPastConversationAndErrors(Emitter<TradeState> emit) {
+    aiGeneratedNpcMessage = null;
+    emit(state.copyWith(
+      pastConversation: [],
+      failure: null,
+      isCounterOfferValid: true,
+      tradeFailed: false,
+    ));
   }
 }

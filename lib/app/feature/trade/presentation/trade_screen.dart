@@ -9,6 +9,7 @@ import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_o
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/select_resource_step.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/steps/set_price_step.dart';
 import 'package:valli_di_comacchio/app/shared/components/npc_loading_modal/npc_loading_modal.dart';
+import 'package:valli_di_comacchio/app/shared/components/success_modal/trade_success_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
@@ -34,6 +35,17 @@ class TradeScreen extends StatelessWidget {
             barrierDismissible: false,
             builder: (context) => const NpcLoadingModal(),
           );
+        } else if (state.status == TradeStatus.success) {
+          showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => TradeSuccessModal(
+              npc: state.npc!,
+              offer: state.npcOffert!,
+              onClose: () => {},
+            ),
+          );
+          context.read<TradeBloc>().add(SuccessResolve());
         }
       },
       buildWhen: (previous, current) =>

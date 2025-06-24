@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
+import 'package:valli_di_comacchio/app/feature/trade/logic/trade_event.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_state.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/demand_info_gradient.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/trade_resource_element.dart';
@@ -38,7 +39,13 @@ class SelectResourceStep extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   final resource = inventory[index];
-                  return TradeResourceElement(resource: resource);
+                  return TradeResourceElement(
+                    resource: resource,
+                    onTap: () {
+                      final TradeBloc tradeBloc = context.read<TradeBloc>();
+                      tradeBloc.add(SelectTradeResource(resource: resource));
+                    },
+                  );
                 },
               );
             },
