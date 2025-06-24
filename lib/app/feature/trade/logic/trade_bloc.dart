@@ -44,6 +44,26 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   User? get user => appCubit.state.user;
   String? aiGeneratedNpcMessage;
 
+  get tradeResourceUserInventory => user?.inventory.firstWhere(
+        (element) =>
+            element.tradeResource.id ==
+            state.selectedResource!.tradeResource.id,
+      );
+
+  get npcOfferIsNotAcceptable {
+    if (state.npcOffert == null || state.npc == null) return false;
+    if (state.npcOffert!.offerType == OfferType.buy) {
+      return state.npcOffert!.offerQuantity == 0 ||
+          (state.npcOffert!.totalCost > user!.wealth) ||
+          (state.npcOffert!.offerQuantity > state.selectedResource!.storage);
+    } else if (state.npcOffert!.offerType == OfferType.sell) {
+      return state.npcOffert!.offerQuantity == 0 ||
+          (state.npcOffert!.totalCost > state.npc!.wealth) ||
+          (state.npcOffert!.offerQuantity > tradeResourceUserInventory.storage);
+    }
+    return false;
+  }
+
   void _onLoadData(LoadData event, Emitter<TradeState> emit) async {
     _getNpcMessage(emit);
     await appCubit.loadUserData();
@@ -217,16 +237,14 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       final isOffertValid = newOffert!.isOfferValid(user!, state.npc!);
 
       emit(state.copyWith(
-          status: isOffertValid ? null : TradeStatus.failure,
-          isCounterOfferValid: isOffertValid,
-          userCounterOffert: newOffert,
-          failure: isOffertValid
-              ? Failure.fromMessage(
-                  (newOffert.offerType == OfferType.buy)
-                      ? 'Invalid counter offer: you don\'t have enough coins to buy at this price'
-                      : 'Invalid counter offer: the NPC doesn\'t have enough coins to at this price',
-                )
-              : null));
+        status: isOffertValid ? null : TradeStatus.failure,
+        isCounterOfferValid: isOffertValid,
+        userCounterOffert: newOffert,
+      ));
+
+      if (!isOffertValid) {
+        getErrorMessage(emit);
+      }
     }
   }
 
@@ -244,16 +262,13 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       final isOffertValid = newOffert!.isOfferValid(user!, state.npc!);
 
       emit(state.copyWith(
-          status: isOffertValid ? null : TradeStatus.failure,
-          isCounterOfferValid: isOffertValid,
-          userCounterOffert: newOffert,
-          failure: isOffertValid
-              ? Failure.fromMessage(
-                  (newOffert.offerType == OfferType.buy)
-                      ? 'Invalid counter offer: the NPC doesn\'t have enough resources in storage'
-                      : 'Invalid counter offer: you don\'t have enough resources in storage',
-                )
-              : null));
+        status: isOffertValid ? null : TradeStatus.failure,
+        isCounterOfferValid: isOffertValid,
+        userCounterOffert: newOffert,
+      ));
+      if (!isOffertValid) {
+        getErrorMessage(emit);
+      }
     }
   }
 
@@ -376,6 +391,38 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
       failure: null,
       isCounterOfferValid: true,
       tradeFailed: false,
+    ));
+  }
+
+  void getErrorMessage(Emitter<TradeState> emit) {
+    late String errorMessage;
+
+    final offer = state.userCounterOffert;
+    if (offer == null) {
+      emit(state.copyWith(
+        status: TradeStatus.failure,
+        failure: Failure.fromMessage('No counter offer available'),
+      ));
+      return;
+    }
+    if (offer.offerType == OfferType.buy) {
+      if (user!.wealth < offer.totalCost) {
+        errorMessage = 'You don\'t have enough coins to buy at this price';
+      } else if (offer.offerQuantity > offer.tradeResourceInventory.storage) {
+        errorMessage = 'The NPC doesn\'t have enough resources in storage';
+      }
+    } else {
+      if (state.npc!.wealth < offer.totalCost) {
+        errorMessage =
+            'The NPC doesn\'t have enough coins to buy at this price';
+      } else if (offer.offerQuantity > tradeResourceUserInventory.storage) {
+        errorMessage = 'You don\'t have enough resources in storage';
+      }
+    }
+
+    emit(state.copyWith(
+      status: TradeStatus.failure,
+      failure: Failure.fromMessage(errorMessage),
     ));
   }
 }

@@ -55,8 +55,8 @@ class _BaseSuccessModalState extends State<BaseSuccessModal> {
               ],
               emissionFrequency: 0.10,
               numberOfParticles: 40,
-              maxBlastForce: 40,
-              minBlastForce: 8,
+              maxBlastForce: 50,
+              minBlastForce: 12,
               gravity: 0.3,
             ),
             GestureDetector(

@@ -9,7 +9,6 @@ import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_butto
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/debounce_text_field/debounce_text_field.dart';
-import 'package:valli_di_comacchio/app/shared/components/success_modal/trade_success_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield.dart';
 import 'package:valli_di_comacchio/app/shared/components/text_field/app_textfield_style.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/number_formatter.dart';
@@ -25,6 +24,8 @@ class SetPriceStep extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<TradeBloc, TradeState>(
       builder: (context, state) {
+        final npcOfferIsNotAcceptable =
+            context.read<TradeBloc>().npcOfferIsNotAcceptable;
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
           child: Column(
@@ -124,7 +125,7 @@ class SetPriceStep extends StatelessWidget {
                   children: [
                     GlowingButton(
                         text: 'ACCETTA',
-                        disabled: state.npcOfferIsNotAcceptable,
+                        disabled: npcOfferIsNotAcceptable,
                         onPressed: () {
                           context.read<TradeBloc>().add(AcceptOffer());
                         }),
@@ -136,9 +137,9 @@ class SetPriceStep extends StatelessWidget {
               if (state.tradeFailed == false)
                 Table(
                   columnWidths: const {
-                    0: FlexColumnWidth(1),
-                    1: FlexColumnWidth(1),
-                    2: FlexColumnWidth(1),
+                    0: FlexColumnWidth(2),
+                    1: FlexColumnWidth(3),
+                    2: FlexColumnWidth(2),
                   },
                   children: [
                     TableRow(
@@ -193,45 +194,41 @@ class SetPriceStep extends StatelessWidget {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: SizedBox(
-                            height: 70,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 4.0),
-                                  child: TradeResourceElement(
-                                    resource:
-                                        state.npcOffert!.tradeResourceInventory,
-                                    size: TradeResourceElmentSize.small,
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4.0),
+                                child: TradeResourceElement(
+                                  resource:
+                                      state.npcOffert!.tradeResourceInventory,
+                                  size: TradeResourceElmentSize.small,
+                                ),
+                              ),
+                              H3('x'),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 4.0),
+                                child: DebouncedTextField(
+                                  onDebouncedChange: (value) {
+                                    context.read<TradeBloc>().add(
+                                          SetCounterOfferQuantity(
+                                            quantity: int.tryParse(value) ?? 0,
+                                          ),
+                                        );
+                                  },
+                                  textField: AppTextField(
+                                    errorMessage: state.isCounterOfferValid
+                                        ? null
+                                        : 'non valido',
+                                    placeHolder:
+                                        '${state.userCounterOffert?.offerQuantity}',
+                                    type: AppTextFieldType.number,
                                   ),
                                 ),
-                                H3('x'),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 4.0),
-                                  child: DebouncedTextField(
-                                    onDebouncedChange: (value) {
-                                      context.read<TradeBloc>().add(
-                                            SetCounterOfferQuantity(
-                                              quantity:
-                                                  int.tryParse(value) ?? 0,
-                                            ),
-                                          );
-                                    },
-                                    textField: AppTextField(
-                                      errorMessage: state.isCounterOfferValid
-                                          ? null
-                                          : 'non valido',
-                                      placeHolder:
-                                          '${state.userCounterOffert?.offerQuantity}',
-                                      type: AppTextFieldType.number,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                         Padding(

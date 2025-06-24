@@ -38,13 +38,6 @@ class TradeState {
     this.tradeFailed = false,
   });
 
-  get npcOfferIsNotAcceptable {
-    if (npcOffert == null || npc == null) return false;
-    return npcOffert!.offerQuantity == 0 ||
-        (npcOffert!.offerType == OfferType.sell &&
-            (npcOffert!.totalCost > npc!.wealth));
-  }
-
   TradeState copyWith({
     TradeStatus? status,
     TradingStep? step,

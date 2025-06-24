@@ -27,6 +27,7 @@ class TradeScreen extends StatelessWidget {
             SnackBar(
               content: Text(state.failure?.message() ?? 'An error occurred'),
               backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
             ),
           );
         } else if (state.status == TradeStatus.loading) {
