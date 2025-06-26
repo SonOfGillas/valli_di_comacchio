@@ -173,6 +173,25 @@ class _NpcDialogueBoxState extends State<NpcDialogueBox>
                         child: H3(widget.speaker),
                       ),
                     ),
+                    Positioned(
+                      bottom: 6,
+                      right: 16,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        // decoration: BoxDecoration(
+                        //   color: Colors.black.withOpacity(0.6),
+                        //   borderRadius: BorderRadius.circular(8),
+                        // ),
+                        child: Text(
+                          '${_sentenceIndex + 1}/${widget.textList.length}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 if (isLastSentence) const SizedBox(height: 10),

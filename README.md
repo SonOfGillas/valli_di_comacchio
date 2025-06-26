@@ -16,3 +16,6 @@ flutter fire:
 
 ## Genera stringe
 flutter pub get 
+
+## BUILD
+flutter build apk --debug

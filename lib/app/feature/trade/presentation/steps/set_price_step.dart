@@ -295,22 +295,26 @@ class SetPriceStep extends StatelessWidget {
                 ),
 
               if (state.tradeFailed)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: H3(
-                    '${state.npc?.name} non è soddisfatto della tue controfferte',
-                  ),
-                ),
-              if (state.tradeFailed)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: GlowingButton(
-                    text: 'INDIETRO',
-                    onPressed: () {
-                      context.read<TradeBloc>().add(GoBack());
-                    },
-                  ),
-                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 24.0, horizontal: 32.0),
+                      child: H3(
+                        '${state.npc?.name} non vuole piu trattare',
+                        error: true,
+                        centre: true,
+                      ),
+                    ),
+                    GlowingButton(
+                      text: 'INDIETRO',
+                      onPressed: () {
+                        context.read<TradeBloc>().add(GoBack());
+                      },
+                    ),
+                  ],
+                )
             ],
           ),
         );
