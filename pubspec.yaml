@@ -32,6 +32,7 @@ dependencies:
   dartz: ^0.10.1
   formz: ^0.8.0
   confetti: ^0.8.0
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   build_runner:
@@ -55,3 +56,9 @@ l10n:
   arb-dir: lib/l10n
   template-arb-file: app_it.arb
   output-localization-file: app_localizations.dart
+
+flutter_launcher_icons:
+  android: 'launcher_icon'
+  ios: true
+  image_path: 'assets/images/playstore-icon.png'
+  min_sdk_android: 21
