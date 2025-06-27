@@ -167,15 +167,18 @@ class AppTextField extends StatelessWidget {
                 )
               : null, // otherwise default padding is applied,
           suffixIcon: (!(rightIcon?.isEmpty ?? true))
-              ? Padding(
-                  padding: EdgeInsets.all(rightIconPadding ?? 8),
-                  child: SvgPicture.asset(
-                    rightIcon!,
-                    width: 34,
-                    height: 34,
-                    colorFilter: ColorFilter.mode(
-                      rightIconColor ?? AppTextFieldColors.rightIcon,
-                      BlendMode.srcIn,
+              ? GestureDetector(
+                  onTap: onRightIconTap,
+                  child: Padding(
+                    padding: EdgeInsets.all(rightIconPadding ?? 8),
+                    child: SvgPicture.asset(
+                      rightIcon!,
+                      width: 34,
+                      height: 34,
+                      colorFilter: ColorFilter.mode(
+                        rightIconColor ?? AppTextFieldColors.rightIcon,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 )

@@ -132,15 +132,22 @@ class AuthScreen extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(top: 16),
                                   child: AppTextField(
-                                    key: usernameFieldKey,
+                                    key: repeatPasswordFieldKey,
                                     placeHolder: "ripeti la password",
+                                    type: state.showPassword
+                                        ? AppTextFieldType.text
+                                        : AppTextFieldType.password,
                                     leftIcon: AppIcons.unlock,
-                                    onChange: (value) =>
-                                        context.read<AuthBloc>().add(
-                                              RepeatPasswordEdit(
-                                                repeatPassword: value,
-                                              ),
-                                            ),
+                                    rightIconPadding: 12,
+                                    rightIcon: state.showPassword
+                                        ? AppIcons.visibilityOn
+                                        : AppIcons.visibilityOff,
+                                    onRightIconTap: () =>
+                                        _togglePasswordVisibility(context),
+                                    onChange: (value) => context
+                                        .read<AuthBloc>()
+                                        .add(RepeatPasswordEdit(
+                                            repeatPassword: value)),
                                   ),
                                 ),
                               const SizedBox(
@@ -197,6 +204,7 @@ class AuthScreen extends StatelessWidget {
   }
 
   void _togglePasswordVisibility(BuildContext context) {
+    print("Toggle password visibility");
     context.read<AuthBloc>().add(
           TogglePasswordIconPressed(),
         );
