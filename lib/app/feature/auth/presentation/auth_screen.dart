@@ -53,10 +53,7 @@ class AuthScreen extends StatelessWidget {
             listenWhen: (previous, current) =>
                 current.status == AuthStatus.succeeded,
             listener: (context, state) {
-              print(
-                'AuthScreen: User logged in successfully',
-              );
-              // context.go(rootAfterLogin);
+              context.go(rootAfterLogin);
             },
             builder: (context, state) => Center(
               child: state.status == AuthStatus.loading

@@ -29,7 +29,9 @@ class UserRepository {
   }) async {
     try {
       final credentials = await authDataSource.login(email, password);
-      return Success(mockUser);
+      final loggedUser =
+          await userDataSource.getUserData(credentials.user!.uid);
+      return Success(loggedUser);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
     } catch (e) {
@@ -48,7 +50,12 @@ class UserRepository {
         password,
         email,
       );
-      return Success(mockUser);
+      final newUser = await userDataSource.createUser(
+        credentials.user!.uid,
+        email,
+        username,
+      );
+      return Success(newUser);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
     } catch (e) {

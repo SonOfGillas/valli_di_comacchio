@@ -7,12 +7,13 @@ import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/chatgbt_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/auth_data_source/auth_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/cloud_firestore/cloud_firestore.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source_mock.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source_mock.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/firebase_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source_mock.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
@@ -30,8 +31,11 @@ Future<void> initServiceLocator() async {
     )
 
     // Data Sources
+    ..registerLazySingleton<CloudFirestoreDataSource>(
+      () => CloudFirestoreDataSource(),
+    )
     ..registerLazySingleton<UserDataSource>(
-      () => UserDataSourceMock(),
+      () => FirebaseUserDataSource(cloudFirestoreDataSource: sl()),
     )
     ..registerLazySingleton<ResourcesInventoryDataSource>(
       () => ResourcesInventoryDataSourceMock(),

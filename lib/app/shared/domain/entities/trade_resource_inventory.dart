@@ -117,4 +117,14 @@ class TradeResourceInventory extends Equatable {
       defaultNeedLevel: defaultNeedLevel,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'tradeResourceID': tradeResource.id,
+      'defaultProductionLevel': defaultProductionLevel.value,
+      'defaultNeedLevel': defaultNeedLevel.value,
+      'storage': storage,
+      'needs': needs,
+    };
+  }
 }

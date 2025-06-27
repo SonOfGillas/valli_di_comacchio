@@ -107,7 +107,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     if (registerUser != null) {
-      await appCubit.loadLocalUserData();
+      await appCubit.setLocalUser(
+        registerUser!,
+        state.password.value,
+      );
       emit(state.copyWith(status: AuthStatus.succeeded));
     }
   }

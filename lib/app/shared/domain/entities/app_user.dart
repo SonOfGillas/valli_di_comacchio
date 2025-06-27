@@ -24,6 +24,8 @@ class AppUser {
         'id': id,
         'email': email,
         'username': username,
+        'wealth': wealth,
+        'inventory': inventory.map((item) => item.toJson()).toList(),
       };
 
   factory AppUser.fromJson(Map<String, dynamic> json) {

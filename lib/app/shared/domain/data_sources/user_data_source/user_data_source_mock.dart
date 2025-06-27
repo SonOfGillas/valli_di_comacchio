@@ -20,4 +20,15 @@ class UserDataSourceMock implements UserDataSource {
     mockUser = user;
     return Future.value();
   }
+
+  @override
+  Future<AppUser> createUser(String id, String email, String username) {
+    return Future.value(AppUser(
+      id: id,
+      email: email,
+      username: username,
+      inventory: [],
+      wealth: 0,
+    ));
+  }
 }
