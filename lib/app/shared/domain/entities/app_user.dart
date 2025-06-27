@@ -1,19 +1,17 @@
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
-class User {
-  const User({
+class AppUser {
+  const AppUser({
     required this.id,
     required this.email,
-    required this.name,
-    required this.surname,
+    required this.username,
     this.inventory = const [],
     this.wealth = 0,
   });
 
   final String id;
   final String email;
-  final String name;
-  final String surname;
+  final String username;
   /*
   * wealth is the amount of game-money the user has
   */
@@ -25,16 +23,14 @@ class User {
   Map<String, dynamic> toJson() => {
         'id': id,
         'email': email,
-        'name': name,
-        'surname': surname,
+        'username': username,
       };
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory AppUser.fromJson(Map<String, dynamic> json) {
+    return AppUser(
       id: json['id'] as String,
       email: json['email'] as String,
-      name: json['name'] as String,
-      surname: json['surname'] as String,
+      username: json['username'] as String,
     );
   }
 
@@ -42,11 +38,10 @@ class User {
     List<TradeResourceInventory>? inventory,
     int? wealth,
   }) {
-    return User(
+    return AppUser(
       id: id,
       email: email,
-      name: name,
-      surname: surname,
+      username: username,
       inventory: inventory ?? this.inventory,
       wealth: wealth ?? this.wealth,
     );

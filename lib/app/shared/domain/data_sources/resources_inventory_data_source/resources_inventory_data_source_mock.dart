@@ -4,7 +4,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_generation.dart';
 
 class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
@@ -20,7 +20,7 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
   }
 
   @override
-  Future<List<TradeResourceInventory>> getUserInventory(User user) async {
+  Future<List<TradeResourceInventory>> getUserInventory(AppUser user) async {
     if (mockUserInventory.isEmpty) {
       mockUserInventory = _generateMockInventory();
     }
@@ -34,7 +34,7 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
   }
 
   @override
-  Future<void> updateUserInventory(User user) {
+  Future<void> updateUserInventory(AppUser user) {
     mockUserInventory = user.inventory;
     return Future.value();
   }

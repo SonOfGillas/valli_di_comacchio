@@ -12,7 +12,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/past_conversation_
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
-import '../../../shared/domain/entities/user.dart';
+import '../../../shared/domain/entities/app_user.dart';
 
 class TradeBloc extends Bloc<TradeEvent, TradeState> {
   TradeBloc({
@@ -41,7 +41,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   final NpcRepository npcRepository;
   final TradePageParameters tradePageParameters;
 
-  User? get user => appCubit.state.user;
+  AppUser? get user => appCubit.state.user;
   String? aiGeneratedNpcMessage;
 
   get tradeResourceUserInventory => user?.inventory.firstWhere(
@@ -66,7 +66,7 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
 
   void _onLoadData(LoadData event, Emitter<TradeState> emit) async {
     _getNpcMessage(emit);
-    await appCubit.loadUserData();
+    await appCubit.loadLocalUserData();
     if (appCubit.state.user == null) {
       emit(state.copyWith(
         status: TradeStatus.failure,

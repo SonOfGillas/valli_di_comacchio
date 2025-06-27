@@ -41,7 +41,7 @@ abstract class AppTextFieldColors {
   static const Color textError = AppColors.utility_allert;
   static const Color leftIcon = AppColors.palette_primary;
   static const Color rightIcon = AppColors.palette_primary;
-  static const Color iconBackground = AppColors.shade_shade_white_50;
+  static const Color iconBackground = AppColors.palette_secondary;
   static const Color fill = AppColors.shade_shade_gray_50;
   static const Color background = AppColors.palette_secondary;
 }

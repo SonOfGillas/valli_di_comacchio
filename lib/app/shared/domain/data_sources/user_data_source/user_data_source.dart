@@ -1,6 +1,6 @@
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
 abstract class UserDataSource {
-  Future<User> getUserData(String userId);
-  Future<void> updateUserData(User user);
+  Future<AppUser> getUserData(String userId);
+  Future<void> updateUserData(AppUser user);
 }

@@ -61,7 +61,7 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: AppColors.background_white),
               onPressed: () => goBack())
           : null,
-      title: H1OnPrimary(getTitle()),
+      title: H1(getTitle()),
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 8.0),

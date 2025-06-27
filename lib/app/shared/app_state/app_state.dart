@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
 class AppState extends Equatable {
   const AppState({
@@ -7,11 +7,11 @@ class AppState extends Equatable {
     this.fcmToken = '',
   });
 
-  final User? user;
+  final AppUser? user;
   final String fcmToken;
 
   AppState copyWith({
-    User? user,
+    AppUser? user,
     String? fcmToken,
   }) {
     return AppState(

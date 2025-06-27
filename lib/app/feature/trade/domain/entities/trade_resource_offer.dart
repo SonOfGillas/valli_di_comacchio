@@ -3,7 +3,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_data.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/utils/price_functions.dart';
 
 //this generates the default quantity of the resource that the NPC wants to buy or sell
@@ -150,7 +150,7 @@ class TradeResourceOffer extends Equatable {
     }
   }
 
-  bool isOfferValid(User user, Npc npc) {
+  bool isOfferValid(AppUser user, Npc npc) {
     if (offerType == OfferType.buy) {
       final userWealthCheck = user.wealth >= offerPrice * offerQuantity;
       final priceCheck = isUserOffer ||

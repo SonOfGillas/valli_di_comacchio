@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
@@ -25,7 +25,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> setLocalUser(
-    User user,
+    AppUser user,
     String password,
   ) async {
     await appStorage.write(
@@ -45,12 +45,11 @@ class AppCubit extends Cubit<AppState> {
     emit(const AppState(user: null));
   }
 
-  Future<void> loadUserData() async {
+  Future<void> loadLocalUserData() async {
     final user = await appStorage.read(key: AppStorage.userKey);
     if (user != null) {
-      final localUserData = User.fromJson(jsonDecode(user));
+      final localUserData = AppUser.fromJson(jsonDecode(user));
       final userResult = await userRepository.getUserData(localUserData.email);
-      //TODO: add TradeResourceInventory to User
       userResult.fold(
         onSuccess: (user) {
           emit(state.copyWith(user: user));
@@ -62,7 +61,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Future<void> updateUser(User user) async {
+  Future<void> updateUser(AppUser user) async {
     emit(state.copyWith(user: user));
   }
 }

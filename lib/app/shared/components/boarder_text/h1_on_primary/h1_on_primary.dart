@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
-class H1OnPrimary extends StatelessWidget {
-  const H1OnPrimary(this.text, {super.key});
+class H1 extends StatelessWidget {
+  const H1(this.text, {super.key});
 
   final String text;
 

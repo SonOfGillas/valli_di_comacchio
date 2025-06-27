@@ -3,13 +3,14 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
 /// NOTE this is the definition of OfferType
 /// buy -> the user is buying the resource from the NPC
 /// sell -> the user is selling the resource to the NPC
 
-User applyOfferToUser({required TradeResourceOffer offer, required User user}) {
+AppUser applyOfferToUser(
+    {required TradeResourceOffer offer, required AppUser user}) {
   final wealthVartiationFactorUser = offer.offerType == OfferType.buy ? -1 : 1;
   final resourceAmountVariationFactorUser =
       offer.offerType == OfferType.buy ? 1 : -1;

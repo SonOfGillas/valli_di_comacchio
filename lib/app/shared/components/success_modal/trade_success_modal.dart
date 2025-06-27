@@ -29,7 +29,7 @@ class TradeSuccessModal extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const H1OnPrimary('Trade Successful!'),
+            const H1('Trade Successful!'),
             const SizedBox(height: 16),
             Table(
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,

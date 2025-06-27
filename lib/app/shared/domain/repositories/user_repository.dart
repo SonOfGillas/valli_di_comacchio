@@ -1,22 +1,32 @@
+import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/auth_data_source/auth_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
 class UserRepository {
   UserRepository({
+    required this.authDataSource,
     required this.userDataSource,
     required this.resourcesInventoryDataSource,
   });
+  final AuthDataSource authDataSource;
   final UserDataSource userDataSource;
   final ResourcesInventoryDataSource resourcesInventoryDataSource;
 
   // login
-  AsyncResult<void> login({
-    required String username,
+  AsyncResult<AppUser> login({
+    required String email,
     required String password,
   }) async {
-    return Success(null);
+    try {
+      return Success(await authDataSource.login(email, password));
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (e) {
+      return Error(UnknownFailure());
+    }
   }
 
   // register
@@ -25,7 +35,13 @@ class UserRepository {
     required String password,
     required String email,
   }) async {
-    return Success(null);
+    try {
+      return Success(await authDataSource.register(username, password, email));
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (e) {
+      return Error(UnknownFailure());
+    }
   }
 
   // logout
@@ -34,7 +50,7 @@ class UserRepository {
   }
 
   // get user data
-  AsyncResult<User> getUserData(String userId) async {
+  AsyncResult<AppUser> getUserData(String userId) async {
     final userData = await userDataSource.getUserData(userId);
     final userInventory =
         await resourcesInventoryDataSource.getUserInventory(userData);
@@ -44,7 +60,7 @@ class UserRepository {
   }
 
   // update user data
-  AsyncResult<void> updateUserData(User user) async {
+  AsyncResult<void> updateUserData(AppUser user) async {
     await userDataSource.updateUserData(user);
     await resourcesInventoryDataSource.updateUserInventory(user);
     return Success(null);

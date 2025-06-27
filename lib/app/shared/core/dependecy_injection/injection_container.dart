@@ -1,10 +1,12 @@
 import 'package:get_it/get_it.dart';
+import 'package:valli_di_comacchio/app/feature/auth/logic/auth_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/chatgbt_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/auth_data_source/auth_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source_mock.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
@@ -37,12 +39,16 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<NpcDataSource>(() => NpcDataSourceMock())
     ..registerLazySingleton<AiGenerationDataSource>(
         () => ChatGbtDataSource(config: sl()))
+    ..registerLazySingleton<AuthDataSource>(
+      () => AuthDataSource(),
+    )
 
     // Repositories
     ..registerLazySingleton<UserRepository>(
       () => UserRepository(
         userDataSource: sl(),
         resourcesInventoryDataSource: sl(),
+        authDataSource: sl(),
       ),
     )
     ..registerLazySingleton<NpcRepository>(
@@ -55,6 +61,14 @@ Future<void> initServiceLocator() async {
     // AppState
     ..registerLazySingleton<AppCubit>(
         () => AppCubit(appStorage: sl(), userRepository: sl()))
+
+    // Auth
+    ..registerFactory<AuthBloc>(
+      () => AuthBloc(
+        userRepository: sl(),
+        appCubit: sl(),
+      ),
+    )
 
     // TRADE
     ..registerFactoryParam<TradeBloc, TradePageParameters, void>(

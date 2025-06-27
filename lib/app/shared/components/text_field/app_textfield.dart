@@ -150,26 +150,15 @@ class AppTextField extends StatelessWidget {
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    DecoratedBox(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: appTextFieldBorderWidth,
-                          color: (errorMessage?.isNotEmpty == true)
-                              ? AppTextFieldColors.borderError
-                              : AppTextFieldColors.border,
-                        ),
-                        color: AppTextFieldColors.iconBackground,
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(leftIconPadding ?? 8),
-                        child: SvgPicture.asset(
-                          leftIcon!,
-                          width: 34,
-                          height: 34,
-                          colorFilter: ColorFilter.mode(
-                            leftIconColor ?? AppTextFieldColors.leftIcon,
-                            BlendMode.srcIn,
-                          ),
+                    Padding(
+                      padding: EdgeInsets.all(leftIconPadding ?? 8),
+                      child: SvgPicture.asset(
+                        leftIcon!,
+                        width: 34,
+                        height: 34,
+                        colorFilter: ColorFilter.mode(
+                          leftIconColor ?? AppTextFieldColors.leftIcon,
+                          BlendMode.srcIn,
                         ),
                       ),
                     ),
@@ -178,27 +167,15 @@ class AppTextField extends StatelessWidget {
                 )
               : null, // otherwise default padding is applied,
           suffixIcon: (!(rightIcon?.isEmpty ?? true))
-              ? DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        width: appTextFieldBorderWidth,
-                        color: (errorMessage?.isNotEmpty == true)
-                            ? AppTextFieldColors.borderError
-                            : AppTextFieldColors.border,
-                      ),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(rightIconPadding ?? 8),
-                    child: SvgPicture.asset(
-                      rightIcon!,
-                      width: 34,
-                      height: 34,
-                      colorFilter: ColorFilter.mode(
-                        rightIconColor ?? AppTextFieldColors.rightIcon,
-                        BlendMode.srcIn,
-                      ),
+              ? Padding(
+                  padding: EdgeInsets.all(rightIconPadding ?? 8),
+                  child: SvgPicture.asset(
+                    rightIcon!,
+                    width: 34,
+                    height: 34,
+                    colorFilter: ColorFilter.mode(
+                      rightIconColor ?? AppTextFieldColors.rightIcon,
+                      BlendMode.srcIn,
                     ),
                   ),
                 )
