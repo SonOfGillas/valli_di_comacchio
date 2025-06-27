@@ -5,6 +5,13 @@ import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inve
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
+const mockUser = AppUser(
+  id: 'mock-id',
+  email: 'mock-email@example.com',
+  username: 'mock-username',
+  inventory: [],
+);
+
 class UserRepository {
   UserRepository({
     required this.authDataSource,
@@ -21,7 +28,8 @@ class UserRepository {
     required String password,
   }) async {
     try {
-      return Success(await authDataSource.login(email, password));
+      final credentials = await authDataSource.login(email, password);
+      return Success(mockUser);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
     } catch (e) {
@@ -30,13 +38,17 @@ class UserRepository {
   }
 
   // register
-  AsyncResult<void> register({
+  AsyncResult<AppUser> register({
     required String username,
     required String password,
     required String email,
   }) async {
     try {
-      return Success(await authDataSource.register(username, password, email));
+      final credentials = await authDataSource.register(
+        password,
+        email,
+      );
+      return Success(mockUser);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
     } catch (e) {

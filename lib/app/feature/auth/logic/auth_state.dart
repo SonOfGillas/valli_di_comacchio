@@ -4,14 +4,14 @@ import 'package:valli_di_comacchio/app/shared/core/form_fields/password_field.da
 import 'package:valli_di_comacchio/app/shared/core/form_fields/email_field.dart';
 import 'package:valli_di_comacchio/app/shared/core/form_fields/username_field.dart';
 
-enum AccessStatus { idle, loading, succeeded, failure }
+enum AuthStatus { idle, loading, succeeded, failure }
 
-enum AccessMode { login, register }
+enum AuthMode { login, register }
 
 class AuthState extends Equatable {
   const AuthState({
     required this.status,
-    this.mode = AccessMode.login,
+    this.mode = AuthMode.login,
     this.showPassword = false,
     this.failure,
     this.email = const EmailField.pure(),
@@ -20,8 +20,8 @@ class AuthState extends Equatable {
     this.repeatPassword = const PasswordField.pure(),
   });
 
-  final AccessStatus status;
-  final AccessMode mode;
+  final AuthStatus status;
+  final AuthMode mode;
   final bool showPassword;
   final Failure? failure;
   final EmailField email;
@@ -30,10 +30,10 @@ class AuthState extends Equatable {
   final PasswordField repeatPassword;
 
   AuthState copyWith({
-    AccessStatus? status,
-    AccessMode? mode,
+    AuthStatus? status,
+    AuthMode? mode,
     bool? showPassword,
-    Failure? Function()? failureProvider,
+    Failure? failure,
     EmailField? email,
     UsernameField? username,
     PasswordField? password,
@@ -43,7 +43,7 @@ class AuthState extends Equatable {
       status: status ?? this.status,
       mode: mode ?? this.mode,
       showPassword: showPassword ?? this.showPassword,
-      failure: failureProvider?.call(),
+      failure: failure ?? this.failure,
       email: email ?? this.email,
       username: username ?? this.username,
       password: password ?? this.password,

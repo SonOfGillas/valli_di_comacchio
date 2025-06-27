@@ -51,145 +51,154 @@ class AuthScreen extends StatelessWidget {
           },
           child: BlocConsumer<AuthBloc, AuthState>(
             listenWhen: (previous, current) =>
-                current.status == AccessStatus.succeeded,
+                current.status == AuthStatus.succeeded,
             listener: (context, state) {
-              context.go(rootAfterLogin);
+              print(
+                'AuthScreen: User logged in successfully',
+              );
+              // context.go(rootAfterLogin);
             },
             builder: (context, state) => Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Form(
-                    child: CustomScrollView(
-                      physics: const ClampingScrollPhysics(),
-                      slivers: [
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const SizedBox(
-                                height: 40,
-                              ),
-                              Image.asset(
-                                AppImages.logo,
-                                height: 160,
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              H1(
-                                state.mode == AccessMode.login
-                                    ? 'Effettua il login'
-                                    : 'Registrati',
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              AppTextField(
-                                key: emailFieldKey,
-                                placeHolder: "email",
-                                leftIcon: AppIcons.email,
-                                onChange: (value) => context
-                                    .read<AuthBloc>()
-                                    .add(EmailEdit(email: value)),
-                              ),
-                              if (state.mode == AccessMode.register)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: AppTextField(
-                                    key: usernameFieldKey,
-                                    placeHolder: "nome utente",
-                                    leftIcon: AppIcons.userNormal,
-                                    onChange: (value) => context
-                                        .read<AuthBloc>()
-                                        .add(UsernameEdit(username: value)),
-                                  ),
-                                ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              AppTextField(
-                                key: passwordFieldKey,
-                                placeHolder: l10n.loginPasswordHint,
-                                type: state.showPassword
-                                    ? AppTextFieldType.text
-                                    : AppTextFieldType.password,
-                                leftIcon: AppIcons.unlock,
-                                rightIconPadding: 12,
-                                rightIcon: state.showPassword
-                                    ? AppIcons.visibilityOn
-                                    : AppIcons.visibilityOff,
-                                onRightIconTap: () =>
-                                    _togglePasswordVisibility(context),
-                                onChange: (value) => context
-                                    .read<AuthBloc>()
-                                    .add(PasswordEdit(password: value)),
-                              ),
-                              if (state.mode == AccessMode.register)
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 16),
-                                  child: AppTextField(
-                                    key: repeatPasswordFieldKey,
-                                    placeHolder: "ripeti la password",
-                                    type: state.showPassword
-                                        ? AppTextFieldType.text
-                                        : AppTextFieldType.password,
-                                    leftIcon: AppIcons.unlock,
-                                    rightIconPadding: 12,
-                                    rightIcon: state.showPassword
-                                        ? AppIcons.visibilityOn
-                                        : AppIcons.visibilityOff,
-                                    onRightIconTap: () =>
-                                        _togglePasswordVisibility(context),
-                                    onChange: (value) => context
-                                        .read<AuthBloc>()
-                                        .add(RepeatPasswordEdit(
-                                            repeatPassword: value)),
-                                  ),
-                                ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: state.mode == AccessMode.login
-                                      ? "Non hai un'account? "
-                                      : "Hai già un'account? ",
-                                  style: AppTextStyles.labelText,
+              child: state.status == AuthStatus.loading
+                  ? const CircularProgressIndicator()
+                  : Container(
+                      constraints: const BoxConstraints(maxWidth: 800),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Form(
+                          child: CustomScrollView(
+                            physics: const ClampingScrollPhysics(),
+                            slivers: [
+                              SliverFillRemaining(
+                                hasScrollBody: false,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    TextSpan(
-                                      text: state.mode == AccessMode.login
-                                          ? 'Registrati'
-                                          : 'Accedi',
-                                      style: AppTextStyles.labelText.copyWith(
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          context.read<AuthBloc>().add(
-                                                const SwitchAccessMode(),
-                                              );
-                                        },
+                                    const SizedBox(
+                                      height: 40,
                                     ),
+                                    Image.asset(
+                                      AppImages.logo,
+                                      height: 160,
+                                    ),
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    H1(
+                                      state.mode == AuthMode.login
+                                          ? 'Effettua il login'
+                                          : 'Registrati',
+                                    ),
+                                    const SizedBox(
+                                      height: 12,
+                                    ),
+                                    AppTextField(
+                                      key: emailFieldKey,
+                                      placeHolder: "email",
+                                      leftIcon: AppIcons.email,
+                                      onChange: (value) => context
+                                          .read<AuthBloc>()
+                                          .add(EmailEdit(email: value)),
+                                    ),
+                                    if (state.mode == AuthMode.register)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 16),
+                                        child: AppTextField(
+                                          key: usernameFieldKey,
+                                          placeHolder: "nome utente",
+                                          leftIcon: AppIcons.userNormal,
+                                          onChange: (value) => context
+                                              .read<AuthBloc>()
+                                              .add(UsernameEdit(
+                                                  username: value)),
+                                        ),
+                                      ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    AppTextField(
+                                      key: passwordFieldKey,
+                                      placeHolder: l10n.loginPasswordHint,
+                                      type: state.showPassword
+                                          ? AppTextFieldType.text
+                                          : AppTextFieldType.password,
+                                      leftIcon: AppIcons.unlock,
+                                      rightIconPadding: 12,
+                                      rightIcon: state.showPassword
+                                          ? AppIcons.visibilityOn
+                                          : AppIcons.visibilityOff,
+                                      onRightIconTap: () =>
+                                          _togglePasswordVisibility(context),
+                                      onChange: (value) => context
+                                          .read<AuthBloc>()
+                                          .add(PasswordEdit(password: value)),
+                                    ),
+                                    if (state.mode == AuthMode.register)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 16),
+                                        child: AppTextField(
+                                          key: repeatPasswordFieldKey,
+                                          placeHolder: "ripeti la password",
+                                          type: state.showPassword
+                                              ? AppTextFieldType.text
+                                              : AppTextFieldType.password,
+                                          leftIcon: AppIcons.unlock,
+                                          rightIconPadding: 12,
+                                          rightIcon: state.showPassword
+                                              ? AppIcons.visibilityOn
+                                              : AppIcons.visibilityOff,
+                                          onRightIconTap: () =>
+                                              _togglePasswordVisibility(
+                                                  context),
+                                          onChange: (value) => context
+                                              .read<AuthBloc>()
+                                              .add(RepeatPasswordEdit(
+                                                  repeatPassword: value)),
+                                        ),
+                                      ),
+                                    const SizedBox(
+                                      height: 16,
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: state.mode == AuthMode.login
+                                            ? "Non hai un'account? "
+                                            : "Hai già un'account? ",
+                                        style: AppTextStyles.labelText,
+                                        children: [
+                                          TextSpan(
+                                            text: state.mode == AuthMode.login
+                                                ? 'Registrati'
+                                                : 'Accedi',
+                                            style: AppTextStyles.labelText
+                                                .copyWith(
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                            recognizer: TapGestureRecognizer()
+                                              ..onTap = () {
+                                                context.read<AuthBloc>().add(
+                                                      const SwitchAccessMode(),
+                                                    );
+                                              },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    GlowingButton(
+                                        text: 'Procedi',
+                                        onPressed: () =>
+                                            _onLoginButtonPressed(context)),
                                   ],
                                 ),
                               ),
-                              const Spacer(),
-                              GlowingButton(
-                                  text: 'Procedi',
-                                  onPressed: () =>
-                                      _onLoginButtonPressed(context)),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ),
           ),
         ),
@@ -204,7 +213,6 @@ class AuthScreen extends StatelessWidget {
   }
 
   void _togglePasswordVisibility(BuildContext context) {
-    print("Toggle password visibility");
     context.read<AuthBloc>().add(
           TogglePasswordIconPressed(),
         );
