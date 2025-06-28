@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 class AppUser {
@@ -29,10 +30,19 @@ class AppUser {
       };
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
+    final inventoryList = json['inventory'] as List<dynamic>?;
+    final inventory = inventoryList != null
+        ? inventoryList
+            .map((item) =>
+                TradeResourceInventory.fromJson(item as Map<String, dynamic>))
+            .toList()
+        : <TradeResourceInventory>[];
     return AppUser(
       id: json['id'] as String,
       email: json['email'] as String,
       username: json['username'] as String,
+      wealth: json['wealth'] as int? ?? 0,
+      inventory: inventory,
     );
   }
 

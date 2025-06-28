@@ -1,7 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
 class AuthDataSource {
+  Future<bool> isLoggedIn() async {
+    final user = FirebaseAuth.instance.currentUser;
+    return user != null;
+  }
+
   Future<UserCredential> login(String email, String password) async {
     final credential = await FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password);

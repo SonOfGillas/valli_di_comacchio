@@ -42,3 +42,27 @@ extension NeedLevelExtension on NeedLevel {
     }
   }
 }
+
+NeedLevel needLevelFromValue(double value) {
+  if (value < 0.1) {
+    return NeedLevel.notInterested;
+  } else if (value < 0.2) {
+    return NeedLevel.veryLow;
+  } else if (value < 0.3) {
+    return NeedLevel.low;
+  } else if (value < 0.4) {
+    return NeedLevel.avarege;
+  } else if (value < 0.5) {
+    return NeedLevel.aboveAverage;
+  } else if (value < 0.6) {
+    return NeedLevel.substatial;
+  } else if (value < 0.7) {
+    return NeedLevel.high;
+  } else if (value < 0.8) {
+    return NeedLevel.veryHigh;
+  } else if (value < 0.9) {
+    return NeedLevel.direNeed;
+  } else {
+    return NeedLevel.extremeNeed;
+  }
+}

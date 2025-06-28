@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:valli_di_comacchio/app/feature/auth/logic/auth_bloc.dart';
+import 'package:valli_di_comacchio/app/feature/slash/logic/splash_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
@@ -65,6 +66,14 @@ Future<void> initServiceLocator() async {
     // AppState
     ..registerLazySingleton<AppCubit>(
         () => AppCubit(appStorage: sl(), userRepository: sl()))
+
+    // Slash
+    ..registerFactory<SplashCubit>(
+      () => SplashCubit(
+        appCubit: sl(),
+        userRepository: sl(),
+      ),
+    )
 
     // Auth
     ..registerFactory<AuthBloc>(

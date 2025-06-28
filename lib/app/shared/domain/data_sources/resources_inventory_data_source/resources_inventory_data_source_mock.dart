@@ -46,6 +46,7 @@ class ResourcesInventoryDataSourceMock implements ResourcesInventoryDataSource {
             tradeResource: tradeResource,
             defaultProductionLevel: _getRndProductionLevel(),
             defaultNeedLevel: _getRndNeedLevel(),
+            lastReset: DateTime.now(),
           ),
         )
         .toList();

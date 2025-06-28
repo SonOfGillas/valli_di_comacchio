@@ -4,4 +4,5 @@ abstract class NpcDataSource {
   Future<Npc> getNpcById(String npc);
   Future<List<Npc>> getAllNpcs();
   Future<void> updateNpcData(Npc npc);
+  Future<void> resetNpcs();
 }

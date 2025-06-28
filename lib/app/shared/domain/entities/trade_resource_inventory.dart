@@ -17,12 +17,14 @@ class TradeResourceInventory extends Equatable {
     required this.defaultNeedLevel,
     required this.storage,
     required this.needs,
+    required this.lastReset,
   });
 
   factory TradeResourceInventory({
     required TradeResource tradeResource,
     required ProductionLevel defaultProductionLevel,
     required NeedLevel defaultNeedLevel,
+    required DateTime lastReset,
     int? storage,
     int? needs,
   }) {
@@ -34,12 +36,14 @@ class TradeResourceInventory extends Equatable {
           generateRandomStorageAmount(tradeResource, defaultProductionLevel),
       needs:
           needs ?? generateRandomNeedsAmount(tradeResource, defaultNeedLevel),
+      lastReset: lastReset,
     );
   }
 
   final TradeResource tradeResource;
   final ProductionLevel defaultProductionLevel;
   final NeedLevel defaultNeedLevel;
+  final DateTime lastReset;
 
   /*
   * storage is a number between 0 and tradeResource.storageLimit
@@ -96,7 +100,6 @@ class TradeResourceInventory extends Equatable {
     if (transactionAmount < 0) {
       return demand;
     } else if (storage - transactionAmount < 0) {
-      // TODO implement a check for the storage limit
       return 0;
     } else {
       return (needs - (storage + transactionAmount));
@@ -115,6 +118,7 @@ class TradeResourceInventory extends Equatable {
       needs: needs,
       defaultProductionLevel: defaultProductionLevel,
       defaultNeedLevel: defaultNeedLevel,
+      lastReset: lastReset,
     );
   }
 
@@ -125,6 +129,26 @@ class TradeResourceInventory extends Equatable {
       'defaultNeedLevel': defaultNeedLevel.value,
       'storage': storage,
       'needs': needs,
+      'lastReset': lastReset.millisecondsSinceEpoch,
     };
+  }
+
+  factory TradeResourceInventory.fromJson(Map<String, dynamic> json) {
+    final tradeResourceId = json['tradeResourceID'] as String;
+    final tradeResource = tradeResourcesList.firstWhere(
+      (element) => element.id == tradeResourceId,
+      orElse: () => throw Exception('TradeResource not found'),
+    );
+    return TradeResourceInventory._(
+      tradeResource: tradeResource,
+      defaultProductionLevel:
+          productionLevelFromValue(json['defaultProductionLevel'] as double),
+      defaultNeedLevel: needLevelFromValue(json['defaultNeedLevel'] as double),
+      storage: json['storage'] as int? ?? 0,
+      needs: json['needs'] as int? ?? 0,
+      lastReset: DateTime.fromMillisecondsSinceEpoch(
+        json['lastReset'] as int? ?? DateTime.now().millisecondsSinceEpoch,
+      ),
+    );
   }
 }

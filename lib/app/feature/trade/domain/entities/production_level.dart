@@ -42,3 +42,27 @@ extension ProductionLevelExtension on ProductionLevel {
     }
   }
 }
+
+ProductionLevel productionLevelFromValue(double value) {
+  if (value < 0.1) {
+    return ProductionLevel.notProduced;
+  } else if (value < 0.2) {
+    return ProductionLevel.veryLow;
+  } else if (value < 0.3) {
+    return ProductionLevel.low;
+  } else if (value < 0.4) {
+    return ProductionLevel.avarege;
+  } else if (value < 0.5) {
+    return ProductionLevel.aboveAverage;
+  } else if (value < 0.6) {
+    return ProductionLevel.substatial;
+  } else if (value < 0.7) {
+    return ProductionLevel.high;
+  } else if (value < 0.8) {
+    return ProductionLevel.veryHigh;
+  } else if (value < 0.9) {
+    return ProductionLevel.overProduction;
+  } else {
+    return ProductionLevel.extremeOverProduction;
+  }
+}

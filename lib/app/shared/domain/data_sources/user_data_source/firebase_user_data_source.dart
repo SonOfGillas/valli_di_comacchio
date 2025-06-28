@@ -22,12 +22,12 @@ class FirebaseUserDataSource extends UserDataSource {
       inventory: tradeResourcesList
           .map(
             (resource) => TradeResourceInventory(
-              tradeResource: resource,
-              defaultProductionLevel: ProductionLevel.notProduced,
-              defaultNeedLevel: NeedLevel.notInterested,
-              storage: 0,
-              needs: 0,
-            ),
+                tradeResource: resource,
+                defaultProductionLevel: ProductionLevel.notProduced,
+                defaultNeedLevel: NeedLevel.notInterested,
+                storage: 0,
+                needs: 0,
+                lastReset: DateTime.now()),
           )
           .toList(),
       wealth: 0,

@@ -49,7 +49,7 @@ class AppCubit extends Cubit<AppState> {
     final user = await appStorage.read(key: AppStorage.userKey);
     if (user != null) {
       final localUserData = AppUser.fromJson(jsonDecode(user));
-      final userResult = await userRepository.getUserData(localUserData.email);
+      final userResult = await userRepository.getUserData(localUserData.id);
       userResult.fold(
         onSuccess: (user) {
           emit(state.copyWith(user: user));
@@ -62,6 +62,15 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> updateUser(AppUser user) async {
-    emit(state.copyWith(user: user));
+    final result = await userRepository.updateUserData(user);
+    result.fold(
+      onSuccess: (_) {
+        emit(state.copyWith(user: user));
+      },
+      onFailure: (error) {
+        // TODO: Handle error if needed
+        print('Error updating user: $error');
+      },
+    );
   }
 }

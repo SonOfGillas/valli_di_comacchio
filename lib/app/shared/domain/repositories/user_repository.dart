@@ -22,6 +22,17 @@ class UserRepository {
   final UserDataSource userDataSource;
   final ResourcesInventoryDataSource resourcesInventoryDataSource;
 
+  AsyncResult<bool> isLoggedIn() async {
+    try {
+      final isLogged = await authDataSource.isLoggedIn();
+      return Success(isLogged);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (e) {
+      return Error(UnknownFailure());
+    }
+  }
+
   // login
   AsyncResult<AppUser> login({
     required String email,
@@ -71,17 +82,15 @@ class UserRepository {
   // get user data
   AsyncResult<AppUser> getUserData(String userId) async {
     final userData = await userDataSource.getUserData(userId);
-    final userInventory =
-        await resourcesInventoryDataSource.getUserInventory(userData);
-    return Success(userData.copyWith(
-      inventory: userInventory,
-    ));
+    // final userInventory =
+    //     await resourcesInventoryDataSource.getUserInventory(userData);
+    return Success(userData);
   }
 
   // update user data
   AsyncResult<void> updateUserData(AppUser user) async {
     await userDataSource.updateUserData(user);
-    await resourcesInventoryDataSource.updateUserInventory(user);
+    // await resourcesInventoryDataSource.updateUserInventory(user);
     return Success(null);
   }
 }
