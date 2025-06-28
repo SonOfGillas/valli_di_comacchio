@@ -17,13 +17,6 @@ class AppCubit extends Cubit<AppState> {
   final AppStorage appStorage;
   final UserRepository userRepository;
 
-  Future<void> loadFcmToken() async {
-    final fcmToken = await appStorage.read(key: AppStorage.fcmToken);
-    if (fcmToken != null) {
-      emit(state.copyWith(fcmToken: fcmToken));
-    }
-  }
-
   Future<void> setLocalUser(
     AppUser user,
     String password,
@@ -69,7 +62,6 @@ class AppCubit extends Cubit<AppState> {
       },
       onFailure: (error) {
         // TODO: Handle error if needed
-        print('Error updating user: $error');
       },
     );
   }

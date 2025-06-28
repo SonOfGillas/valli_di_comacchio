@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/feature/trade/domain/entities/trade_resource_offer.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 

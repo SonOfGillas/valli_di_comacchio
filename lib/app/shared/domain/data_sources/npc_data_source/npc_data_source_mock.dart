@@ -5,12 +5,13 @@ class NpcDataSourceMock implements NpcDataSource {
   var npcDataMock = Npc(
     id: '1',
     name: 'Rosario',
-    imageName: 'https://example.com/test.png',
+    imageLocalPath: 'https://example.com/test.png',
     wealth: 10000,
     inventory: [],
     locationName: 'Comacchio',
     longitude: 12.3456,
     latitude: 65.4321,
+    lastReset: DateTime.now(),
   );
 
   @override
@@ -30,7 +31,7 @@ class NpcDataSourceMock implements NpcDataSource {
   }
 
   @override
-  Future<void> resetNpcs() {
-    return Future.value();
+  Future<List<Npc>> resetNpcs() {
+    return Future.value([]);
   }
 }

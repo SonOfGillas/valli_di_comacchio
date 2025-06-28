@@ -9,8 +9,8 @@ import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/chatgbt_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/auth_data_source/auth_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/cloud_firestore/cloud_firestore.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/firebase_npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source_mock.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source_mock.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/firebase_user_data_source.dart';
@@ -41,7 +41,8 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<ResourcesInventoryDataSource>(
       () => ResourcesInventoryDataSourceMock(),
     )
-    ..registerLazySingleton<NpcDataSource>(() => NpcDataSourceMock())
+    ..registerLazySingleton<NpcDataSource>(
+        () => FirebaseNpcDataSource(cloudFirestoreDataSource: sl()))
     ..registerLazySingleton<AiGenerationDataSource>(
         () => ChatGbtDataSource(config: sl()))
     ..registerLazySingleton<AuthDataSource>(
@@ -70,9 +71,7 @@ Future<void> initServiceLocator() async {
     // Slash
     ..registerFactory<SplashCubit>(
       () => SplashCubit(
-        appCubit: sl(),
-        userRepository: sl(),
-      ),
+          appCubit: sl(), userRepository: sl(), npcRepository: sl()),
     )
 
     // Auth

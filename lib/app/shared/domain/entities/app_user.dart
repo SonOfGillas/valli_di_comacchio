@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 class AppUser {

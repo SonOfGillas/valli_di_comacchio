@@ -22,17 +22,17 @@ class FirebaseUserDataSource extends UserDataSource {
       inventory: tradeResourcesList
           .map(
             (resource) => TradeResourceInventory(
-                tradeResource: resource,
-                defaultProductionLevel: ProductionLevel.notProduced,
-                defaultNeedLevel: NeedLevel.notInterested,
-                storage: 0,
-                needs: 0,
-                lastReset: DateTime.now()),
+              tradeResource: resource,
+              defaultProductionLevel: ProductionLevel.notProduced,
+              defaultNeedLevel: NeedLevel.notInterested,
+              storage: 0,
+              needs: 0,
+            ),
           )
           .toList(),
-      wealth: 0,
+      wealth: 500,
     );
-    await cloudFirestoreDataSource.saveData(
+    await cloudFirestoreDataSource.addData(
         DatabaseCollection.users, newUser.toJson());
     return Future.value(newUser);
   }
@@ -49,7 +49,7 @@ class FirebaseUserDataSource extends UserDataSource {
 
   @override
   Future<void> updateUserData(AppUser user) async {
-    await cloudFirestoreDataSource.saveData(
-        DatabaseCollection.users, user.toJson());
+    await cloudFirestoreDataSource.updateData(
+        DatabaseCollection.users, user.id, user.toJson());
   }
 }

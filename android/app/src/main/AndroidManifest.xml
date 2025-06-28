@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="valli_di_comacchio"
+        android:label="Valli di Comacchio"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

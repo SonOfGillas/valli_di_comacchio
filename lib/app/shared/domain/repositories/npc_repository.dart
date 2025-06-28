@@ -18,22 +18,41 @@ class NpcRepository {
   final AiGenerationDataSource aiGenerationDataSource;
 
   AsyncResult<List<Npc>> getAllNpcs() async {
-    return Success([]);
+    try {
+      final npcs = await npcDataSource.getAllNpcs();
+      final now = DateTime.now();
+      if (npcs.any((npc) => now.difference(npc.lastReset).inHours >= 1)) {
+        final npcs = await npcDataSource.resetNpcs();
+        return Success(npcs);
+      }
+      return Success(npcs);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (exception) {
+      return Error(UnknownFailure());
+    }
   }
 
   AsyncResult<Npc> getNpcById(String id) async {
-    final npc = await npcDataSource.getNpcById(id);
-    final npcInventory =
-        await resourcesInventoryDataSource.getNpcInventory(npc);
-    return Success(npc.copyWith(
-      inventory: npcInventory,
-    ));
+    try {
+      final npc = await npcDataSource.getNpcById(id);
+      return Success(npc);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (exception) {
+      return Error(UnknownFailure());
+    }
   }
 
   AsyncResult<void> updateNpcData(Npc npc) async {
-    await npcDataSource.updateNpcData(npc);
-    await resourcesInventoryDataSource.updateNpcInventory(npc);
-    return Success(null);
+    try {
+      await npcDataSource.updateNpcData(npc);
+      return Success(null);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (exception) {
+      return Error(UnknownFailure());
+    }
   }
 
   AsyncResult<CounterOfferResponse> getNpcReponseToCounterOffer(

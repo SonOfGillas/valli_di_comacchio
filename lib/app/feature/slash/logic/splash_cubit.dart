@@ -3,17 +3,20 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/slash/logic/splash_state.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
 class SplashCubit extends Cubit<SplashState> {
   SplashCubit({
     required this.userRepository,
+    required this.npcRepository,
     required this.appCubit,
   }) : super(SplashLoading()) {
     _checkInitialConfiguration();
   }
 
   final UserRepository userRepository;
+  final NpcRepository npcRepository;
   final AppCubit appCubit;
 
   Future<void> _checkInitialConfiguration() async {
@@ -21,6 +24,15 @@ class SplashCubit extends Cubit<SplashState> {
 
     try {
       final loginCheckResult = await userRepository.isLoggedIn();
+      final loadNpcsResult = await npcRepository.getAllNpcs();
+      loadNpcsResult.fold(
+        onSuccess: (npcs) {
+          appCubit.emit(appCubit.state.copyWith(npcs: npcs));
+        },
+        onFailure: (failure) {
+          // Handle failure to load NPCs if necessary
+        },
+      );
       loginCheckResult.fold(onSuccess: (isLoggedIn) async {
         if (isLoggedIn) {
           await appCubit.loadLocalUserData();

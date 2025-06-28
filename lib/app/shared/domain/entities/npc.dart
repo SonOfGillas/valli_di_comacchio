@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
@@ -7,21 +5,23 @@ class Npc extends Equatable {
   const Npc({
     required this.id,
     required this.name,
-    required this.imageName,
+    required this.imageLocalPath,
     required this.locationName,
     required this.longitude,
     required this.latitude,
     required this.wealth,
     required this.inventory,
+    required this.lastReset,
   });
 
   final String id;
   final String name;
-  final String imageName;
+  final String imageLocalPath;
   final String locationName;
   final double longitude;
   final double latitude;
   final int wealth;
+  final DateTime lastReset;
   final List<TradeResourceInventory> inventory;
 
   // mood -> quando è difficile commerciare quel giorno
@@ -32,12 +32,13 @@ class Npc extends Equatable {
   List<Object?> get props => [
         id,
         name,
-        imageName,
+        imageLocalPath,
         locationName,
         longitude,
         latitude,
         wealth,
-        inventory
+        inventory,
+        lastReset,
       ];
 
   Npc copyWith({
@@ -45,22 +46,22 @@ class Npc extends Equatable {
     List<TradeResourceInventory>? inventory,
   }) {
     return Npc(
-      id: id,
-      name: name,
-      locationName: locationName,
-      longitude: longitude,
-      latitude: latitude,
-      imageName: imageName,
-      wealth: wealth ?? this.wealth,
-      inventory: inventory ?? this.inventory,
-    );
+        id: id,
+        name: name,
+        locationName: locationName,
+        longitude: longitude,
+        latitude: latitude,
+        imageLocalPath: imageLocalPath,
+        wealth: wealth ?? this.wealth,
+        inventory: inventory ?? this.inventory,
+        lastReset: lastReset);
   }
 
-  Npc fromJson(String id, Map<String, dynamic> json) {
+  factory Npc.fromJson(Map<String, dynamic> json) {
     return Npc(
-      id: id,
+      id: json['id'] as String,
       name: json['name'] as String,
-      imageName: json['imageName'] as String,
+      imageLocalPath: json['imageName'] as String,
       locationName: json['locationName'] as String,
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
@@ -68,6 +69,23 @@ class Npc extends Equatable {
       inventory: (json['inventory'] as List)
           .map((item) => TradeResourceInventory.fromJson(item))
           .toList(),
+      lastReset: DateTime.parse(
+        json['lastReset'] as String,
+      ),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'imageLocalPath': imageLocalPath,
+      'locationName': locationName,
+      'longitude': longitude,
+      'latitude': latitude,
+      'wealth': wealth,
+      'inventory': inventory.map((item) => item.toJson()).toList(),
+      'lastReset': lastReset.toIso8601String(),
+    };
   }
 }
