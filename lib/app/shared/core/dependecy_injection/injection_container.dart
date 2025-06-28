@@ -65,13 +65,12 @@ Future<void> initServiceLocator() async {
     )
 
     // AppState
-    ..registerLazySingleton<AppCubit>(
-        () => AppCubit(appStorage: sl(), userRepository: sl()))
+    ..registerLazySingleton<AppCubit>(() =>
+        AppCubit(appStorage: sl(), userRepository: sl(), npcRepository: sl()))
 
     // Slash
     ..registerFactory<SplashCubit>(
-      () => SplashCubit(
-          appCubit: sl(), userRepository: sl(), npcRepository: sl()),
+      () => SplashCubit(appCubit: sl(), userRepository: sl()),
     )
 
     // Auth

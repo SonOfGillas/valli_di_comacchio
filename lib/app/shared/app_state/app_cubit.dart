@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
@@ -10,12 +12,14 @@ class AppCubit extends Cubit<AppState> {
   AppCubit({
     required this.appStorage,
     required this.userRepository,
+    required this.npcRepository,
   }) : super(
           const AppState(),
         );
 
   final AppStorage appStorage;
   final UserRepository userRepository;
+  final NpcRepository npcRepository;
 
   Future<void> setLocalUser(
     AppUser user,
@@ -32,9 +36,10 @@ class AppCubit extends Cubit<AppState> {
     emit(state.copyWith(user: user));
   }
 
-  Future<void> removeUser() async {
+  Future<void> logout() async {
     await appStorage.delete(key: AppStorage.userKey);
-    // ignore: avoid_redundant_argument_values
+    await appStorage.delete(key: AppStorage.userPasswordKey);
+    await userRepository.logout();
     emit(const AppState(user: null));
   }
 
@@ -64,5 +69,19 @@ class AppCubit extends Cubit<AppState> {
         // TODO: Handle error if needed
       },
     );
+  }
+
+  Future<void> loadNpcs() async {
+    final loadNpcsResult = await npcRepository.getAllNpcs();
+    late List<Npc> npcsList;
+    loadNpcsResult.fold(
+      onSuccess: (npcs) {
+        npcsList = npcs;
+      },
+      onFailure: (failure) {
+        npcsList = [];
+      },
+    );
+    emit(state.copyWith(npcs: npcsList));
   }
 }
