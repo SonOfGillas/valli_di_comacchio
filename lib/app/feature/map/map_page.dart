@@ -5,11 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -34,7 +31,7 @@ class MapPage extends StatelessWidget {
               osmOption: OSMOption(
                 userTrackingOption: const UserTrackingOption(
                   enableTracking: false, // TODO remove this when ready
-                  unFollowUser: false,
+                  unFollowUser: true,
                 ),
                 zoomOption: const ZoomOption(
                   initZoom: 14,
@@ -64,20 +61,6 @@ class MapPage extends StatelessWidget {
                     .map(
                       (npc) => StaticPositionGeoPoint(
                         npc.id,
-                        // MarkerIcon(
-                        //   iconWidget: GestureDetector(
-                        //     onTap: () {
-                        //       context.push(
-                        //         RoutesPaths.trade,
-                        //         extra: TradePageParameters(npcId: npc.id),
-                        //       );
-                        //     },
-                        //     child: Image.asset(
-                        //       npc.imageLocalPath,
-                        //       height: 300,
-                        //     ),
-                        //   ),
-                        // ),
                         MarkerIcon(
                           iconWidget: Image.asset(
                             npc.imageLocalPath,
@@ -92,6 +75,41 @@ class MapPage extends StatelessWidget {
                     )
                     .toList(),
               ),
+              onGeoPointClicked: (geoPoint) {
+                final npc = state.npcs
+                    .where(
+                      (n) =>
+                          n.latitude == geoPoint.latitude &&
+                          n.longitude == geoPoint.longitude,
+                    )
+                    .firstOrNull;
+                if (npc != null) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(npc.name),
+                      content: Text(
+                          'Vuoi andare alla pagina di scambio di ${npc.name}?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('Annulla'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            context.push(
+                              RoutesPaths.trade,
+                              extra: TradePageParameters(npcId: npc.id),
+                            );
+                          },
+                          child: const Text('Vai'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
             ));
       },
     );

@@ -111,7 +111,7 @@ List<Npc> generateNpcResetData() {
     ),
     Npc(
       id: 'npc_4',
-      name: 'al_carpone',
+      name: 'Al Carponè',
       imageLocalPath: AppImages.alCarpone,
       locationName: 'Lido degli Estensi',
       longitude: 12.247454,

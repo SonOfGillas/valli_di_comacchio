@@ -30,10 +30,11 @@ class NpcDisplayHeader extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(
-                  AppImages.rosario,
-                  height: 230,
-                ),
+                if (state.npc?.imageLocalPath != null)
+                  Image.asset(
+                    state.npc!.imageLocalPath,
+                    height: 230,
+                  ),
                 Expanded(
                   child: SizedBox(
                     height: 230,
