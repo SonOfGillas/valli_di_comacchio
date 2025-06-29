@@ -58,6 +58,9 @@ class Npc extends Equatable {
   }
 
   factory Npc.fromJson(Map<String, dynamic> json) {
+    final invetory = (json['inventory'] as List)
+        .map((item) => TradeResourceInventory.fromJson(item))
+        .toList();
     return Npc(
       id: json['id'] as String,
       name: json['name'] as String,
@@ -66,9 +69,7 @@ class Npc extends Equatable {
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
       wealth: json['wealth'] as int,
-      inventory: (json['inventory'] as List)
-          .map((item) => TradeResourceInventory.fromJson(item))
-          .toList(),
+      inventory: invetory,
       lastReset: DateTime.parse(
         json['lastReset'] as String,
       ),
