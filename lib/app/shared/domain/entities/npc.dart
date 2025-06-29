@@ -6,6 +6,7 @@ class Npc extends Equatable {
     required this.id,
     required this.name,
     required this.imageLocalPath,
+    required this.locationImagePath,
     required this.locationName,
     required this.longitude,
     required this.latitude,
@@ -17,6 +18,7 @@ class Npc extends Equatable {
   final String id;
   final String name;
   final String imageLocalPath;
+  final String locationImagePath;
   final String locationName;
   final double longitude;
   final double latitude;
@@ -32,6 +34,7 @@ class Npc extends Equatable {
   List<Object?> get props => [
         id,
         name,
+        locationImagePath,
         imageLocalPath,
         locationName,
         longitude,
@@ -48,6 +51,7 @@ class Npc extends Equatable {
     return Npc(
         id: id,
         name: name,
+        locationImagePath: locationImagePath,
         locationName: locationName,
         longitude: longitude,
         latitude: latitude,
@@ -65,6 +69,7 @@ class Npc extends Equatable {
       id: json['id'] as String,
       name: json['name'] as String,
       imageLocalPath: json['imageLocalPath'] as String,
+      locationImagePath: json['locationImagePath'] as String,
       locationName: json['locationName'] as String,
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
@@ -81,6 +86,7 @@ class Npc extends Equatable {
       'id': id,
       'name': name,
       'imageLocalPath': imageLocalPath,
+      'locationImagePath': locationImagePath,
       'locationName': locationName,
       'longitude': longitude,
       'latitude': latitude,

@@ -22,80 +22,93 @@ class NpcLocationDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.palette_secondary,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Custom AppBar
-            Container(
-              height: 62,
-              decoration: BoxDecoration(
-                color: AppColors.palette_primary,
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new,
-                        color: Colors.white),
-                    onPressed: onBack ?? () => Navigator.of(context).pop(),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: H1(
-                      npc.locationName,
-                    ),
-                  ),
-                ],
-              ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Image.asset(
+              npc.locationImagePath,
+              fit: BoxFit.cover,
             ),
-            // NPC Header
-            NpcDisplayHeader(
-              npc: npc,
-              npcMessage:
-                  'Benvenuto,  Puoi avere più informazioni su ${npc.locationName}. oppure accettare una quest.  o commerciare con me per iniziare a fare punti',
-              expanded: true,
-            ),
-            const SizedBox(height: 24),
-            // Glowing Buttons
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GlowingButton(
-                    text: 'Escursioni',
-                    onPressed: () {},
-                    disabled: true,
+          ),
+          Container(
+            color: AppColors.palette_secondary.withOpacity(0.6),
+          ),
+          SafeArea(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Custom AppBar
+                Container(
+                  height: 62,
+                  decoration: BoxDecoration(
+                    color: AppColors.palette_primary,
                   ),
-                  GlowingButton(
-                    text: 'Commercia',
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      context.push(
-                        RoutesPaths.trade,
-                        extra: TradePageParameters(npcId: npc.id),
-                      );
-                    },
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new,
+                            color: Colors.white),
+                        onPressed: onBack ?? () => Navigator.of(context).pop(),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: H1(
+                          npc.locationName,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GlowingButton(
-                    text: 'Informazioni',
-                    onPressed: () {},
-                    disabled: true,
+                ),
+                // NPC Header
+                NpcDisplayHeader(
+                  npc: npc,
+                  npcMessage:
+                      'Benvenuto,  Puoi avere più informazioni su ${npc.locationName}. oppure accettare una quest.  o commerciare con me per iniziare a fare punti',
+                  expanded: true,
+                ),
+                const SizedBox(height: 24),
+                // Glowing Buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GlowingButton(
+                        text: 'Escursioni',
+                        onPressed: () {},
+                        disabled: true,
+                      ),
+                      GlowingButton(
+                        text: 'Commercia',
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          context.push(
+                            RoutesPaths.trade,
+                            extra: TradePageParameters(npcId: npc.id),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GlowingButton(
+                        text: 'Informazioni',
+                        onPressed: () {},
+                        disabled: true,
+                      ),
+                    ],
+                  ),
+                ),
+                // Optionally, add more content here
+              ],
             ),
-            // Optionally, add more content here
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

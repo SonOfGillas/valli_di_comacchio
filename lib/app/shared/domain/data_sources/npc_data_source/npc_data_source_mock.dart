@@ -6,6 +6,7 @@ class NpcDataSourceMock implements NpcDataSource {
     id: '1',
     name: 'Rosario',
     imageLocalPath: 'https://example.com/test.png',
+    locationImagePath: 'https://example.com/test.png',
     wealth: 10000,
     inventory: [],
     locationName: 'Comacchio',
