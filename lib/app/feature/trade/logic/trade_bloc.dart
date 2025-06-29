@@ -65,6 +65,9 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
   }
 
   void _onLoadData(LoadData event, Emitter<TradeState> emit) async {
+    final npcFromState = appCubit.state.npcs
+        .firstWhere((n) => n.id == tradePageParameters.npcId);
+    emit(state.copyWith(status: TradeStatus.loading, npc: npcFromState));
     _getNpcMessage(emit);
     await appCubit.loadLocalUserData();
     if (appCubit.state.user == null) {

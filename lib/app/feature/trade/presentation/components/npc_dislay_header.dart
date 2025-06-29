@@ -12,11 +12,13 @@ class NpcDisplayHeader extends StatelessWidget {
   const NpcDisplayHeader({
     required this.npc,
     required this.npcMessage,
+    this.expanded = false,
     super.key,
   });
 
   final Npc npc;
   final String npcMessage;
+  final bool expanded;
 
   @override
   Widget build(BuildContext context) {
@@ -28,42 +30,43 @@ class NpcDisplayHeader extends StatelessWidget {
           children: [
             Image.asset(
               npc.imageLocalPath,
-              height: 230,
+              height: expanded ? 280 : 230,
             ),
-            Expanded(
-              child: SizedBox(
-                height: 230,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      LabelText(l10n.tradeNpcWealth(npc.name)),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          LabelText(
-                            formatNumber(npc.wealth),
-                            withBoarder: false,
-                          ),
-                          SizedBox(width: 8),
-                          SvgPicture.asset(
-                            AppIcons.money,
-                            width: 24,
-                            height: 24,
-                            colorFilter: ColorFilter.mode(
-                              AppColors.palette_primary,
-                              BlendMode.srcIn,
+            if (!expanded)
+              Expanded(
+                child: SizedBox(
+                  height: 230,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        LabelText(l10n.tradeNpcWealth(npc.name)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            LabelText(
+                              formatNumber(npc.wealth),
+                              withBoarder: false,
                             ),
-                          ),
-                        ],
-                      )
-                    ],
+                            SizedBox(width: 8),
+                            SvgPicture.asset(
+                              AppIcons.money,
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(
+                                AppColors.palette_primary,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
         if (npcMessage.isNotEmpty)

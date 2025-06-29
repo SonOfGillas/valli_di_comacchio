@@ -21,11 +21,6 @@ class _SlashScreenState extends State<SlashScreen> {
   void initState() {
     super.initState();
     FlutterNativeSplash.remove();
-
-    // Navigate to the home page after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.go(RoutesPaths.auth);
-    });
   }
 
   @override
@@ -44,9 +39,6 @@ class _SlashScreenState extends State<SlashScreen> {
             } else {
               context.go(RoutesPaths.map);
             }
-          } else {
-            // Handle other states if necessary
-            context.go(RoutesPaths.auth);
           }
         },
         child: Scaffold(

@@ -30,11 +30,11 @@ class TradeScreen extends StatelessWidget {
               duration: const Duration(seconds: 5),
             ),
           );
-        } else if (state.status == TradeStatus.loading) {
+        } else if (state.status == TradeStatus.loading && state.npc != null) {
           showDialog(
             context: context,
             barrierDismissible: false,
-            builder: (context) => const NpcLoadingModal(),
+            builder: (context) => NpcLoadingModal(npc: state.npc!),
           );
         } else if (state.status == TradeStatus.success) {
           showDialog(

@@ -28,6 +28,7 @@ class NpcLocationDetail extends StatelessWidget {
           children: [
             // Custom AppBar
             Container(
+              height: 62,
               decoration: BoxDecoration(
                 color: AppColors.palette_primary,
               ),
@@ -51,26 +52,21 @@ class NpcLocationDetail extends StatelessWidget {
             NpcDisplayHeader(
               npc: npc,
               npcMessage:
-                  'Benvenuto,  Puoi avere più informazioni su ${npc.locationName} oppure accettare una quest  o commerciare con me per iniziare a fare punti',
+                  'Benvenuto,  Puoi avere più informazioni su ${npc.locationName}. oppure accettare una quest.  o commerciare con me per iniziare a fare punti',
+              expanded: true,
             ),
             const SizedBox(height: 24),
             // Glowing Buttons
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GlowingButton(
-                    text: 'Informazioni',
-                    onPressed: () {},
-                    expanded: true,
-                  ),
-                  const SizedBox(height: 16),
                   GlowingButton(
                     text: 'Escursioni',
                     onPressed: () {},
-                    expanded: true,
+                    disabled: true,
                   ),
-                  const SizedBox(height: 16),
                   GlowingButton(
                     text: 'Commercia',
                     onPressed: () {
@@ -80,7 +76,19 @@ class NpcLocationDetail extends StatelessWidget {
                         extra: TradePageParameters(npcId: npc.id),
                       );
                     },
-                    expanded: true,
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GlowingButton(
+                    text: 'Informazioni',
+                    onPressed: () {},
+                    disabled: true,
                   ),
                 ],
               ),
