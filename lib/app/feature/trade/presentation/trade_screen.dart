@@ -77,7 +77,19 @@ class TradeScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  NpcDisplayHeader(),
+                  if (state.npc != null)
+                    BlocBuilder<TradeBloc, TradeState>(
+                      buildWhen: (previous, current) =>
+                          (previous.npc != current.npc) ||
+                          (previous.step != current.step) ||
+                          (previous.npcMessage != current.npcMessage),
+                      builder: (context, state) {
+                        return NpcDisplayHeader(
+                          npc: state.npc!,
+                          npcMessage: state.npcMessage,
+                        );
+                      },
+                    ),
                   if (state.step == TradingStep.selectResource)
                     SelectResourceStep(),
                   if (state.step == TradingStep.selectOfferType)

@@ -7,6 +7,7 @@ import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
+import 'package:valli_di_comacchio/app/feature/map/components/npc_location_detail.dart';
 
 class MapPage extends StatelessWidget {
   const MapPage({super.key});
@@ -36,7 +37,7 @@ class MapPage extends StatelessWidget {
                 zoomOption: const ZoomOption(
                   initZoom: 14,
                   minZoomLevel: 12,
-                  maxZoomLevel: 19,
+                  maxZoomLevel: 2,
                   stepZoom: 1.0,
                 ),
                 userLocationMarker: UserLocationMaker(
@@ -86,26 +87,10 @@ class MapPage extends StatelessWidget {
                 if (npc != null) {
                   showDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text(npc.name),
-                      content: Text(
-                          'Vuoi andare alla pagina di scambio di ${npc.name}?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Annulla'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            context.push(
-                              RoutesPaths.trade,
-                              extra: TradePageParameters(npcId: npc.id),
-                            );
-                          },
-                          child: const Text('Vai'),
-                        ),
-                      ],
+                    barrierColor: Colors.black.withOpacity(0.85),
+                    builder: (context) => NpcLocationDetail(
+                      npc: npc,
+                      onBack: () => Navigator.of(context).pop(),
                     ),
                   );
                 }
