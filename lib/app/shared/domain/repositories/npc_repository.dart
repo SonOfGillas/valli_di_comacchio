@@ -21,7 +21,9 @@ class NpcRepository {
     try {
       final npcs = await npcDataSource.getAllNpcs();
       final now = DateTime.now();
-      if (npcs.any((npc) => now.difference(npc.lastReset).inHours >= 1)) {
+      final npcNeedsReset =
+          npcs.any((npc) => now.difference(npc.lastReset).inHours >= 1);
+      if (npcNeedsReset) {
         final npcs = await npcDataSource.resetNpcs();
         return Success(npcs);
       }

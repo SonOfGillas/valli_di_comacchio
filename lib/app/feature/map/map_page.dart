@@ -20,27 +20,7 @@ class MapPage extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
             appBar: ValliAppBar(),
-            body:
-                // Center(
-                //   child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: <Widget>[
-                //       ElevatedButton(
-                //           style: ElevatedButton.styleFrom(
-                //             backgroundColor: AppColors.palette_accent,
-                //           ),
-                //           onPressed: () {
-                //             context.push(RoutesPaths.trade,
-                //                 extra: const TradePageParameters(npcId: 'npc_1'));
-                //           },
-                //           child: LabelText('Go to Trade DEMO')),
-                //       // H1OnPrimary('h1'),
-                //       // H3('h3'),
-                //       // LabelText('labelText', withBoarder: true),
-                //     ],
-                //   ),
-                // ),
-                OSMFlutter(
+            body: OSMFlutter(
               controller: MapController(
                 initPosition:
                     GeoPoint(latitude: 44.672905, longitude: 12.197045),
@@ -84,6 +64,20 @@ class MapPage extends StatelessWidget {
                     .map(
                       (npc) => StaticPositionGeoPoint(
                         npc.id,
+                        // MarkerIcon(
+                        //   iconWidget: GestureDetector(
+                        //     onTap: () {
+                        //       context.push(
+                        //         RoutesPaths.trade,
+                        //         extra: TradePageParameters(npcId: npc.id),
+                        //       );
+                        //     },
+                        //     child: Image.asset(
+                        //       npc.imageLocalPath,
+                        //       height: 300,
+                        //     ),
+                        //   ),
+                        // ),
                         MarkerIcon(
                           iconWidget: Image.asset(
                             npc.imageLocalPath,
@@ -97,19 +91,6 @@ class MapPage extends StatelessWidget {
                       ),
                     )
                     .toList(),
-
-                // [
-                //   StaticPositionGeoPoint(
-                //     'npc_marker',
-                //     MarkerIcon(
-                //       iconWidget: Image.asset(
-                //         AppImages.rosario,
-                //         height: 300,
-                //       ),
-                //     ),
-                //     [GeoPoint(latitude: 44.672905, longitude: 12.197045)],
-                //   ),
-                // ],
               ),
             ));
       },

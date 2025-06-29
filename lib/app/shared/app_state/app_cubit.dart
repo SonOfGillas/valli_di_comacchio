@@ -44,18 +44,11 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> loadLocalUserData() async {
-    final user = await appStorage.read(key: AppStorage.userKey);
+    final user = await getLocalUserData();
     if (user != null) {
-      final localUserData = AppUser.fromJson(jsonDecode(user));
-      final userResult = await userRepository.getUserData(localUserData.id);
-      userResult.fold(
-        onSuccess: (user) {
-          emit(state.copyWith(user: user));
-        },
-        onFailure: (error) {
-          emit(state.copyWith(user: null));
-        },
-      );
+      emit(state.copyWith(user: user));
+    } else {
+      emit(const AppState(user: null));
     }
   }
 
@@ -72,16 +65,44 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> loadNpcs() async {
-    final loadNpcsResult = await npcRepository.getAllNpcs();
-    late List<Npc> npcsList;
-    loadNpcsResult.fold(
+    final npcs = await getNpcsData();
+    emit(state.copyWith(npcs: npcs));
+  }
+
+  Future<void> loadUserAndNpcs() async {
+    final user = await getLocalUserData();
+    final npcs = await getNpcsData();
+    emit(state.copyWith(user: user, npcs: npcs));
+  }
+
+  Future<AppUser?> getLocalUserData() async {
+    AppUser? appUser;
+    final user = await appStorage.read(key: AppStorage.userKey);
+    if (user != null) {
+      final localUserData = AppUser.fromJson(jsonDecode(user));
+      final userResult = await userRepository.getUserData(localUserData.id);
+      userResult.fold(
+        onSuccess: (user) {
+          appUser = user;
+        },
+        onFailure: (error) {},
+      );
+      return appUser;
+    }
+    return null;
+  }
+
+  Future<List<Npc>> getNpcsData() async {
+    List<Npc> npcsList = [];
+    final npcsResult = await npcRepository.getAllNpcs();
+    npcsResult.fold(
       onSuccess: (npcs) {
         npcsList = npcs;
       },
-      onFailure: (failure) {
-        npcsList = [];
+      onFailure: (error) {
+        // Handle error if needed
       },
     );
-    emit(state.copyWith(npcs: npcsList));
+    return npcsList;
   }
 }

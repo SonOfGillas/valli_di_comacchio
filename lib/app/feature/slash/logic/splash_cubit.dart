@@ -28,11 +28,11 @@ class SplashCubit extends Cubit<SplashState> {
       }, onFailure: (failure) {
         isLoggedIn = false;
       });
-      await appCubit.loadNpcs();
       if (isLoggedIn) {
-        await appCubit.loadLocalUserData();
+        await appCubit.loadUserAndNpcs();
         emit(SplashSetupCompleted(loginFailed: false));
       } else {
+        await appCubit.loadNpcs();
         emit(SplashSetupCompleted(loginFailed: true));
       }
     } catch (e) {

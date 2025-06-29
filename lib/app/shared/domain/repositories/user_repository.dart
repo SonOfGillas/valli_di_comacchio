@@ -76,6 +76,7 @@ class UserRepository {
 
   // logout
   AsyncResult<void> logout() async {
+    await authDataSource.logout();
     return Success(null);
   }
 

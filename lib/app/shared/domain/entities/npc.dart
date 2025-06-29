@@ -64,7 +64,7 @@ class Npc extends Equatable {
     return Npc(
       id: json['id'] as String,
       name: json['name'] as String,
-      imageLocalPath: json['imageName'] as String,
+      imageLocalPath: json['imageLocalPath'] as String,
       locationName: json['locationName'] as String,
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
