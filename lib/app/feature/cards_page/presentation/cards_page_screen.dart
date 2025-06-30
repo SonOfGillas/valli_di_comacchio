@@ -24,6 +24,10 @@ class _CardPageScreenState extends State<CardPageScreen>
   late AnimationController _cardCollectionController;
   late Animation<double> _cardScaleAnimation;
 
+  // Animation controller for foil shimmer effect
+  late AnimationController _shimmerController;
+  late Animation<double> _shimmerAnimation;
+
   // Selected card for inspection
   CollectibleCard? _selectedCard;
 
@@ -46,6 +50,16 @@ class _CardPageScreenState extends State<CardPageScreen>
           parent: _cardCollectionController, curve: Curves.easeOutBack),
     );
 
+    // Initialize shimmer animation for foil cards
+    _shimmerController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat();
+
+    _shimmerAnimation = Tween<double>(begin: -1.0, end: 2.0).animate(
+      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
+    );
+
     // Initialize card inspection animation
     _inspectController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -61,6 +75,7 @@ class _CardPageScreenState extends State<CardPageScreen>
   void dispose() {
     _cardCollectionController.dispose();
     _inspectController.dispose();
+    _shimmerController.dispose();
     super.dispose();
   }
 
@@ -136,22 +151,13 @@ class _CardPageScreenState extends State<CardPageScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Collection: ${_collectedCards.length}/${appCardsCompleteList.length}',
+                      'Collezione: ${_collectedCards.length}/${appCardsCompleteList.length}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (_collectedCards.length == packetSize)
-                      const Text(
-                        '✨ COMPLETE! ✨',
-                        style: TextStyle(
-                          color: Colors.amber,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                   ],
                 ),
               ),
@@ -228,12 +234,60 @@ class _CardPageScreenState extends State<CardPageScreen>
                                           ),
                                         ],
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.asset(
-                                          _collectedCards[index].imagePath,
-                                          fit: BoxFit.cover,
-                                        ),
+                                      child: Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.asset(
+                                              _collectedCards[index].imagePath,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          if (_collectedCards[index].isFoil())
+                                            AnimatedBuilder(
+                                              animation: _shimmerAnimation,
+                                              builder: (context, child) {
+                                                return ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                        begin: Alignment(
+                                                          -1.0 +
+                                                              _shimmerAnimation
+                                                                  .value,
+                                                          -0.5,
+                                                        ),
+                                                        end: Alignment(
+                                                          0.0 +
+                                                              _shimmerAnimation
+                                                                  .value,
+                                                          0.5,
+                                                        ),
+                                                        colors: const [
+                                                          Colors.transparent,
+                                                          Color(0x22FFFFFF),
+                                                          Color(0x44FFFFFF),
+                                                          Color(0x22FFFFFF),
+                                                          Colors.transparent,
+                                                        ],
+                                                        stops: const [
+                                                          0.0,
+                                                          0.35,
+                                                          0.5,
+                                                          0.65,
+                                                          1.0
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                        ],
                                       ),
                                     ),
                                   ),
