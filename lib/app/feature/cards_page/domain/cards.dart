@@ -30,7 +30,7 @@ class CollectibleCard {
 
 final appCardsCompleteList = [
   CollectibleCard(
-      id: 1, name: 'Eel', imagePath: 'assets/images/eel_card.png', rarity: 3),
+      id: 1, name: 'Eel', imagePath: 'assets/images/eel_card.png', rarity: 4),
   CollectibleCard(
       id: 2,
       name: 'Eel Foil',
@@ -40,7 +40,7 @@ final appCardsCompleteList = [
       id: 3,
       name: 'Flamingo',
       imagePath: 'assets/images/flamingo_card.png',
-      rarity: 3),
+      rarity: 4),
   CollectibleCard(
       id: 4,
       name: 'Flamingo Foil',

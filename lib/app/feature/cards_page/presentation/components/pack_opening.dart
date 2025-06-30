@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 
 // The opening stages
 enum OpeningStage {
@@ -11,14 +12,6 @@ enum OpeningStage {
 // Pack image assets
 const String PACK_CLOSED = 'assets/images/card_pack.png';
 const String PACK_OPENED = 'assets/images/card_pack_opened.png';
-
-final List<CollectibleCard> cardsInThePack = [
-  appCardsCompleteList[1],
-  appCardsCompleteList[4],
-  appCardsCompleteList[5],
-  appCardsCompleteList[6],
-  appCardsCompleteList[7],
-];
 
 class PackOpeningPage extends StatefulWidget {
   const PackOpeningPage({Key? key}) : super(key: key);
@@ -58,7 +51,8 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     super.initState();
 
     // Initialize the list of remaining cards
-    _remainingCards = List.from(cardsInThePack);
+    final randomPacket = getRandomPacket();
+    _remainingCards = List.from(randomPacket);
 
     // Initialize the bounce animation controller
     _bounceController = AnimationController(

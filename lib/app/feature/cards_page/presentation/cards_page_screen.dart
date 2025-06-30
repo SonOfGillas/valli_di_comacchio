@@ -1,18 +1,18 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
-class PackOpenerExample extends StatefulWidget {
-  const PackOpenerExample({super.key});
+class CardPageScreen extends StatefulWidget {
+  const CardPageScreen({super.key});
 
   @override
-  State<PackOpenerExample> createState() => _PackOpenerExampleState();
+  State<CardPageScreen> createState() => _CardPageScreenState();
 }
 
-class _PackOpenerExampleState extends State<PackOpenerExample>
+class _CardPageScreenState extends State<CardPageScreen>
     with TickerProviderStateMixin {
   // The cards revealed from packs
   final List<CollectibleCard> _collectedCards = appCardsCompleteList;
@@ -143,7 +143,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if (_collectedCards.length == cardsInThePack.length)
+                    if (_collectedCards.length == packetSize)
                       const Text(
                         '✨ COMPLETE! ✨',
                         style: TextStyle(
@@ -202,9 +202,8 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
                             itemCount: _collectedCards.length,
                             itemBuilder: (context, index) {
                               // Apply scale animation to the most recently added cards
-                              final isNew = index >=
-                                  _collectedCards.length -
-                                      cardsInThePack.length;
+                              final isNew =
+                                  index >= _collectedCards.length - packetSize;
 
                               return GestureDetector(
                                 onTap: () =>

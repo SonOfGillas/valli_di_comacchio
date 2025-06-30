@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opener_example.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/cards_page_screen.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
@@ -21,8 +21,7 @@ class _CardsPageState extends State<CardsPage> {
         return Scaffold(
           appBar: ValliAppBar(),
           body: Padding(
-              padding: const EdgeInsets.only(top: 0.0),
-              child: PackOpenerExample()
+              padding: const EdgeInsets.only(top: 0.0), child: CardPageScreen()
 
               // PackCarousel(
               //   packCount: 8,
