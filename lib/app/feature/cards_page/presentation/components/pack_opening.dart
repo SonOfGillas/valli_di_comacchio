@@ -186,11 +186,12 @@ class _PackOpeningPageState extends State<PackOpeningPage>
 
             // Status text
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
               child: Text(
                 _remainingCards.isEmpty
-                    ? 'All cards revealed!'
-                    : 'Cards remaining: ${_remainingCards.length}',
+                    ? 'Tutte le carte sono state sbustate!'
+                    : 'Carte rimanenti: ${_remainingCards.length}',
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 20,
@@ -198,8 +199,6 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                 ),
               ),
             ),
-
-            const SizedBox(height: 20),
 
             // Pack area
             Expanded(
@@ -367,22 +366,6 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                         );
                       },
                     ),
-            ),
-
-            // Instructions text
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                _stage == OpeningStage.initial
-                    ? 'Tap the pack to open it!'
-                    : _remainingCards.isNotEmpty
-                        ? 'Tap the pack to reveal a card!'
-                        : 'All cards revealed! 🎉',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
             ),
           ],
         ),
