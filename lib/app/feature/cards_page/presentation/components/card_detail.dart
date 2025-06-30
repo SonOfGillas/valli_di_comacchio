@@ -10,7 +10,7 @@ class CardDetail extends StatefulWidget {
   CardDetail({
     super.key,
     required this.card,
-  }) : isFoil = card.rarity >= 5;
+  }) : isFoil = card.isFoil();
 
   @override
   State<CardDetail> createState() => _CardDetailState();
@@ -186,17 +186,17 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
           ..rotateY(_rotateY),
         alignment: Alignment.center,
         child: Container(
-          width: 220,
-          height: 320,
+          width: 300,
+          height: 440,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             color: Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.35),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-                spreadRadius: 2,
+                blurRadius: 28,
+                offset: const Offset(0, 14),
+                spreadRadius: 3,
               ),
             ],
           ),
@@ -207,8 +207,8 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
               // Base card image
               Image.asset(
                 widget.card.imagePath,
-                width: 220,
-                height: 320,
+                width: 300,
+                height: 440,
                 fit: BoxFit.cover,
               ),
 

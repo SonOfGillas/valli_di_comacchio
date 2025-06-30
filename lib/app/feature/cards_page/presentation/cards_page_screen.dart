@@ -254,11 +254,6 @@ class _CardPageScreenState extends State<CardPageScreen>
               builder: (context, child) {
                 return Positioned.fill(
                   child: GestureDetector(
-                    onVerticalDragEnd: (details) {
-                      if (details.velocity.pixelsPerSecond.dy > 500) {
-                        _closeInspection();
-                      }
-                    },
                     onTap: _closeInspection,
                     child: Container(
                       color: Colors.black
@@ -283,9 +278,8 @@ class _CardPageScreenState extends State<CardPageScreen>
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _openNewPack,
         backgroundColor: Colors.amber,
-        icon: const Icon(Icons.card_giftcard, color: Colors.black87),
         label: const Text(
-          'OPEN NEW PACK',
+          'APRI UN PACCHETTO',
           style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
       ),

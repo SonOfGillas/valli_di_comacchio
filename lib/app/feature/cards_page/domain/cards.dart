@@ -4,6 +4,10 @@ class CollectibleCard {
   String imagePath;
   int rarity;
 
+  bool isFoil() {
+    return rarity >= 5;
+  }
+
   CollectibleCard(
       {required this.id,
       required this.name,

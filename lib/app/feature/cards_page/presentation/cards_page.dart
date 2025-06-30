@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/cards_page_screen.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
@@ -21,14 +23,17 @@ class _CardsPageState extends State<CardsPage> {
         return Scaffold(
           appBar: ValliAppBar(),
           body: Padding(
-              padding: const EdgeInsets.only(top: 0.0), child: CardPageScreen()
+              padding: const EdgeInsets.only(top: 0.0),
+              child: //  Center(child: CardDetail(card: appCardsCompleteList[0]))
 
+                  CardPageScreen()
               // PackCarousel(
-              //   packCount: 8,
-              //   onPackSelected: (index) {
-              //     // Handle pack selection
-              //   },
-              // ),
+//   packCount: 8,
+//   onPackSelected: (index) {
+//     // Handle pack selection
+//   },
+// ),
+
               ),
           bottomNavigationBar: const FooterNavBar(),
         );
