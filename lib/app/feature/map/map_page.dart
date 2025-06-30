@@ -35,9 +35,9 @@ class MapPage extends StatelessWidget {
                   unFollowUser: true,
                 ),
                 zoomOption: const ZoomOption(
-                  initZoom: 14,
-                  minZoomLevel: 12,
-                  maxZoomLevel: 2,
+                  initZoom: 8,
+                  minZoomLevel: 3,
+                  maxZoomLevel: 19,
                   stepZoom: 1.0,
                 ),
                 userLocationMarker: UserLocationMaker(
