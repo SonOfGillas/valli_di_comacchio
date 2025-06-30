@@ -578,10 +578,10 @@ class CardHighlightPainter extends CustomPainter {
         startAngle: 0,
         endAngle: pi * 2,
         colors: [
-          Colors.white.withOpacity(0.8),
-          Colors.white.withOpacity(0.3),
-          Colors.white.withOpacity(0.8),
-          Colors.white.withOpacity(0.3),
+          Colors.white.withOpacity(0.5), // Reduced from 0.8 to 0.5
+          Colors.white.withOpacity(0.2), // Reduced from 0.3 to 0.2
+          Colors.white.withOpacity(0.5), // Reduced from 0.8 to 0.5
+          Colors.white.withOpacity(0.2), // Reduced from 0.3 to 0.2
         ],
       ).createShader(Rect.fromLTRB(0, 0, width, height));
 
