@@ -190,7 +190,7 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
           height: 440,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
+            color: Colors.transparent,
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.35),
@@ -216,10 +216,10 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
               if (widget.isFoil)
                 Positioned.fill(
                   child: Opacity(
-                    opacity:
-                        0.25, // Further reduced opacity to better show card details
+                    opacity: 0.3, // Reduced opacity to make card more visible
                     child: ShaderMask(
-                      blendMode: BlendMode.srcOver,
+                      blendMode: BlendMode
+                          .overlay, // Changed to overlay for better color visibility
                       shaderCallback: (bounds) {
                         return LinearGradient(
                           transform: GradientRotation(_rainbowOffset * pi),
@@ -232,13 +232,13 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                             -(_gradientOffsetY - 0.5) * 3.0,
                           ),
                           colors: const [
-                            Color(0xFFFF0000),
-                            Color(0x00FFFFFF),
-                            Color(0xFF00FFFF),
-                            Color(0x00FFFFFF),
-                            Color(0xFF00FF00),
-                            Color(0x00FFFFFF),
-                            Color(0xFFFF00FF),
+                            Color(0xFFFF0000), // Pure Red
+                            Color(0xFFFF8800), // Orange
+                            Color(0xFFFFFF00), // Yellow
+                            Color(0xFF00FF00), // Pure Green
+                            Color(0xFF0088FF), // Sky Blue
+                            Color(0xFF8800FF), // Purple
+                            Color(0xFFFF0088), // Pink
                           ],
                         ).createShader(bounds);
                       },
@@ -248,10 +248,10 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
-                              Colors.white.withOpacity(0.9),
-                              Colors.white.withOpacity(0.1),
-                              Colors.white.withOpacity(0.9),
-                              Colors.white.withOpacity(0.1),
+                              Colors.white.withOpacity(0.3), // Reduced from 0.9
+                              Colors.white.withOpacity(0.0),
+                              Colors.white.withOpacity(0.3), // Reduced from 0.9
+                              Colors.white.withOpacity(0.0),
                             ],
                             stops: const [0.0, 0.3, 0.6, 1.0],
                           ),
@@ -261,51 +261,32 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                   ),
                 ),
 
-              // Selective highlight areas that enhance the card's special features
-              if (widget.isFoil)
-                Positioned.fill(
-                  child: CustomPaint(
-                    painter: CardHighlightPainter(
-                      shimmerOffset: _shimmerAnimation.value,
-                      gradientOffsetX: _gradientOffsetX,
-                      gradientOffsetY: _gradientOffsetY,
-                    ),
-                    child: Container(),
-                  ),
-                ),
-
               // Foil overlay effects - subtle layers that let the card image show through
               if (widget.isFoil) ...[
                 // STRONG shimmer effect - highly visible
                 ShaderMask(
-                  blendMode: BlendMode.lighten, // Much stronger blend mode
+                  blendMode: BlendMode.lighten,
                   shaderCallback: (Rect bounds) {
                     return RadialGradient(
                       center: Alignment(
                         (_gradientOffsetX - 0.5) * 3.0,
                         (_gradientOffsetY - 0.5) * 3.0,
                       ),
-                      radius: 0.8, // Tighter radius for stronger highlight
+                      radius: 0.8,
                       colors: [
-                        Colors.white.withOpacity(
-                            0.4), // Further reduced from 0.6 to 0.4
-                        Colors.white.withOpacity(
-                            0.2), // Further reduced from 0.3 to 0.2
+                        Colors.white.withOpacity(0.2), // Reduced from 0.4
+                        Colors.white.withOpacity(0.1), // Reduced from 0.2
                         Colors.transparent,
                       ],
-                      stops: const [
-                        0.0,
-                        0.3,
-                        0.7
-                      ], // More defined highlight with sharp falloff
+                      stops: const [0.0, 0.3, 0.7],
                     ).createShader(bounds);
                   },
                   child: Container(color: Colors.transparent),
                 ),
 
-                // Rainbow color layer with moderate visibility (50% opacity)
+                // Rainbow color layer with increased visibility
                 ShaderMask(
-                  blendMode: BlendMode.overlay, // Strong blend mode
+                  blendMode: BlendMode.overlay,
                   shaderCallback: (Rect bounds) {
                     return SweepGradient(
                       center: Alignment(
@@ -316,26 +297,26 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                       endAngle: pi * 2,
                       transform: GradientRotation(_rainbowOffset * pi * 2),
                       colors: const [
-                        Color(0x80FF0000), // Red with 50% opacity
-                        Color(0x80FF7F00), // Orange with 50% opacity
-                        Color(0x80FFFF00), // Yellow with 50% opacity
-                        Color(0x8000FF00), // Green with 50% opacity
-                        Color(0x800000FF), // Blue with 50% opacity
-                        Color(0x804B0082), // Indigo with 50% opacity
-                        Color(0x809400D3), // Violet with 50% opacity
-                        Color(0x80FF0000), // Back to red with 50% opacity
+                        Color(0xA0FF0000), // Red with 63% opacity
+                        Color(0xA0FF8800), // Orange with 63% opacity
+                        Color(0xA0FFFF00), // Yellow with 63% opacity
+                        Color(0xA000FF00), // Green with 63% opacity
+                        Color(0xA00088FF), // Sky Blue with 63% opacity
+                        Color(0xA08800FF), // Purple with 63% opacity
+                        Color(0xA0FF0088), // Pink with 63% opacity
+                        Color(0xA0FF0000), // Back to red with 63% opacity
                       ],
                       tileMode: TileMode.mirror,
                     ).createShader(bounds);
                   },
                   child: Container(
-                    color: Colors.transparent, // Removed white base layer
+                    color: Colors.transparent,
                   ),
                 ),
 
-                // Horizontal shimmer line - DRAMATICALLY more visible
+                // Horizontal shimmer line - thin and subtle
                 ShaderMask(
-                  blendMode: BlendMode.lighten, // Very strong blend mode
+                  blendMode: BlendMode.lighten,
                   shaderCallback: (Rect bounds) {
                     return LinearGradient(
                       begin: Alignment(
@@ -348,11 +329,10 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                       ),
                       colors: [
                         Colors.transparent,
-                        Colors.white.withOpacity(
-                            0.6), // Reduced opacity for white shimmer
+                        Colors.white.withOpacity(0.3),
                         Colors.transparent,
                       ],
-                      stops: const [0.2, 0.5, 0.8], // Sharper line
+                      stops: const [0.3, 0.5, 0.7], // Thinner line
                     ).createShader(bounds);
                   },
                   child: Container(color: Colors.transparent),
@@ -373,19 +353,18 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                       ),
                       colors: [
                         Colors.transparent,
-                        Colors.white.withOpacity(
-                            0.6), // Reduced opacity for white shimmer
+                        Colors.white.withOpacity(0.3), // Reduced from 0.6
                         Colors.transparent,
                       ],
-                      stops: const [0.2, 0.5, 0.8],
+                      stops: const [0.3, 0.5, 0.7], // Thinner line
                     ).createShader(bounds);
                   },
                   child: Container(color: Colors.transparent),
                 ),
 
-                // Diagonal shimmer line - MUCH stronger effect
+                // Diagonal shimmer line - subtle and elegant
                 ShaderMask(
-                  blendMode: BlendMode.lighten, // Very strong blend mode
+                  blendMode: BlendMode.lighten,
                   shaderCallback: (Rect bounds) {
                     return LinearGradient(
                       begin: Alignment(
@@ -398,16 +377,10 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                       ),
                       colors: [
                         Colors.transparent,
-                        Colors.white.withOpacity(
-                            0.6), // Reduced opacity for white shimmer
+                        Colors.white.withOpacity(0.25), // Reduced from 0.6
                         Colors.transparent,
                       ],
-                      // Narrower white section for more defined line
-                      stops: const [
-                        0.35,
-                        0.5,
-                        0.65
-                      ], // Very tight line for strong effect
+                      stops: const [0.4, 0.5, 0.6], // Even thinner line
                     ).createShader(bounds);
                   },
                   child: Container(color: Colors.transparent),
@@ -449,151 +422,5 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-}
-
-/// Custom painter to create selective highlight areas on the card
-/// This helps maintain the foil effect while ensuring card details remain visible
-class CardHighlightPainter extends CustomPainter {
-  final double shimmerOffset;
-  final double gradientOffsetX;
-  final double gradientOffsetY;
-
-  CardHighlightPainter({
-    required this.shimmerOffset,
-    required this.gradientOffsetX,
-    required this.gradientOffsetY,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final width = size.width;
-    final height = size.height;
-
-    // Create paint for highlights with strong glow
-    final highlightPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..maskFilter = const MaskFilter.blur(
-          BlurStyle.normal, 8); // Much stronger blur for dramatic glow
-
-    // Calculate dynamic position based on shimmer animation
-    final xOffset = shimmerOffset * width * 0.6; // Increased movement
-
-    // Create several highlight areas that correspond to card features
-    // These positions are approximate and can be adjusted based on the actual card design
-
-    // Top title area highlight - MUCH brighter
-    {
-      final rect = RRect.fromLTRBR(
-        width * 0.2,
-        height * 0.05 + xOffset * 0.1,
-        width * 0.8,
-        height * 0.12 + xOffset * 0.1,
-        const Radius.circular(4),
-      );
-
-      highlightPaint.shader = RadialGradient(
-        center: Alignment(
-          (gradientOffsetX - 0.5) * 2.0,
-          (gradientOffsetY - 0.5) * 2.0,
-        ),
-        radius: 1.2,
-        colors: [
-          Colors.white.withOpacity(
-              0.5 + shimmerOffset.abs() * 0.2), // Reduced from 0.7 to 0.5
-          Colors.white.withOpacity(0.2), // Reduced from 0.3 to 0.2
-          Colors.transparent,
-        ],
-        stops: const [0.0, 0.3, 1.0],
-      ).createShader(Rect.fromLTRB(0, 0, width, height));
-
-      canvas.drawRRect(rect, highlightPaint);
-    }
-
-    // Card art frame highlight - MUCH brighter
-    {
-      final rect = RRect.fromLTRBR(
-        width * 0.1,
-        height * 0.15,
-        width * 0.9,
-        height * 0.6,
-        const Radius.circular(8),
-      );
-
-      highlightPaint.shader = LinearGradient(
-        begin: Alignment(shimmerOffset, -shimmerOffset),
-        end: Alignment(-shimmerOffset, shimmerOffset),
-        colors: [
-          Colors.white.withOpacity(0.3), // Reduced from 0.4 to 0.3
-          Colors.white.withOpacity(0.4), // Reduced from 0.6 to 0.4
-          Colors.white.withOpacity(0.3), // Reduced from 0.4 to 0.3
-        ],
-      ).createShader(Rect.fromLTRB(0, 0, width, height));
-
-      canvas.drawRRect(rect, highlightPaint);
-    }
-
-    // Bottom text area highlights (simulating text lines) - MUCH brighter
-    for (int i = 0; i < 3; i++) {
-      final rect = RRect.fromLTRBR(
-        width * 0.15,
-        height * (0.65 + i * 0.07),
-        width * (0.7 + i * 0.1) + xOffset * 0.5, // More dynamic movement
-        height * (0.67 + i * 0.07),
-        const Radius.circular(2),
-      );
-
-      highlightPaint.shader = LinearGradient(
-        begin: Alignment.centerLeft,
-        end: Alignment.centerRight,
-        colors: [
-          Colors.white.withOpacity(0.15 + i * 0.07), // Reduced opacity
-          Colors.white.withOpacity(
-              0.5 + shimmerOffset.abs() * 0.2), // Reduced from 0.7 to 0.5
-          Colors.white.withOpacity(0.15), // Reduced from 0.2 to 0.15
-        ],
-      ).createShader(Rect.fromLTRB(0, 0, width, height));
-
-      canvas.drawRRect(rect, highlightPaint);
-    }
-
-    // Add additional card elements highlights for stronger effect
-
-    // Card border highlight
-    final borderRect = RRect.fromLTRBR(
-      width * 0.05,
-      height * 0.05,
-      width * 0.95,
-      height * 0.95,
-      const Radius.circular(12),
-    );
-
-    final borderPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 5
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 4)
-      ..shader = SweepGradient(
-        center: Alignment(
-          (gradientOffsetX - 0.5) * 1.5,
-          (gradientOffsetY - 0.5) * 1.5,
-        ),
-        startAngle: 0,
-        endAngle: pi * 2,
-        colors: [
-          Colors.white.withOpacity(0.5), // Reduced from 0.8 to 0.5
-          Colors.white.withOpacity(0.2), // Reduced from 0.3 to 0.2
-          Colors.white.withOpacity(0.5), // Reduced from 0.8 to 0.5
-          Colors.white.withOpacity(0.2), // Reduced from 0.3 to 0.2
-        ],
-      ).createShader(Rect.fromLTRB(0, 0, width, height));
-
-    canvas.drawRRect(borderRect, borderPaint);
-  }
-
-  @override
-  bool shouldRepaint(CardHighlightPainter oldDelegate) {
-    return oldDelegate.shimmerOffset != shimmerOffset ||
-        oldDelegate.gradientOffsetX != gradientOffsetX ||
-        oldDelegate.gradientOffsetY != gradientOffsetY;
   }
 }
