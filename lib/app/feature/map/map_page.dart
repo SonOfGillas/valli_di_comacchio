@@ -29,6 +29,26 @@ class MapPage extends StatelessWidget {
                   west: 12.197045,
                 ),
               ),
+              mapIsLoading: const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    CircularProgressIndicator(
+                      color: AppColors.palette_primary,
+                      strokeWidth: 3,
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Loading map...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               osmOption: OSMOption(
                 userTrackingOption: const UserTrackingOption(
                   enableTracking: false, // TODO remove this when ready
