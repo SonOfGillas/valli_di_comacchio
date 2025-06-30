@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+
 class CardDetail extends StatefulWidget {
+  final CollectibleCard card;
   final bool isFoil;
 
-  const CardDetail({
+  CardDetail({
     super.key,
-    this.isFoil =
-        true, // Set default to true to make effect visible immediately
-  });
+    required this.card,
+  }) : isFoil = card.rarity >= 5;
 
   @override
   State<CardDetail> createState() => _CardDetailState();
@@ -204,7 +206,7 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
             children: [
               // Base card image
               Image.asset(
-                'assets/images/test_card.png',
+                widget.card.imagePath,
                 width: 220,
                 height: 320,
                 fit: BoxFit.cover,

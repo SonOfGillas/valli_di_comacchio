@@ -1,10 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/components/pack_opening.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/components/card_detail.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
 class PackOpenerExample extends StatefulWidget {
-  const PackOpenerExample({Key? key}) : super(key: key);
+  const PackOpenerExample({super.key});
 
   @override
   State<PackOpenerExample> createState() => _PackOpenerExampleState();
@@ -13,7 +15,7 @@ class PackOpenerExample extends StatefulWidget {
 class _PackOpenerExampleState extends State<PackOpenerExample>
     with TickerProviderStateMixin {
   // The cards revealed from packs
-  final List<String> _collectedCards = [];
+  final List<CollectibleCard> _collectedCards = appCardsCompleteList;
 
   // Whether we're showing the pack opening screen
   bool _openingPack = false;
@@ -23,7 +25,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
   late Animation<double> _cardScaleAnimation;
 
   // Selected card for inspection
-  String? _selectedCard;
+  CollectibleCard? _selectedCard;
 
   // Controller for card inspection animation
   late AnimationController _inspectController;
@@ -70,7 +72,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
   }
 
   // Handle cards revealed from the pack
-  void _onCardsRevealed(List<String> cards) {
+  void _onCardsRevealed(List<CollectibleCard> cards) {
     // Add the cards to the collection
     setState(() {
       _collectedCards.addAll(cards);
@@ -83,7 +85,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
   }
 
   // Inspect a card
-  void _inspectCard(String card) {
+  void _inspectCard(CollectibleCard card) {
     setState(() {
       _selectedCard = card;
     });
@@ -119,62 +121,9 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Card Collection'),
-        backgroundColor: Colors.blueGrey.shade800,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            onPressed: () {
-              // Show help dialog
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('How to Use'),
-                  content: const SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('• Tap "OPEN NEW PACK" to get more cards'),
-                        SizedBox(height: 8),
-                        Text('• Tap any card to inspect it up close'),
-                        SizedBox(height: 8),
-                        Text('• Swipe down to dismiss the card inspection'),
-                        SizedBox(height: 8),
-                        Text(
-                            '• Collect all cards to complete your collection!'),
-                      ],
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      child: const Text('GOT IT'),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      backgroundColor: Colors.blueGrey.shade900,
+      backgroundColor: AppColors.palette_secondary,
       body: Stack(
         children: [
-          // Background pattern
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.blueGrey.shade900,
-              image: DecorationImage(
-                image: const AssetImage('assets/images/LOGO-comacchio.png'),
-                opacity: 0.05,
-                repeat: ImageRepeat.repeat,
-                scale: 6.0,
-              ),
-            ),
-          ),
-
           Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -187,7 +136,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Collection: ${_collectedCards.length}/${cardsInThePack.length}',
+                      'Collection: ${_collectedCards.length}/${appCardsCompleteList.length}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -267,7 +216,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
                                       ? _cardScaleAnimation.value
                                       : 1.0,
                                   child: Hero(
-                                    tag: 'card_${_collectedCards[index]}',
+                                    tag: 'card_${_collectedCards[index].id}',
                                     child: Container(
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
@@ -283,7 +232,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.asset(
-                                          _collectedCards[index],
+                                          _collectedCards[index].imagePath,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -319,11 +268,9 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
                       child: Transform.scale(
                         scale: 0.8 + (0.2 * _inspectAnimation.value),
                         child: Hero(
-                          tag: 'card_$_selectedCard',
+                          tag: 'card_${_selectedCard?.name}',
                           child: CardDetail(
-                            isFoil: Random()
-                                .nextBool(), // Randomly show foil effect
-                            // cardAsset: _selectedCard!, TODO update this
+                            card: _selectedCard!,
                           ),
                         ),
                       ),
@@ -343,6 +290,7 @@ class _PackOpenerExampleState extends State<PackOpenerExample>
           style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

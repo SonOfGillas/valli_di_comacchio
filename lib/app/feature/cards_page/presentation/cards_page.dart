@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_courosel.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opener_example.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
 class CardsPage extends StatefulWidget {
   const CardsPage({super.key});
