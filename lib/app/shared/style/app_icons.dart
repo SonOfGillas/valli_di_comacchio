@@ -15,6 +15,10 @@ class AppIcons {
   static final warning = _iconPath('warning');
   static final info = _iconPath('info');
   static final email = _iconPath('email');
+  static final cards = _iconPath('cards');
+  static final map = _iconPath('map');
+  static final quest = _iconPath('quest-flag');
+  static final walksAndPlaces = _iconPath('track');
 
   static String _iconPath(String iconName) => 'assets/icons/$iconName.svg';
 }

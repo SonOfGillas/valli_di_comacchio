@@ -34,6 +34,14 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
           return l10n.tradePageTitle;
         case RoutesPaths.map:
           return l10n.mapPageTitle;
+        case RoutesPaths.profile:
+          return 'Profilo';
+        case RoutesPaths.cards:
+          return 'Carte';
+        case RoutesPaths.quest:
+          return 'Missioni';
+        case RoutesPaths.walksAndPlaces:
+          return 'Posti e Percorsi';
         case RoutesPaths.root:
         default:
           return '';

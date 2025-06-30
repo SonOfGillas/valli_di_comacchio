@@ -41,10 +41,11 @@ class SelectOfferTypeStep extends StatelessWidget {
                       TradeResourceElement(
                           resource: state.selectedResource!,
                           size: TradeResourceElmentSize.large),
-                      Image.asset(
-                        AppImages.rosario,
-                        height: 80,
-                      ),
+                      if (state.npc?.imageLocalPath != null)
+                        Image.asset(
+                          state.npc!.imageLocalPath,
+                          height: 80,
+                        ),
                     ],
                   ),
                   Builder(builder: (context) {

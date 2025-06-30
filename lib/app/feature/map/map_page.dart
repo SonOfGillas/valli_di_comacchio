@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:go_router/go_router.dart';
-import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
+import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
-import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 import 'package:valli_di_comacchio/app/feature/map/components/npc_location_detail.dart';
 
 class MapPage extends StatelessWidget {
@@ -95,7 +93,8 @@ class MapPage extends StatelessWidget {
                   );
                 }
               },
-            ));
+            ),
+            bottomNavigationBar: FooterNavBar());
       },
     );
   }
