@@ -122,4 +122,24 @@ final appCardsCompleteList = [
       name: 'Three-Spined Stickleback',
       imagePath: 'assets/images/three_spined_stickleback_card.jpeg',
       rarity: 2),
+  CollectibleCard(
+      id: 20,
+      name: 'European pond turtle',
+      imagePath: 'assets/images/european_pond_turtle_card.jpeg',
+      rarity: 2),
+  CollectibleCard(
+      id: 21,
+      name: 'Swan',
+      imagePath: 'assets/images/swan_card.jpeg',
+      rarity: 2),
+  CollectibleCard(
+      id: 22,
+      name: 'Otter',
+      imagePath: 'assets/images/otter_card.jpeg',
+      rarity: 2),
+  CollectibleCard(
+      id: 23,
+      name: 'Grass Snake',
+      imagePath: 'assets/images/grass_snake_card.jpeg',
+      rarity: 2),
 ];
