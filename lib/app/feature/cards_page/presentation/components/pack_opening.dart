@@ -98,7 +98,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
 
     // Initialize the card reveal animation controller
     _cardRevealController = AnimationController(
-      duration: const Duration(milliseconds: 1700),
+      duration: const Duration(milliseconds: 2000),
       vsync: this,
     );
 
@@ -217,6 +217,27 @@ class _PackOpeningPageState extends State<PackOpeningPage>
           _bounceController.stop();
         }
       });
+    });
+  }
+
+  // Instantly complete the card reveal animation
+  void _skipCardRevealAnimation() {
+    if (!_isRevealingCard || _currentRevealedCard == null) return;
+
+    // Stop the animation and jump to the end
+    _cardRevealController.stop();
+    _cardRevealController.value = 1.0;
+
+    // Complete the reveal process immediately
+    setState(() {
+      _revealedCards.add(_currentRevealedCard!);
+      _currentRevealedCard = null;
+      _isRevealingCard = false;
+
+      // If this was the last card, stop the bounce animation
+      if (_remainingCards.isEmpty) {
+        _bounceController.stop();
+      }
     });
   }
 
@@ -383,110 +404,116 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                                         minBlastForce: 15,
                                         gravity: 0.3,
                                       ),
-                                    // The revealed card
-                                    AnimatedBuilder(
-                                      animation: _cardRevealController,
-                                      builder: (context, child) {
-                                        return Transform.translate(
-                                          offset: Offset(
-                                              0,
-                                              30 *
-                                                  (1 -
-                                                      _cardSlideAnimation
-                                                          .value)),
-                                          child: Transform.scale(
-                                            scale: _cardScaleAnimation.value,
-                                            child: Container(
-                                              width: 180,
-                                              height: 280,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: _currentRevealedCard!
-                                                            .isFoil()
-                                                        ? Colors.amber
-                                                        : Colors.yellow,
-                                                    blurRadius: 20,
-                                                    spreadRadius: 5,
-                                                  )
-                                                ],
-                                              ),
-                                              child: Stack(
-                                                fit: StackFit.expand,
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    child: Image.asset(
-                                                      _currentRevealedCard!
-                                                          .imagePath,
-                                                      fit: BoxFit.cover,
+                                    // The revealed card with tap gesture
+                                    GestureDetector(
+                                      onTap: _skipCardRevealAnimation,
+                                      child: AnimatedBuilder(
+                                        animation: _cardRevealController,
+                                        builder: (context, child) {
+                                          return Transform.translate(
+                                            offset: Offset(
+                                                0,
+                                                30 *
+                                                    (1 -
+                                                        _cardSlideAnimation
+                                                            .value)),
+                                            child: Transform.scale(
+                                              scale: _cardScaleAnimation.value,
+                                              child: Container(
+                                                width: 180,
+                                                height: 280,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color:
+                                                          _currentRevealedCard!
+                                                                  .isFoil()
+                                                              ? Colors.amber
+                                                              : Colors.yellow,
+                                                      blurRadius: 20,
+                                                      spreadRadius: 5,
+                                                    )
+                                                  ],
+                                                ),
+                                                child: Stack(
+                                                  fit: StackFit.expand,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      child: Image.asset(
+                                                        _currentRevealedCard!
+                                                            .imagePath,
+                                                        fit: BoxFit.cover,
+                                                      ),
                                                     ),
-                                                  ),
-                                                  // Shimmer effect for foil cards
-                                                  if (_currentRevealedCard!
-                                                      .isFoil())
-                                                    AnimatedBuilder(
-                                                      animation:
-                                                          _shimmerAnimation,
-                                                      builder:
-                                                          (context, child) {
-                                                        return ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              gradient:
-                                                                  LinearGradient(
-                                                                begin:
-                                                                    Alignment(
-                                                                  -1.0 +
-                                                                      _shimmerAnimation
-                                                                          .value,
-                                                                  -0.5,
+                                                    // Shimmer effect for foil cards
+                                                    if (_currentRevealedCard!
+                                                        .isFoil())
+                                                      AnimatedBuilder(
+                                                        animation:
+                                                            _shimmerAnimation,
+                                                        builder:
+                                                            (context, child) {
+                                                          return ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                gradient:
+                                                                    LinearGradient(
+                                                                  begin:
+                                                                      Alignment(
+                                                                    -1.0 +
+                                                                        _shimmerAnimation
+                                                                            .value,
+                                                                    -0.5,
+                                                                  ),
+                                                                  end:
+                                                                      Alignment(
+                                                                    0.0 +
+                                                                        _shimmerAnimation
+                                                                            .value,
+                                                                    0.5,
+                                                                  ),
+                                                                  colors: const [
+                                                                    Colors
+                                                                        .transparent,
+                                                                    Color(
+                                                                        0x44FFAA00), // Gold shimmer
+                                                                    Color(
+                                                                        0x66FFDD00), // Brighter gold
+                                                                    Color(
+                                                                        0x44FFAA00), // Gold shimmer
+                                                                    Colors
+                                                                        .transparent,
+                                                                  ],
+                                                                  stops: const [
+                                                                    0.0,
+                                                                    0.35,
+                                                                    0.5,
+                                                                    0.65,
+                                                                    1.0
+                                                                  ],
                                                                 ),
-                                                                end: Alignment(
-                                                                  0.0 +
-                                                                      _shimmerAnimation
-                                                                          .value,
-                                                                  0.5,
-                                                                ),
-                                                                colors: const [
-                                                                  Colors
-                                                                      .transparent,
-                                                                  Color(
-                                                                      0x44FFAA00), // Gold shimmer
-                                                                  Color(
-                                                                      0x66FFDD00), // Brighter gold
-                                                                  Color(
-                                                                      0x44FFAA00), // Gold shimmer
-                                                                  Colors
-                                                                      .transparent,
-                                                                ],
-                                                                stops: const [
-                                                                  0.0,
-                                                                  0.35,
-                                                                  0.5,
-                                                                  0.65,
-                                                                  1.0
-                                                                ],
                                                               ),
                                                             ),
-                                                          ),
-                                                        );
-                                                      },
-                                                    ),
-                                                ],
+                                                          );
+                                                        },
+                                                      ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      },
+                                          );
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
