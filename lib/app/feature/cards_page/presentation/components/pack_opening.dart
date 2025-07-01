@@ -298,6 +298,8 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                         } else if (!_isRevealingCard &&
                             _remainingCards.isNotEmpty) {
                           _revealNextCard();
+                        } else if (_remainingCards.isEmpty) {
+                          widget.onClose();
                         }
                       },
                       child: AnimatedBuilder(
