@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
@@ -48,6 +49,13 @@ class _PackOpeningPageState extends State<PackOpeningPage>
   // Whether a card reveal animation is in progress
   bool _isRevealingCard = false;
 
+  // Selected card for inspection
+  CollectibleCard? _selectedCard;
+
+  // Controller for card inspection animation
+  late AnimationController _inspectController;
+  late Animation<double> _inspectAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -89,12 +97,23 @@ class _PackOpeningPageState extends State<PackOpeningPage>
       CurvedAnimation(
           parent: _cardRevealController, curve: Curves.easeOutCubic),
     );
+
+    // Initialize card inspection animation
+    _inspectController = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+
+    _inspectAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _inspectController, curve: Curves.easeOut),
+    );
   }
 
   @override
   void dispose() {
     _bounceController.dispose();
     _cardRevealController.dispose();
+    _inspectController.dispose();
     super.dispose();
   }
 
@@ -164,208 +183,268 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     });
   }
 
+  // Inspect a card
+  void _inspectCard(CollectibleCard card) {
+    setState(() {
+      _selectedCard = card;
+    });
+
+    _inspectController.reset();
+    _inspectController.forward();
+  }
+
+  // Close card inspection
+  void _closeInspection() {
+    _inspectController.reverse().then((_) {
+      setState(() {
+        _selectedCard = null;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // Background
-        Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                AppColors.palette_secondary,
-                AppColors.palette_tertiary,
-              ],
-            ),
-          ),
-        ),
-
-        Column(
+        // Main pack opening interface
+        Stack(
           children: [
-            const SizedBox(height: 20),
-
-            // Status text
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-              child: H3(
-                _remainingCards.isEmpty
-                    ? 'Tutte le carte sono state sbustate!'
-                    : 'Carte rimanenti: ${_remainingCards.length}',
+            // Background
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    AppColors.palette_secondary,
+                    AppColors.palette_tertiary,
+                  ],
+                ),
               ),
             ),
 
-            // Pack area
-            Expanded(
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    if (_stage == OpeningStage.initial) {
-                      _startRevealingCards();
-                    } else if (!_isRevealingCard &&
-                        _remainingCards.isNotEmpty) {
-                      _revealNextCard();
-                    }
-                  },
-                  child: AnimatedBuilder(
-                    animation: _bounceController,
-                    builder: (context, child) {
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // The main pack with bounce effect that continues until all cards are revealed
-                          Transform.scale(
-                            scale: _remainingCards.isEmpty
-                                ? 1.0
-                                : _bounceAnimation.value,
-                            child: Container(
-                              width: 200,
-                              height: 300,
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.5),
-                                    blurRadius: 15,
-                                    spreadRadius: 2,
-                                    offset: const Offset(0, 5),
-                                  ),
-                                  // Add a pulsing glow effect until all cards are revealed
-                                  if (_remainingCards.isNotEmpty)
-                                    BoxShadow(
-                                      color: Colors.yellow.withOpacity(
-                                          0.6 * _bounceAnimation.value),
-                                      blurRadius: 20,
-                                      spreadRadius: 5,
-                                    )
-                                ],
-                              ),
-                              child: AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 500),
-                                transitionBuilder: (Widget child,
-                                    Animation<double> animation) {
-                                  return FadeTransition(
-                                    opacity: animation,
-                                    child: child,
-                                  );
-                                },
-                                child: Image.asset(
-                                  _stage == OpeningStage.initial
-                                      ? PACK_CLOSED
-                                      : PACK_OPENED,
-                                  key: ValueKey<String>(
-                                      _stage == OpeningStage.initial
-                                          ? 'closed_pack'
-                                          : 'opened_pack'),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
+            Column(
+              children: [
+                const SizedBox(height: 20),
 
-                          // Revealed card animation
-                          if (_currentRevealedCard != null)
-                            AnimatedBuilder(
-                              animation: _cardRevealController,
-                              builder: (context, child) {
-                                return Transform.translate(
-                                  offset: Offset(
-                                      0, 30 * (1 - _cardSlideAnimation.value)),
-                                  child: Transform.scale(
-                                    scale: _cardScaleAnimation.value,
-                                    child: Container(
-                                      width: 180,
-                                      height: 280,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.yellow.withOpacity(
-                                                0.3 *
-                                                    _cardScaleAnimation.value),
-                                            blurRadius: 20,
-                                            spreadRadius: 5,
-                                          )
-                                        ],
+                // Status text
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                  child: H3(
+                    _remainingCards.isEmpty
+                        ? 'Tutte le carte sono state sbustate!'
+                        : 'Carte rimanenti: ${_remainingCards.length}',
+                  ),
+                ),
+
+                // Pack area
+                Expanded(
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        if (_stage == OpeningStage.initial) {
+                          _startRevealingCards();
+                        } else if (!_isRevealingCard &&
+                            _remainingCards.isNotEmpty) {
+                          _revealNextCard();
+                        }
+                      },
+                      child: AnimatedBuilder(
+                        animation: _bounceController,
+                        builder: (context, child) {
+                          return Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // The main pack with bounce effect that continues until all cards are revealed
+                              Transform.scale(
+                                scale: _remainingCards.isEmpty
+                                    ? 1.0
+                                    : _bounceAnimation.value,
+                                child: Container(
+                                  width: 200,
+                                  height: 300,
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.5),
+                                        blurRadius: 15,
+                                        spreadRadius: 2,
+                                        offset: const Offset(0, 5),
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.asset(
-                                          _currentRevealedCard!.imagePath,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                                      // Add a pulsing glow effect until all cards are revealed
+                                      if (_remainingCards.isNotEmpty)
+                                        BoxShadow(
+                                          color: Colors.yellow,
+                                          // .withOpacity(
+                                          //     0.5 * _bounceAnimation.value),
+                                          blurRadius: 20,
+                                          spreadRadius: 5,
+                                        )
+                                    ],
+                                  ),
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(milliseconds: 500),
+                                    transitionBuilder: (Widget child,
+                                        Animation<double> animation) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                    child: Image.asset(
+                                      _stage == OpeningStage.initial
+                                          ? PACK_CLOSED
+                                          : PACK_OPENED,
+                                      key: ValueKey<String>(
+                                          _stage == OpeningStage.initial
+                                              ? 'closed_pack'
+                                              : 'opened_pack'),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-
-            // Revealed cards area
-            Container(
-              height: 120,
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.black45,
-                border: Border(
-                  top: BorderSide(
-                    color: Colors.blueGrey.shade700,
-                    width: 2,
-                  ),
-                ),
-              ),
-              child: _revealedCards.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No cards revealed yet',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 16,
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: _revealedCards.length,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Container(
-                            width: 70,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.4),
-                                  blurRadius: 5,
-                                  offset: const Offset(0, 2),
-                                )
-                              ],
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
-                                _revealedCards[index].imagePath,
-                                fit: BoxFit.cover,
+                                ),
                               ),
+
+                              // Revealed card animation
+                              if (_currentRevealedCard != null)
+                                AnimatedBuilder(
+                                  animation: _cardRevealController,
+                                  builder: (context, child) {
+                                    return Transform.translate(
+                                      offset: Offset(0,
+                                          30 * (1 - _cardSlideAnimation.value)),
+                                      child: Transform.scale(
+                                        scale: _cardScaleAnimation.value,
+                                        child: Container(
+                                          width: 180,
+                                          height: 280,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.yellow,
+                                                // .withOpacity(
+                                                //     0.5 *
+                                                //         _cardScaleAnimation.value),
+                                                blurRadius: 20,
+                                                spreadRadius: 5,
+                                              )
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            child: Image.asset(
+                                              _currentRevealedCard!.imagePath,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Revealed cards area
+                Container(
+                  height: 120,
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.black45,
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.blueGrey.shade700,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  child: _revealedCards.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'No cards revealed yet',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 16,
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        )
+                      : ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _revealedCards.length,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5),
+                              child: GestureDetector(
+                                onTap: () =>
+                                    _inspectCard(_revealedCards[index]),
+                                child: Container(
+                                  width: 70,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.4),
+                                        blurRadius: 5,
+                                        offset: const Offset(0, 2),
+                                      )
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Image.asset(
+                                      _revealedCards[index].imagePath,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
           ],
         ),
+
+        // Card inspection overlay
+        if (_selectedCard != null)
+          AnimatedBuilder(
+            animation: _inspectAnimation,
+            builder: (context, child) {
+              return Positioned.fill(
+                child: GestureDetector(
+                  onTap: _closeInspection,
+                  child: Container(
+                    color:
+                        Colors.black.withOpacity(0.8 * _inspectAnimation.value),
+                    alignment: Alignment.center,
+                    child: Transform.scale(
+                      scale: 0.8 + (0.2 * _inspectAnimation.value),
+                      child: Hero(
+                        tag: 'card_${_selectedCard?.name}',
+                        child: CardDetail(
+                          card: _selectedCard!,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
       ],
     );
   }
