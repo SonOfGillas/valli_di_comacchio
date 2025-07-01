@@ -13,6 +13,8 @@ class AppImages {
   static final alCarpone_location = _iconPath('lido_degli_estensi');
   static final quaQua = _iconPath('qua_qua');
   static final quaQua_location = _iconPath('porto_garibaldi');
+  static final pack_closed = _iconPath('card_pack');
+  static final pack_opened = _iconPath('card_pack_opened');
 
   static String _iconPath(String iconName) => 'assets/images/$iconName.png';
 }

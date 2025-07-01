@@ -5,16 +5,13 @@ import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 // The opening stages
 enum OpeningStage {
   initial, // Unopened pack - showing bouncing animation
   openingCards // Cards being pulled out
 }
-
-// Pack image assets
-const String PACK_CLOSED = 'assets/images/card_pack.png';
-const String PACK_OPENED = 'assets/images/card_pack_opened.png';
 
 class PackOpeningPage extends StatefulWidget {
   const PackOpeningPage({Key? key}) : super(key: key);
@@ -294,8 +291,8 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                                     },
                                     child: Image.asset(
                                       _stage == OpeningStage.initial
-                                          ? PACK_CLOSED
-                                          : PACK_OPENED,
+                                          ? AppImages.pack_closed
+                                          : AppImages.pack_opened,
                                       key: ValueKey<String>(
                                           _stage == OpeningStage.initial
                                               ? 'closed_pack'
