@@ -165,7 +165,7 @@ class _CardPageScreenState extends State<CardPageScreen>
               top: 12,
               left: 12,
               child: IconButton(
-                icon: const Icon(Icons.arrow_back,
+                icon: const Icon(Icons.arrow_back_ios_new,
                     color: AppColors.palette_primary, size: 30),
                 onPressed: () {
                   setState(() {
@@ -191,6 +191,15 @@ class _CardPageScreenState extends State<CardPageScreen>
         },
         child: PackOpeningPage(
           pack: _selectedPack!,
+          onCardRevealed: (_) => {
+            // TODO manage card revealed callback
+          },
+          onClose: () {
+            setState(() {
+              _openingPack = false;
+              _selectedPack = null;
+            });
+          },
         ),
       );
     }

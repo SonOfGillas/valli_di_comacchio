@@ -267,4 +267,14 @@ final appCardsCompleteList = [
       name: 'deer Foil',
       imagePath: 'assets/images/deer_card.jpeg',
       rarity: 5),
+  CollectibleCard(
+      id: 49,
+      name: 'mouse',
+      imagePath: 'assets/images/mouse_card.jpeg',
+      rarity: 1),
+  CollectibleCard(
+      id: 50,
+      name: 'mouse Foil',
+      imagePath: 'assets/images/mouse_card.jpeg',
+      rarity: 5),
 ];

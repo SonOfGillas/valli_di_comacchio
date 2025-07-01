@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -16,9 +15,16 @@ enum OpeningStage {
 }
 
 class PackOpeningPage extends StatefulWidget {
-  const PackOpeningPage({Key? key, required this.pack}) : super(key: key);
+  const PackOpeningPage(
+      {Key? key,
+      required this.pack,
+      required this.onCardRevealed,
+      required this.onClose})
+      : super(key: key);
 
   final CardPack pack;
+  final Function(CollectibleCard) onCardRevealed;
+  final VoidCallback onClose;
 
   @override
   State<PackOpeningPage> createState() => _PackOpeningPageState();
@@ -189,6 +195,9 @@ class _PackOpeningPageState extends State<PackOpeningPage>
       _currentRevealedCard = card;
     });
 
+    // Trigger the card revealed callback
+    widget.onCardRevealed(card);
+
     // Trigger confetti for foil cards
     if (card.isFoil()) {
       _confettiController.play();
@@ -260,10 +269,20 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_ios_new,
+                            color: AppColors.palette_primary, size: 30),
+                        onPressed: () {
+                          widget.onClose();
+                        },
+                      ),
                       H3(
                         _remainingCards.isEmpty
-                            ? 'Tutte le carte sono state sbustate!'
-                            : 'Carte rimanenti: ${_remainingCards.length}',
+                            ? 'Il Pacchetto è vuoto!'
+                            : 'Carte rimanenti:   ${_remainingCards.length}',
+                      ),
+                      Container(
+                        width: 40, // Fixed width for alignment
                       ),
                     ],
                   ),
