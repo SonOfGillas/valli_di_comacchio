@@ -2,6 +2,7 @@ class CollectibleCard {
   int id;
   String name;
   String imagePath;
+  /* from 1 to 100 max */
   int rarity;
 
   bool isFoil() {
