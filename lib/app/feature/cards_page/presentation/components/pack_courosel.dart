@@ -105,7 +105,6 @@ class _PackCarouselState extends State<PackCarousel>
       _rotationAngle += adjustedDiff;
       _selectedPackIndex =
           (widget.packs.length - nearestIndex) % widget.packs.length;
-      widget.onPackSelected(widget.packs[_selectedPackIndex]);
     });
   }
 

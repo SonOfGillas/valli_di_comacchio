@@ -56,6 +56,10 @@ class _PackOpeningPageState extends State<PackOpeningPage>
   late AnimationController _inspectController;
   late Animation<double> _inspectAnimation;
 
+  // Animation controller for foil shimmer effect
+  late AnimationController _shimmerController;
+  late Animation<double> _shimmerAnimation;
+
   @override
   void initState() {
     super.initState();
@@ -106,6 +110,16 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     _inspectAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _inspectController, curve: Curves.easeOut),
     );
+
+    // Initialize shimmer animation for foil cards
+    _shimmerController = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat();
+
+    _shimmerAnimation = Tween<double>(begin: -1.0, end: 2.0).animate(
+      CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -113,6 +127,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     _bounceController.dispose();
     _cardRevealController.dispose();
     _inspectController.dispose();
+    _shimmerController.dispose();
     super.dispose();
   }
 
@@ -400,12 +415,59 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                                       )
                                     ],
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.asset(
-                                      _revealedCards[index].imagePath,
-                                      fit: BoxFit.cover,
-                                    ),
+                                  child: Stack(
+                                    fit: StackFit.expand,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(8),
+                                        child: Image.asset(
+                                          _revealedCards[index].imagePath,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      if (_revealedCards[index].isFoil())
+                                        AnimatedBuilder(
+                                          animation: _shimmerAnimation,
+                                          builder: (context, child) {
+                                            return ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                    begin: Alignment(
+                                                      -1.0 +
+                                                          _shimmerAnimation
+                                                              .value,
+                                                      -0.5,
+                                                    ),
+                                                    end: Alignment(
+                                                      0.0 +
+                                                          _shimmerAnimation
+                                                              .value,
+                                                      0.5,
+                                                    ),
+                                                    colors: const [
+                                                      Colors.transparent,
+                                                      Color(0x22FFFFFF),
+                                                      Color(0x44FFFFFF),
+                                                      Color(0x22FFFFFF),
+                                                      Colors.transparent,
+                                                    ],
+                                                    stops: const [
+                                                      0.0,
+                                                      0.35,
+                                                      0.5,
+                                                      0.65,
+                                                      1.0
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                    ],
                                   ),
                                 ),
                               ),

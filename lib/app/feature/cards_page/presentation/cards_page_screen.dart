@@ -5,6 +5,7 @@ import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_courosel.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h1_on_primary/h1_on_primary.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
@@ -147,14 +148,9 @@ class _CardPageScreenState extends State<CardPageScreen>
           children: [
             Column(
               children: [
-                const SizedBox(height: 60),
-                const Text(
+                const SizedBox(height: 12),
+                const H1(
                   'Scegli un pacchetto',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
                 const SizedBox(height: 40),
                 Expanded(
@@ -166,11 +162,11 @@ class _CardPageScreenState extends State<CardPageScreen>
             ),
             // Back button
             Positioned(
-              top: 50,
-              left: 20,
+              top: 12,
+              left: 12,
               child: IconButton(
-                icon:
-                    const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                icon: const Icon(Icons.arrow_back,
+                    color: AppColors.palette_primary, size: 30),
                 onPressed: () {
                   setState(() {
                     _showingPackCarousel = false;
