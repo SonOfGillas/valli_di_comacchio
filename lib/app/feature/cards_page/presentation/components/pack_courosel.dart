@@ -1,7 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class PackCarousel extends StatefulWidget {
@@ -171,75 +174,87 @@ class _PackCarouselState extends State<PackCarousel>
               final radius = min(centerX, centerY) * 0.8;
 
               return Stack(
-                clipBehavior: Clip.none,
-                children: List.generate(widget.packs.length, (index) {
-                  // Calculate the angle for this pack
-                  final angle =
-                      _rotationAngle + (index * 2 * pi / widget.packs.length);
+                children: [
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: List.generate(widget.packs.length, (index) {
+                      // Calculate the angle for this pack
+                      final angle = _rotationAngle +
+                          (index * 2 * pi / widget.packs.length);
 
-                  // Calculate position on the circle
-                  final x = centerX + radius * sin(angle);
-                  final y = centerY - radius * cos(angle);
+                      // Calculate position on the circle
+                      final x = centerX + radius * sin(angle);
+                      final y = centerY - radius * cos(angle);
 
-                  // Calculate size based on position (packs in front appear larger)
-                  final scale = 0.8 + 0.4 * (1 + cos(angle)) / 2;
+                      // Calculate size based on position (packs in front appear larger)
+                      final scale = 0.8 + 0.4 * (1 + cos(angle)) / 2;
 
-                  // Is this the front-most pack?
-                  final isFrontmost = (cos(angle) > 0.9);
+                      // Is this the front-most pack?
+                      final isFrontmost = (cos(angle) > 0.9);
 
-                  return Positioned(
-                    left: x - 60 * scale,
-                    top: y - 85 * scale,
-                    width: 120 * scale,
-                    height: 170 * scale,
-                    key: ValueKey('pack_$index'),
-                    child: Transform(
-                      transform: Matrix4.identity()
-                        ..setEntry(3, 2, 0.001) // Perspective
-                        ..rotateY(
-                            sin(angle) * 0.8), // Rotate packs based on position
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: isFrontmost
-                            ? () {
-                                widget.onPackSelected(widget.packs[index]);
-                              }
-                            : null,
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              if (isFrontmost)
-                                BoxShadow(
-                                  color: Colors.yellow.withOpacity(0.6),
-                                  blurRadius: 25,
-                                  spreadRadius: 5,
-                                )
-                            ],
-                          ),
-                          child: Image.asset(
-                            AppImages.pack_closed,
-                            fit: BoxFit.contain,
+                      return Positioned(
+                        left: x - 60 * scale,
+                        top: y - 85 * scale,
+                        width: 120 * scale,
+                        height: 170 * scale,
+                        key: ValueKey('pack_$index'),
+                        child: Transform(
+                          transform: Matrix4.identity()
+                            ..setEntry(3, 2, 0.001) // Perspective
+                            ..rotateY(sin(angle) *
+                                0.8), // Rotate packs based on position
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                            onTap: isFrontmost
+                                ? () {
+                                    widget.onPackSelected(widget.packs[index]);
+                                  }
+                                : null,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  if (isFrontmost)
+                                    BoxShadow(
+                                      color: Colors.yellow.withOpacity(0.6),
+                                      blurRadius: 25,
+                                      spreadRadius: 5,
+                                    )
+                                ],
+                              ),
+                              child: Image.asset(
+                                AppImages.pack_closed,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
+                      );
+                    })
+                      // Sort by z-index for proper layering
+                      ..sort((a, b) {
+                        final indexA = int.parse(
+                            (a.key as ValueKey).value.toString().split('_')[1]);
+                        final indexB = int.parse(
+                            (b.key as ValueKey).value.toString().split('_')[1]);
+
+                        final angleA = _rotationAngle +
+                            (indexA * 2 * pi / widget.packs.length);
+                        final angleB = _rotationAngle +
+                            (indexB * 2 * pi / widget.packs.length);
+
+                        return cos(angleA).compareTo(cos(angleB));
+                      }),
+                  ),
+                  Center(
+                    child: SvgPicture.asset(
+                      AppIcons.rotation,
+                      height: 32,
+                      colorFilter: ColorFilter.mode(
+                          AppColors.palette_primary, BlendMode.srcIn),
                     ),
-                  );
-                })
-                  // Sort by z-index for proper layering
-                  ..sort((a, b) {
-                    final indexA = int.parse(
-                        (a.key as ValueKey).value.toString().split('_')[1]);
-                    final indexB = int.parse(
-                        (b.key as ValueKey).value.toString().split('_')[1]);
-
-                    final angleA = _rotationAngle +
-                        (indexA * 2 * pi / widget.packs.length);
-                    final angleB = _rotationAngle +
-                        (indexB * 2 * pi / widget.packs.length);
-
-                    return cos(angleA).compareTo(cos(angleB));
-                  }),
+                  ),
+                ],
               );
             },
           ),

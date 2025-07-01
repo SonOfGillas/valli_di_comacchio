@@ -1,8 +1,10 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -147,7 +149,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
   }
 
   // Start revealing cards from the pack
-  void _startRevealingCards() {
+  void _startRevealingCards(BuildContext context) {
     if (_stage != OpeningStage.initial) return;
 
     setState(() {
@@ -166,11 +168,11 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     });
 
     // Reveal the first card
-    _revealNextCard();
+    _revealNextCard(context);
   }
 
   // Reveal the next card
-  void _revealNextCard() {
+  void _revealNextCard(BuildContext context) {
     // Only allow if we're in the correct stage and not already animating
     if (_stage != OpeningStage.openingCards) return;
     if (_isRevealingCard) return;
@@ -186,6 +188,9 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     final random = Random();
     final index = random.nextInt(_remainingCards.length);
     final card = _remainingCards[index];
+
+    // add the cart to the user's collection
+    context.read<CardCubit>().addCardToCollection(card);
 
     // Remove the card from remaining and add to revealed
     _remainingCards.removeAt(index);
@@ -315,10 +320,10 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                     child: GestureDetector(
                       onTap: () {
                         if (_stage == OpeningStage.initial) {
-                          _startRevealingCards();
+                          _startRevealingCards(context);
                         } else if (!_isRevealingCard &&
                             _remainingCards.isNotEmpty) {
-                          _revealNextCard();
+                          _revealNextCard(context);
                         } else if (_remainingCards.isEmpty) {
                           widget.onClose();
                         }

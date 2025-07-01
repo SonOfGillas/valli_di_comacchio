@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:math';
 
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 
 class CardDetail extends StatefulWidget {
   final CollectibleCard card;
@@ -183,8 +185,13 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.autorenew,
-                size: 32, color: AppColors.palette_tertiary),
+            SvgPicture.asset(
+              AppIcons.rotation,
+              height: 32,
+              colorFilter:
+                  ColorFilter.mode(AppColors.palette_tertiary, BlendMode.srcIn),
+            ),
+            const SizedBox(width: 8),
             Text('Tieni premuto per ruotare',
                 style: TextStyle(
                   color: AppColors.palette_tertiary,

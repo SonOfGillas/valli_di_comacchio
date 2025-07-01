@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_courosel.dart';
@@ -18,9 +21,6 @@ class CardPageScreen extends StatefulWidget {
 
 class _CardPageScreenState extends State<CardPageScreen>
     with TickerProviderStateMixin {
-  // The cards revealed from packs
-  final List<CollectibleCard> _collectedCards = appCardsCompleteList;
-
   // Whether we're showing the pack carousel screen
   bool _showingPackCarousel = false;
 
@@ -103,20 +103,6 @@ class _CardPageScreenState extends State<CardPageScreen>
       _showingPackCarousel = false;
       _openingPack = true;
     });
-  }
-
-  // Handle cards revealed from the pack
-  void _onCardsRevealed(List<CollectibleCard> cards) {
-    // Add the cards to the collection
-    setState(() {
-      _collectedCards.addAll(cards);
-      _openingPack = false;
-      _selectedPack = null;
-    });
-
-    // Play the collection animation
-    _cardCollectionController.reset();
-    _cardCollectionController.forward();
   }
 
   // Inspect a card
@@ -205,208 +191,255 @@ class _CardPageScreenState extends State<CardPageScreen>
     }
 
     // Show main collection screen
-    return Scaffold(
-      backgroundColor: AppColors.palette_secondary,
-      body: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+    return BlocBuilder<CardCubit, CardState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColors.palette_secondary,
+          body: Stack(
             children: [
-              // Stats bar
-              Container(
-                color: AppColors.palette_tertiary,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    LabelText(
-                      'Collezione: ${_collectedCards.length}/${appCardsCompleteList.length}',
-                      withBoarder: false,
-                    ),
-                  ],
-                ),
-              ),
-
-              // Card collection
-              Expanded(
-                child: _collectedCards.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.collections_bookmark_outlined,
-                              size: 80,
-                              color: Colors.white.withOpacity(0.3),
-                            ),
-                            const SizedBox(height: 20),
-                            Text(
-                              'No cards collected yet',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.7),
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              'Open a pack to get started!',
-                              style: TextStyle(
-                                color: Colors.white.withOpacity(0.5),
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Stats bar
+                  Container(
+                    color: AppColors.palette_tertiary,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        LabelText(
+                          'Collezione: ${state.userCards.length}/${appCardsCompleteList.length}',
+                          withBoarder: false,
                         ),
-                      )
-                    : AnimatedBuilder(
-                        animation: _cardCollectionController,
-                        builder: (context, child) {
-                          return GridView.builder(
-                            padding: const EdgeInsets.all(12),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 0.7,
-                              crossAxisSpacing: 12,
-                              mainAxisSpacing: 12,
-                            ),
-                            itemCount: _collectedCards.length,
-                            itemBuilder: (context, index) {
-                              // Apply scale animation to the most recently added cards
-                              final isNew =
-                                  index >= _collectedCards.length - packetSize;
+                      ],
+                    ),
+                  ),
 
-                              return GestureDetector(
-                                onTap: () =>
-                                    _inspectCard(_collectedCards[index]),
-                                child: Transform.scale(
-                                  scale: isNew &&
-                                          _cardCollectionController.status ==
-                                              AnimationStatus.forward
-                                      ? _cardScaleAnimation.value
-                                      : 1.0,
-                                  child: Hero(
-                                    tag: 'card_${_collectedCards[index].id}',
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.5),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Stack(
-                                        fit: StackFit.expand,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image.asset(
-                                              _collectedCards[index].imagePath,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          if (_collectedCards[index].isFoil())
-                                            AnimatedBuilder(
-                                              animation: _shimmerAnimation,
-                                              builder: (context, child) {
-                                                return ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      gradient: LinearGradient(
-                                                        begin: Alignment(
-                                                          -1.0 +
-                                                              _shimmerAnimation
-                                                                  .value,
-                                                          -0.5,
+                  // Card collection
+                  Expanded(
+                    child: AnimatedBuilder(
+                      animation: _cardCollectionController,
+                      builder: (context, child) {
+                        return GridView.builder(
+                          padding: const EdgeInsets.all(12),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.7,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                          itemCount: appCardsCompleteList.length,
+                          itemBuilder: (context, index) {
+                            // Apply scale animation to the most recently added cards
+                            final cardElement = appCardsCompleteList[index];
+                            final CollectibleCard? userCard = state.userCards
+                                .where(
+                                  (c) => c.id == cardElement.id,
+                                )
+                                .firstOrNull;
+                            final isCardInCollection = userCard != null;
+                            final isNew = isCardInCollection &&
+                                context
+                                    .read<CardCubit>()
+                                    .state
+                                    .lastPacketCards
+                                    .any((card) => card.id == cardElement.id);
+
+                            return GestureDetector(
+                              onTap: () => {
+                                if (isCardInCollection)
+                                  {_inspectCard(cardElement)}
+                              },
+                              child: Transform.scale(
+                                scale: isNew &&
+                                        _cardCollectionController.status ==
+                                            AnimationStatus.forward
+                                    ? _cardScaleAnimation.value
+                                    : 1.0,
+                                child: Hero(
+                                  tag: 'card_${cardElement.id}',
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.5),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Stack(
+                                      fit: StackFit.expand,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: isCardInCollection
+                                              ? Image.asset(
+                                                  cardElement.imagePath,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Container(
+                                                  color: Colors.grey.shade800,
+                                                  child: Column(
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                                top: 8.0,
+                                                                left: 4.0,
+                                                                right: 4.0),
+                                                        child: Text(
+                                                          cardElement.name,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: Colors
+                                                                .grey.shade600,
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                         ),
-                                                        end: Alignment(
-                                                          0.0 +
-                                                              _shimmerAnimation
-                                                                  .value,
-                                                          0.5,
-                                                        ),
-                                                        colors: const [
-                                                          Colors.transparent,
-                                                          Color(0x22FFFFFF),
-                                                          Color(0x44FFFFFF),
-                                                          Color(0x22FFFFFF),
-                                                          Colors.transparent,
-                                                        ],
-                                                        stops: const [
-                                                          0.0,
-                                                          0.35,
-                                                          0.5,
-                                                          0.65,
-                                                          1.0
-                                                        ],
                                                       ),
+                                                      Expanded(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Icon(
+                                                              Icons
+                                                                  .help_outline,
+                                                              size: 40,
+                                                              color: Colors.grey
+                                                                  .shade600,
+                                                            ),
+                                                            const SizedBox(
+                                                                height: 8),
+                                                            Text(
+                                                              'MANCANTE',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .shade600,
+                                                                fontSize: 12,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                        ),
+                                        if (isCardInCollection &&
+                                            cardElement.isFoil())
+                                          AnimatedBuilder(
+                                            animation: _shimmerAnimation,
+                                            builder: (context, child) {
+                                              return ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    gradient: LinearGradient(
+                                                      begin: Alignment(
+                                                        -1.0 +
+                                                            _shimmerAnimation
+                                                                .value,
+                                                        -0.5,
+                                                      ),
+                                                      end: Alignment(
+                                                        0.0 +
+                                                            _shimmerAnimation
+                                                                .value,
+                                                        0.5,
+                                                      ),
+                                                      colors: const [
+                                                        Colors.transparent,
+                                                        Color(0x22FFFFFF),
+                                                        Color(0x44FFFFFF),
+                                                        Color(0x22FFFFFF),
+                                                        Colors.transparent,
+                                                      ],
+                                                      stops: const [
+                                                        0.0,
+                                                        0.35,
+                                                        0.5,
+                                                        0.65,
+                                                        1.0
+                                                      ],
                                                     ),
                                                   ),
-                                                );
-                                              },
-                                            ),
-                                        ],
-                                      ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
 
-          // Card inspection overlay
-          if (_selectedCard != null)
-            AnimatedBuilder(
-              animation: _inspectAnimation,
-              builder: (context, child) {
-                return Positioned.fill(
-                  child: GestureDetector(
-                    onTap: _closeInspection,
-                    child: Container(
-                      color: Colors.black
-                          .withOpacity(0.8 * _inspectAnimation.value),
-                      alignment: Alignment.center,
-                      child: Transform.scale(
-                        scale: 0.8 + (0.2 * _inspectAnimation.value),
-                        child: Hero(
-                          tag: 'card_${_selectedCard?.name}',
-                          child: CardDetail(
-                            card: _selectedCard!,
+              // Card inspection overlay
+              if (_selectedCard != null)
+                AnimatedBuilder(
+                  animation: _inspectAnimation,
+                  builder: (context, child) {
+                    return Positioned.fill(
+                      child: GestureDetector(
+                        onTap: _closeInspection,
+                        child: Container(
+                          color: Colors.black
+                              .withOpacity(0.8 * _inspectAnimation.value),
+                          alignment: Alignment.center,
+                          child: Transform.scale(
+                            scale: 0.8 + (0.2 * _inspectAnimation.value),
+                            child: Hero(
+                              tag: 'card_${_selectedCard?.name}',
+                              child: CardDetail(
+                                card: _selectedCard!,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    );
+                  },
+                ),
+            ],
+          ),
+          floatingActionButton: _selectedCard == null
+              ? FloatingActionButton.extended(
+                  onPressed: _openNewPack,
+                  backgroundColor: Colors.amber,
+                  label: const Text(
+                    'APRI UN PACCHETTO',
+                    style: TextStyle(
+                        color: Colors.black87, fontWeight: FontWeight.bold),
                   ),
-                );
-              },
-            ),
-        ],
-      ),
-      floatingActionButton: _selectedCard == null
-          ? FloatingActionButton.extended(
-              onPressed: _openNewPack,
-              backgroundColor: Colors.amber,
-              label: const Text(
-                'APRI UN PACCHETTO',
-                style: TextStyle(
-                    color: Colors.black87, fontWeight: FontWeight.bold),
-              ),
-            )
-          : null,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                )
+              : null,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+        );
+      },
     );
   }
 }

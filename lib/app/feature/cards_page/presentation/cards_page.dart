@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/cards_page_screen.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
+import 'package:valli_di_comacchio/app/shared/core/dependecy_injection/injection_container.dart';
 
 class CardsPage extends StatefulWidget {
   const CardsPage({super.key});
@@ -18,26 +21,19 @@ class CardsPage extends StatefulWidget {
 class _CardsPageState extends State<CardsPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        return Scaffold(
-          appBar: ValliAppBar(),
-          body: Padding(
-              padding: const EdgeInsets.only(top: 0.0),
-              child: //  Center(child: CardDetail(card: appCardsCompleteList[0]))
-
-                  CardPageScreen()
-              // PackCarousel(
-//   packCount: 8,
-//   onPackSelected: (index) {
-//     // Handle pack selection
-//   },
-// ),
-
-              ),
-          bottomNavigationBar: const FooterNavBar(),
-        );
-      },
+    return BlocProvider<CardCubit>(
+      create: (context) => sl<CardCubit>(),
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            appBar: ValliAppBar(),
+            body: Padding(
+                padding: const EdgeInsets.only(top: 0.0),
+                child: CardPageScreen()),
+            bottomNavigationBar: const FooterNavBar(),
+          );
+        },
+      ),
     );
   }
 }
