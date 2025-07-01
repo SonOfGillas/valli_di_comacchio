@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_courosel.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -18,8 +20,14 @@ class _CardPageScreenState extends State<CardPageScreen>
   // The cards revealed from packs
   final List<CollectibleCard> _collectedCards = appCardsCompleteList;
 
+  // Whether we're showing the pack carousel screen
+  bool _showingPackCarousel = false;
+
   // Whether we're showing the pack opening screen
   bool _openingPack = false;
+
+  // Selected pack from carousel
+  CardPack? _selectedPack;
 
   // Animation controller for card collection
   late AnimationController _cardCollectionController;
@@ -80,9 +88,18 @@ class _CardPageScreenState extends State<CardPageScreen>
     super.dispose();
   }
 
-  // Open a new card pack
+  // Open a new card pack - show carousel first
   void _openNewPack() {
     setState(() {
+      _showingPackCarousel = true;
+    });
+  }
+
+  // Handle pack selection from carousel
+  void _onPackSelected(CardPack pack) {
+    setState(() {
+      _selectedPack = pack;
+      _showingPackCarousel = false;
       _openingPack = true;
     });
   }
@@ -93,6 +110,7 @@ class _CardPageScreenState extends State<CardPageScreen>
     setState(() {
       _collectedCards.addAll(cards);
       _openingPack = false;
+      _selectedPack = null;
     });
 
     // Play the collection animation
@@ -121,21 +139,67 @@ class _CardPageScreenState extends State<CardPageScreen>
 
   @override
   Widget build(BuildContext context) {
-    if (_openingPack) {
-      // Show the pack opening screen
+    // Show pack carousel screen
+    if (_showingPackCarousel) {
+      return Scaffold(
+        backgroundColor: AppColors.palette_secondary,
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                const SizedBox(height: 60),
+                const Text(
+                  'Scegli un pacchetto',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Expanded(
+                  child: PackCarousel(
+                    onPackSelected: _onPackSelected,
+                  ),
+                ),
+              ],
+            ),
+            // Back button
+            Positioned(
+              top: 50,
+              left: 20,
+              child: IconButton(
+                icon:
+                    const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                onPressed: () {
+                  setState(() {
+                    _showingPackCarousel = false;
+                  });
+                },
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Show pack opening screen
+    if (_openingPack && _selectedPack != null) {
       return WillPopScope(
         onWillPop: () async {
           setState(() {
             _openingPack = false;
+            _selectedPack = null;
           });
           return false;
         },
         child: PackOpeningPage(
-            // onComplete: _onCardsRevealed,
-            ),
+          pack: _selectedPack!,
+        ),
       );
     }
 
+    // Show main collection screen
     return Scaffold(
       backgroundColor: AppColors.palette_secondary,
       body: Stack(

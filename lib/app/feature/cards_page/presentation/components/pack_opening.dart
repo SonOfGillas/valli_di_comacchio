@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
@@ -14,7 +15,9 @@ enum OpeningStage {
 }
 
 class PackOpeningPage extends StatefulWidget {
-  const PackOpeningPage({Key? key}) : super(key: key);
+  const PackOpeningPage({Key? key, required this.pack}) : super(key: key);
+
+  final CardPack pack;
 
   @override
   State<PackOpeningPage> createState() => _PackOpeningPageState();
@@ -58,8 +61,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     super.initState();
 
     // Initialize the list of remaining cards
-    final randomPacket = getRandomPacket();
-    _remainingCards = List.from(randomPacket);
+    _remainingCards = List.from(widget.pack.cards);
 
     // Initialize the bounce animation controller
     _bounceController = AnimationController(

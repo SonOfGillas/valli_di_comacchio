@@ -1,15 +1,23 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 
 class PackCarousel extends StatefulWidget {
-  final int packCount;
-  final Function(int) onPackSelected;
+  final Function(CardPack) onPackSelected;
 
-  const PackCarousel({
-    Key? key,
-    this.packCount = 8, // Default number of packs in the carousel
+  PackCarousel({
+    super.key,
+    int packCount = 8,
     required this.onPackSelected,
-  }) : super(key: key);
+  }) {
+    packs = List.generate(
+      packCount,
+      (index) => getRandomPacket(),
+    );
+  }
+
+  late List<CardPack> packs;
 
   @override
   State<PackCarousel> createState() => _PackCarouselState();
@@ -76,12 +84,12 @@ class _PackCarouselState extends State<PackCarousel>
 
   // Snap carousel to the nearest pack when rotation stops
   void _snapToNearestPack() {
-    final packAngle = 2 * pi / widget.packCount;
+    final packAngle = 2 * pi / widget.packs.length;
     final currentAngle = _rotationAngle % (2 * pi);
 
     // Find the nearest pack index
-    int nearestIndex = (currentAngle / packAngle).round() % widget.packCount;
-    if (nearestIndex < 0) nearestIndex += widget.packCount;
+    int nearestIndex = (currentAngle / packAngle).round() % widget.packs.length;
+    if (nearestIndex < 0) nearestIndex += widget.packs.length;
 
     // Calculate the target angle to snap to
     final targetAngle = nearestIndex * packAngle;
@@ -95,8 +103,9 @@ class _PackCarouselState extends State<PackCarousel>
 
     setState(() {
       _rotationAngle += adjustedDiff;
-      _selectedPackIndex = (widget.packCount - nearestIndex) % widget.packCount;
-      widget.onPackSelected(_selectedPackIndex);
+      _selectedPackIndex =
+          (widget.packs.length - nearestIndex) % widget.packs.length;
+      widget.onPackSelected(widget.packs[_selectedPackIndex]);
     });
   }
 
@@ -163,10 +172,10 @@ class _PackCarouselState extends State<PackCarousel>
 
               return Stack(
                 clipBehavior: Clip.none,
-                children: List.generate(widget.packCount, (index) {
+                children: List.generate(widget.packs.length, (index) {
                   // Calculate the angle for this pack
                   final angle =
-                      _rotationAngle + (index * 2 * pi / widget.packCount);
+                      _rotationAngle + (index * 2 * pi / widget.packs.length);
 
                   // Calculate position on the circle
                   final x = centerX + radius * sin(angle);
@@ -193,7 +202,7 @@ class _PackCarouselState extends State<PackCarousel>
                       child: GestureDetector(
                         onTap: isFrontmost
                             ? () {
-                                widget.onPackSelected(index);
+                                widget.onPackSelected(widget.packs[index]);
                               }
                             : null,
                         child: AnimatedContainer(
@@ -224,10 +233,10 @@ class _PackCarouselState extends State<PackCarousel>
                     final indexB = int.parse(
                         (b.key as ValueKey).value.toString().split('_')[1]);
 
-                    final angleA =
-                        _rotationAngle + (indexA * 2 * pi / widget.packCount);
-                    final angleB =
-                        _rotationAngle + (indexB * 2 * pi / widget.packCount);
+                    final angleA = _rotationAngle +
+                        (indexA * 2 * pi / widget.packs.length);
+                    final angleB = _rotationAngle +
+                        (indexB * 2 * pi / widget.packs.length);
 
                     return cos(angleA).compareTo(cos(angleB));
                   }),

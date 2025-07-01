@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_generation.dart';
 
@@ -30,10 +31,12 @@ CollectibleCard getRandomCard() {
 
 const packetSize = 5;
 
-List<CollectibleCard> getRandomPacket() {
+CardPack getRandomPacket() {
   final packet = <CollectibleCard>[];
   for (var i = 0; i < packetSize; i++) {
     packet.add(getRandomCard());
   }
-  return packet;
+  return CardPack(
+    cards: packet,
+  );
 }
