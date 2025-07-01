@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class PackCarousel extends StatefulWidget {
   final Function(CardPack) onPackSelected;
@@ -217,7 +218,7 @@ class _PackCarouselState extends State<PackCarousel>
                             ],
                           ),
                           child: Image.asset(
-                            'assets/images/card_pack.png',
+                            AppImages.pack_closed,
                             fit: BoxFit.contain,
                           ),
                         ),

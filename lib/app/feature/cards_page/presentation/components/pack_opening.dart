@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
@@ -60,6 +61,9 @@ class _PackOpeningPageState extends State<PackOpeningPage>
   late AnimationController _shimmerController;
   late Animation<double> _shimmerAnimation;
 
+  // Confetti controller for foil card reveals
+  late ConfettiController _confettiController;
+
   @override
   void initState() {
     super.initState();
@@ -88,7 +92,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
 
     // Initialize the card reveal animation controller
     _cardRevealController = AnimationController(
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1700),
       vsync: this,
     );
 
@@ -120,6 +124,10 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     _shimmerAnimation = Tween<double>(begin: -1.0, end: 2.0).animate(
       CurvedAnimation(parent: _shimmerController, curve: Curves.easeInOut),
     );
+
+    // Initialize confetti controller for foil cards
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 2));
   }
 
   @override
@@ -128,6 +136,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     _cardRevealController.dispose();
     _inspectController.dispose();
     _shimmerController.dispose();
+    _confettiController.dispose();
     super.dispose();
   }
 
@@ -179,6 +188,11 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     setState(() {
       _currentRevealedCard = card;
     });
+
+    // Trigger confetti for foil cards
+    if (card.isFoil()) {
+      _confettiController.play();
+    }
 
     // Reset and play the card reveal animation
     _cardRevealController.reset();
@@ -239,16 +253,19 @@ class _PackOpeningPageState extends State<PackOpeningPage>
 
             Column(
               children: [
-                const SizedBox(height: 20),
-
                 // Status text
                 Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                  child: H3(
-                    _remainingCards.isEmpty
-                        ? 'Tutte le carte sono state sbustate!'
-                        : 'Carte rimanenti: ${_remainingCards.length}',
+                      const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      H3(
+                        _remainingCards.isEmpty
+                            ? 'Tutte le carte sono state sbustate!'
+                            : 'Carte rimanenti: ${_remainingCards.length}',
+                      ),
+                    ],
                   ),
                 ),
 
@@ -322,43 +339,135 @@ class _PackOpeningPageState extends State<PackOpeningPage>
 
                               // Revealed card animation
                               if (_currentRevealedCard != null)
-                                AnimatedBuilder(
-                                  animation: _cardRevealController,
-                                  builder: (context, child) {
-                                    return Transform.translate(
-                                      offset: Offset(0,
-                                          30 * (1 - _cardSlideAnimation.value)),
-                                      child: Transform.scale(
-                                        scale: _cardScaleAnimation.value,
-                                        child: Container(
-                                          width: 180,
-                                          height: 280,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.yellow,
-                                                // .withOpacity(
-                                                //     0.5 *
-                                                //         _cardScaleAnimation.value),
-                                                blurRadius: 20,
-                                                spreadRadius: 5,
-                                              )
-                                            ],
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            child: Image.asset(
-                                              _currentRevealedCard!.imagePath,
-                                              fit: BoxFit.cover,
+                                Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    // Confetti effect for foil cards
+                                    if (_currentRevealedCard!.isFoil())
+                                      ConfettiWidget(
+                                        confettiController: _confettiController,
+                                        blastDirectionality:
+                                            BlastDirectionality.explosive,
+                                        shouldLoop: false,
+                                        colors: [
+                                          Colors.amber,
+                                          Colors.yellow,
+                                          Colors.orange,
+                                          Colors.deepOrange,
+                                          Colors.red,
+                                        ],
+                                        emissionFrequency: 0.15,
+                                        numberOfParticles: 50,
+                                        maxBlastForce: 40,
+                                        minBlastForce: 15,
+                                        gravity: 0.3,
+                                      ),
+                                    // The revealed card
+                                    AnimatedBuilder(
+                                      animation: _cardRevealController,
+                                      builder: (context, child) {
+                                        return Transform.translate(
+                                          offset: Offset(
+                                              0,
+                                              30 *
+                                                  (1 -
+                                                      _cardSlideAnimation
+                                                          .value)),
+                                          child: Transform.scale(
+                                            scale: _cardScaleAnimation.value,
+                                            child: Container(
+                                              width: 180,
+                                              height: 280,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: _currentRevealedCard!
+                                                            .isFoil()
+                                                        ? Colors.amber
+                                                        : Colors.yellow,
+                                                    blurRadius: 20,
+                                                    spreadRadius: 5,
+                                                  )
+                                                ],
+                                              ),
+                                              child: Stack(
+                                                fit: StackFit.expand,
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Image.asset(
+                                                      _currentRevealedCard!
+                                                          .imagePath,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                  // Shimmer effect for foil cards
+                                                  if (_currentRevealedCard!
+                                                      .isFoil())
+                                                    AnimatedBuilder(
+                                                      animation:
+                                                          _shimmerAnimation,
+                                                      builder:
+                                                          (context, child) {
+                                                        return ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              gradient:
+                                                                  LinearGradient(
+                                                                begin:
+                                                                    Alignment(
+                                                                  -1.0 +
+                                                                      _shimmerAnimation
+                                                                          .value,
+                                                                  -0.5,
+                                                                ),
+                                                                end: Alignment(
+                                                                  0.0 +
+                                                                      _shimmerAnimation
+                                                                          .value,
+                                                                  0.5,
+                                                                ),
+                                                                colors: const [
+                                                                  Colors
+                                                                      .transparent,
+                                                                  Color(
+                                                                      0x44FFAA00), // Gold shimmer
+                                                                  Color(
+                                                                      0x66FFDD00), // Brighter gold
+                                                                  Color(
+                                                                      0x44FFAA00), // Gold shimmer
+                                                                  Colors
+                                                                      .transparent,
+                                                                ],
+                                                                stops: const [
+                                                                  0.0,
+                                                                  0.35,
+                                                                  0.5,
+                                                                  0.65,
+                                                                  1.0
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                        );
+                                      },
+                                    ),
+                                  ],
                                 ),
                             ],
                           );

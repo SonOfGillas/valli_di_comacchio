@@ -34,21 +34,21 @@ class CollectibleCard {
 
 final appCardsCompleteList = [
   CollectibleCard(
-      id: 1, name: 'Eel', imagePath: 'assets/images/eel_card.jpeg', rarity: 4),
-  CollectibleCard(
-      id: 2,
-      name: 'Eel Foil',
-      imagePath: 'assets/images/eel_card_f.jpeg',
-      rarity: 6),
-  CollectibleCard(
-      id: 3,
+      id: 1,
       name: 'Flamingo',
       imagePath: 'assets/images/flamingo_card.jpeg',
       rarity: 4),
   CollectibleCard(
-      id: 4,
+      id: 2,
       name: 'Flamingo Foil',
       imagePath: 'assets/images/flamingo_card_f.jpeg',
+      rarity: 6),
+  CollectibleCard(
+      id: 3, name: 'Eel', imagePath: 'assets/images/eel_card.jpeg', rarity: 4),
+  CollectibleCard(
+      id: 4,
+      name: 'Eel Foil',
+      imagePath: 'assets/images/eel_card_f.jpeg',
       rarity: 6),
   CollectibleCard(
       id: 5,

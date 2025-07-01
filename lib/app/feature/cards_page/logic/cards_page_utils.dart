@@ -10,8 +10,7 @@ import 'package:valli_di_comacchio/app/shared/domain/utils/gaussian_rnd_number_g
 // max rarity is rarity 5
 CollectibleCard getRandomCard() {
   final random = Random();
-  final rarityDouble =
-      5; // generateGaussianRandomNumberInRange(1, 1.2, 1, 5.2);
+  final rarityDouble = generateGaussianRandomNumberInRange(1, 1.2, 1, 5.2);
   final rarity = rarityDouble.round();
 
   // Filter cards by the selected rarity
