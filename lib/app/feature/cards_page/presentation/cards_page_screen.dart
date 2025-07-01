@@ -3,6 +3,7 @@ import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
 class CardPageScreen extends StatefulWidget {
@@ -144,19 +145,15 @@ class _CardPageScreenState extends State<CardPageScreen>
             children: [
               // Stats bar
               Container(
-                color: Colors.black38,
+                color: AppColors.palette_tertiary,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    LabelText(
                       'Collezione: ${_collectedCards.length}/${appCardsCompleteList.length}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      withBoarder: false,
                     ),
                   ],
                 ),

@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
 // The opening stages
 enum OpeningStage {
@@ -173,8 +175,8 @@ class _PackOpeningPageState extends State<PackOpeningPage>
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.blueGrey.shade900,
-                Colors.black,
+                AppColors.palette_secondary,
+                AppColors.palette_tertiary,
               ],
             ),
           ),
@@ -188,15 +190,10 @@ class _PackOpeningPageState extends State<PackOpeningPage>
             Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-              child: Text(
+              child: H3(
                 _remainingCards.isEmpty
                     ? 'Tutte le carte sono state sbustate!'
                     : 'Carte rimanenti: ${_remainingCards.length}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
             ),
 
@@ -238,7 +235,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                                   if (_remainingCards.isNotEmpty)
                                     BoxShadow(
                                       color: Colors.yellow.withOpacity(
-                                          0.3 * _bounceAnimation.value),
+                                          0.6 * _bounceAnimation.value),
                                       blurRadius: 20,
                                       spreadRadius: 5,
                                     )
