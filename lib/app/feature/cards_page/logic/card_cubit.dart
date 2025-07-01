@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
@@ -35,7 +36,7 @@ class CardCubit extends Cubit<CardState> {
     }
   }
 
-  Future<void> openAPack() async {
+  Future<void> openAPack(CardPack pack) async {
     emit(state.copyWith(lastPacketCards: []));
   }
 }
