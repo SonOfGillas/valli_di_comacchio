@@ -329,14 +329,17 @@ class _CardPageScreenState extends State<CardPageScreen>
             ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _openNewPack,
-        backgroundColor: Colors.amber,
-        label: const Text(
-          'APRI UN PACCHETTO',
-          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
-        ),
-      ),
+      floatingActionButton: _selectedCard == null
+          ? FloatingActionButton.extended(
+              onPressed: _openNewPack,
+              backgroundColor: Colors.amber,
+              label: const Text(
+                'APRI UN PACCHETTO',
+                style: TextStyle(
+                    color: Colors.black87, fontWeight: FontWeight.bold),
+              ),
+            )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
