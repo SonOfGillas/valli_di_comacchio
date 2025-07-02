@@ -5,6 +5,7 @@ import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart'
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/new_card_badge.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_courosel.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
@@ -402,6 +403,8 @@ class _CardPageScreenState extends State<CardPageScreen>
                                         )
                                         .firstOrNull;
                                 final isCardInCollection = userCard != null;
+                                final isNewCard = state.newCardsInTheLastPack
+                                    .any((c) => c.id == cardElement.id);
                                 return GestureDetector(
                                   onTap: () => {
                                     if (isCardInCollection)
@@ -544,6 +547,13 @@ class _CardPageScreenState extends State<CardPageScreen>
                                                     ),
                                                   );
                                                 },
+                                              ),
+                                            // NEW badge for newly acquired cards
+                                            if (isNewCard)
+                                              Positioned(
+                                                top: 8,
+                                                right: 8,
+                                                child: NewCardBadge(),
                                               ),
                                           ],
                                         ),
