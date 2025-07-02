@@ -1,3 +1,4 @@
+import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 class AppUser {
@@ -6,7 +7,9 @@ class AppUser {
     required this.email,
     required this.username,
     this.inventory = const [],
+    this.cardCollection = const [],
     this.wealth = 0,
+    this.isGuest = false,
   });
 
   final String id;
@@ -17,8 +20,10 @@ class AppUser {
   */
   final int wealth;
 
-  // fama? relazioni npc
   final List<TradeResourceInventory> inventory;
+  final List<CollectibleCard> cardCollection;
+  /* Guest is a local user not connected to the database */
+  final bool isGuest;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -26,6 +31,8 @@ class AppUser {
         'username': username,
         'wealth': wealth,
         'inventory': inventory.map((item) => item.toJson()).toList(),
+        'cardCollection': cardCollection.map((card) => card.toJson()).toList(),
+        'isGuest': isGuest,
       };
 
   factory AppUser.fromJson(Map<String, dynamic> json) {
@@ -36,17 +43,27 @@ class AppUser {
                 TradeResourceInventory.fromJson(item as Map<String, dynamic>))
             .toList()
         : <TradeResourceInventory>[];
+    final cardCollectionList = json['cardCollection'] as List<dynamic>?;
+    final cardCollection = cardCollectionList != null
+        ? cardCollectionList
+            .map((item) =>
+                CollectibleCard.fromJson(item as Map<String, dynamic>))
+            .toList()
+        : <CollectibleCard>[];
     return AppUser(
       id: json['id'] as String,
       email: json['email'] as String,
       username: json['username'] as String,
       wealth: json['wealth'] as int? ?? 0,
       inventory: inventory,
+      cardCollection: cardCollection,
+      isGuest: json['isGuest'] as bool? ?? false,
     );
   }
 
   copyWith({
     List<TradeResourceInventory>? inventory,
+    List<CollectibleCard>? cardCollection,
     int? wealth,
   }) {
     return AppUser(
@@ -55,6 +72,7 @@ class AppUser {
       username: username,
       inventory: inventory ?? this.inventory,
       wealth: wealth ?? this.wealth,
+      cardCollection: cardCollection ?? this.cardCollection,
     );
   }
 }

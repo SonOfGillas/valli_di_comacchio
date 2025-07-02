@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_opening.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/pack_courosel.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
@@ -12,6 +12,7 @@ import 'package:valli_di_comacchio/app/shared/components/boarder_text/h1_on_prim
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/modal/base_modal.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 import '../../../shared/components/boarder_text/h3/h3.dart';
@@ -158,10 +159,14 @@ class _CardPageScreenState extends State<CardPageScreen>
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(
-                          Icons.monetization_on,
-                          color: Colors.black87,
-                          size: 20,
+                        SvgPicture.asset(
+                          AppIcons.money,
+                          width: 20,
+                          height: 20,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.palette_primary,
+                            BlendMode.srcIn,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         const Text(

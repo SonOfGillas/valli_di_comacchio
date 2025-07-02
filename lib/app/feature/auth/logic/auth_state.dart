@@ -6,12 +6,12 @@ import 'package:valli_di_comacchio/app/shared/core/form_fields/username_field.da
 
 enum AuthStatus { idle, loading, succeeded, failure }
 
-enum AuthMode { login, register }
+enum AuthMode { login, register, guest }
 
 class AuthState extends Equatable {
   const AuthState({
     required this.status,
-    this.mode = AuthMode.login,
+    this.mode = AuthMode.guest,
     this.showPassword = false,
     this.failure,
     this.email = const EmailField.pure(),

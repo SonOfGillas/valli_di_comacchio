@@ -69,7 +69,6 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         .firstWhere((n) => n.id == tradePageParameters.npcId);
     emit(state.copyWith(status: TradeStatus.loading, npc: npcFromState));
     _getNpcMessage(emit);
-    await appCubit.loadLocalUserData();
     if (appCubit.state.user == null) {
       emit(state.copyWith(
         status: TradeStatus.failure,
@@ -193,24 +192,20 @@ class TradeBloc extends Bloc<TradeEvent, TradeState> {
         return;
       }
 
-      final userUpdateReponse =
-          await userRepository.updateUserData(updatedUser);
+      final updateUserResult = await appCubit.updateUser(updatedUser);
 
-      userUpdateReponse.fold(
-        onSuccess: (_) async {
-          emit(state.copyWith(
-            status: TradeStatus.success,
-            npc: updatedNpc,
-          ));
-          await appCubit.updateUser(updatedUser);
-        },
-        onFailure: (error) async {
-          emit(state.copyWith(
-            status: TradeStatus.failure,
-            failure: error,
-          ));
-        },
-      );
+      if (updateUserResult) {
+        emit(state.copyWith(
+          status: TradeStatus.success,
+          npc: updatedNpc,
+        ));
+      } else {
+        emit(state.copyWith(
+          status: TradeStatus.failure,
+          failure: Failure.fromMessage('aggiornamento utente fallito'),
+        ));
+        return;
+      }
     }
   }
 

@@ -51,8 +51,8 @@ class MapPage extends StatelessWidget {
               ),
               osmOption: OSMOption(
                 userTrackingOption: const UserTrackingOption(
-                  enableTracking: false, // TODO remove this when ready
-                  unFollowUser: true,
+                  enableTracking: true,
+                  unFollowUser: false,
                 ),
                 zoomOption: const ZoomOption(
                   initZoom: 8,

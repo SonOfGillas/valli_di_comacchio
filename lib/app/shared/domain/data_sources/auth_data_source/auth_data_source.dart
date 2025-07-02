@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-class AuthDataSource {
+class AuthServiceDataSource {
   Future<bool> isLoggedIn() async {
     final user = FirebaseAuth.instance.currentUser;
     return user != null;
@@ -19,6 +19,15 @@ class AuthDataSource {
       password: password,
     );
     return credential;
+  }
+
+  Future<void> deleteCurrentAccount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await user.delete();
+    } else {
+      throw Exception('No user is currently logged in.');
+    }
   }
 
   Future<void> logout() async {

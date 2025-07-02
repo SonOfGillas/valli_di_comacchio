@@ -12,8 +12,7 @@ import 'package:valli_di_comacchio/app/shared/domain/data_sources/auth_data_sour
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/cloud_firestore/cloud_firestore.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/firebase_npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source.dart';
-import 'package:valli_di_comacchio/app/shared/domain/data_sources/resources_inventory_data_source/resources_inventory_data_source_mock.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/app_storage_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/firebase_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
@@ -36,38 +35,35 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<CloudFirestoreDataSource>(
       () => CloudFirestoreDataSource(),
     )
-    ..registerLazySingleton<UserDataSource>(
-      () => FirebaseUserDataSource(cloudFirestoreDataSource: sl()),
+    ..registerLazySingleton<LocalUserDataSource>(
+      () => AppStorageUserDataSource(sl<AppStorage>()),
     )
-    ..registerLazySingleton<ResourcesInventoryDataSource>(
-      () => ResourcesInventoryDataSourceMock(),
+    ..registerLazySingleton<RemoteUserDataSource>(
+      () => FirebaseUserDataSource(cloudFirestoreDataSource: sl()),
     )
     ..registerLazySingleton<NpcDataSource>(
         () => FirebaseNpcDataSource(cloudFirestoreDataSource: sl()))
     ..registerLazySingleton<AiGenerationDataSource>(
         () => ChatGbtDataSource(config: sl()))
-    ..registerLazySingleton<AuthDataSource>(
-      () => AuthDataSource(),
+    ..registerLazySingleton<AuthServiceDataSource>(
+      () => AuthServiceDataSource(),
     )
 
     // Repositories
     ..registerLazySingleton<UserRepository>(
       () => UserRepository(
-        userDataSource: sl(),
-        resourcesInventoryDataSource: sl(),
         authDataSource: sl(),
+        localUserDataSource: sl(),
+        remoteUserDataSource: sl(),
       ),
     )
     ..registerLazySingleton<NpcRepository>(
-      () => NpcRepository(
-          npcDataSource: sl(),
-          resourcesInventoryDataSource: sl(),
-          aiGenerationDataSource: sl()),
+      () => NpcRepository(npcDataSource: sl(), aiGenerationDataSource: sl()),
     )
 
     // AppState
-    ..registerLazySingleton<AppCubit>(() =>
-        AppCubit(appStorage: sl(), userRepository: sl(), npcRepository: sl()))
+    ..registerLazySingleton<AppCubit>(
+        () => AppCubit(userRepository: sl(), npcRepository: sl()))
 
     // Slash
     ..registerFactory<SplashCubit>(

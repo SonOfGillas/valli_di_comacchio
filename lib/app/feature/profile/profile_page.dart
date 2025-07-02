@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
-import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 
@@ -10,15 +8,11 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        return Scaffold(
-            appBar: ValliAppBar(),
-            body: const Center(
-              child: Text('Profile Page'),
-            ),
-            bottomNavigationBar: FooterNavBar());
-      },
-    );
+    return Scaffold(
+        appBar: ValliAppBar(),
+        body: Center(
+          child: H3('Profile'),
+        ),
+        bottomNavigationBar: FooterNavBar());
   }
 }

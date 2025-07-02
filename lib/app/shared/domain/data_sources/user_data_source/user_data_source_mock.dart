@@ -1,7 +1,7 @@
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 
-class UserDataSourceMock implements UserDataSource {
+class UserDataSourceMock implements RemoteUserDataSource {
   var mockUser = AppUser(
     id: '00000000-0000-0000-0000-000000000001',
     email: 'John.Doe@gmail.com',
@@ -22,13 +22,7 @@ class UserDataSourceMock implements UserDataSource {
   }
 
   @override
-  Future<AppUser> createUser(String id, String email, String username) {
-    return Future.value(AppUser(
-      id: id,
-      email: email,
-      username: username,
-      inventory: [],
-      wealth: 0,
-    ));
+  Future<AppUser> createUser(AppUser user) {
+    return Future.value(user);
   }
 }

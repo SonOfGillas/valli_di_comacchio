@@ -52,8 +52,36 @@ class TogglePasswordIconPressed extends AuthEvent {
   List<Object?> get props => [];
 }
 
-class SwitchAccessMode extends AuthEvent {
+abstract class SwitchAccessMode extends AuthEvent {
   const SwitchAccessMode();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GoToLogin extends SwitchAccessMode {
+  const GoToLogin();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GoToRegister extends SwitchAccessMode {
+  const GoToRegister();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GoToGuest extends SwitchAccessMode {
+  const GoToGuest();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class GuestModeSelected extends AuthEvent {
+  const GuestModeSelected();
 
   @override
   List<Object?> get props => [];

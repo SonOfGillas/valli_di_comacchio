@@ -25,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<RepeatPasswordEdit>(_updateRepeatPassword);
     on<UsernameEdit>(_updateUsername);
     on<SwitchAccessMode>(_switchAccessMode);
+    on<GuestModeSelected>(_guestModePressed);
   }
 
   final UserRepository userRepository;
@@ -77,11 +78,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     if (loginUser != null) {
-      await appCubit.setLocalUser(
-        loginUser!,
-        state.password.value,
+      await appCubit.setCurrentUser(
+        user: loginUser!,
       );
       emit(state.copyWith(status: AuthStatus.succeeded));
+    } else {
+      emit(state.copyWith(status: AuthStatus.failure));
     }
   }
 
@@ -107,11 +109,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     });
 
     if (registerUser != null) {
-      await appCubit.setLocalUser(
-        registerUser!,
-        state.password.value,
+      await appCubit.setCurrentUser(
+        user: registerUser!,
       );
       emit(state.copyWith(status: AuthStatus.succeeded));
+    } else {
+      emit(state.copyWith(status: AuthStatus.failure));
     }
   }
 
@@ -170,8 +173,52 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     SwitchAccessMode event,
     Emitter<AuthState> emit,
   ) async {
-    final newMode =
-        state.mode == AuthMode.login ? AuthMode.register : AuthMode.login;
-    emit(state.copyWith(mode: newMode));
+    if (event is GoToLogin) {
+      emit(state.copyWith(mode: AuthMode.login));
+      return;
+    }
+    if (event is GoToRegister) {
+      emit(state.copyWith(mode: AuthMode.register));
+      return;
+    }
+    if (event is GoToGuest) {
+      emit(state.copyWith(mode: AuthMode.guest));
+      return;
+    }
+  }
+
+  Future<void> _guestModePressed(
+    GuestModeSelected event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(status: AuthStatus.loading));
+    try {
+      final guestUserCreationResult =
+          await userRepository.createLocalUser(isGuest: true);
+      AppUser? guestUser;
+      guestUserCreationResult.fold(onSuccess: (user) async {
+        guestUser = user;
+      }, onFailure: (failure) {
+        emit(state.copyWith(
+          status: AuthStatus.failure,
+          failure: failure,
+        ));
+      });
+      if (guestUser == null) {
+        return;
+      }
+      await appCubit.loadSetUpData(guestUser!);
+      emit(state.copyWith(status: AuthStatus.succeeded));
+    } on Exception catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.failure,
+        failure: Failure.fromException(e),
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.failure,
+        failure: UnknownFailure(),
+      ));
+    }
   }
 }
