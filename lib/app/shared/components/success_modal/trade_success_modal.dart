@@ -43,7 +43,7 @@ class TradeSuccessModal extends StatelessWidget {
                     ),
                     (offer.offerType == OfferType.buy)
                         ? Image.asset(
-                            AppImages.rosario,
+                            npc.imageLocalPath,
                             height: 80,
                           )
                         : const Icon(Icons.person,
