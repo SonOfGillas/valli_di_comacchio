@@ -102,12 +102,13 @@ class _CardPageScreenState extends State<CardPageScreen>
   }
 
   // Handle pack selection from carousel
-  void _onPackSelected(CardPack pack) {
-    _showPackCostModal(pack);
+  void _onPackSelected(CardPack pack, BuildContext context) {
+    final userHaveEnoughCoins = context.read<CardCubit>().userHasEnoughCoins;
+    _showPackCostModal(pack, userHaveEnoughCoins);
   }
 
   // Show pack cost modal
-  void _showPackCostModal(CardPack pack) {
+  void _showPackCostModal(CardPack pack, bool userHaveEnoughCoins) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -137,15 +138,16 @@ class _CardPageScreenState extends State<CardPageScreen>
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'Pacchetto Carte',
-                    style: TextStyle(
-                      color: AppColors.palette_primary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  if (!userHaveEnoughCoins)
+                    const Text(
+                      'credito insufficiente per aprire questo pacchetto.',
+                      style: TextStyle(
+                        color: AppColors.shade_red_100,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
                   const SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.symmetric(
@@ -170,7 +172,7 @@ class _CardPageScreenState extends State<CardPageScreen>
                         ),
                         const SizedBox(width: 8),
                         const Text(
-                          '200 COINS',
+                          '$packetCost COINS',
                           style: TextStyle(
                             color: Colors.black87,
                             fontSize: 18,
@@ -209,11 +211,15 @@ class _CardPageScreenState extends State<CardPageScreen>
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
-                            _openPack(pack);
+                            if (userHaveEnoughCoins) {
+                              Navigator.of(context).pop();
+                              _openPack(pack);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
+                            backgroundColor: userHaveEnoughCoins
+                                ? Colors.green
+                                : Colors.grey,
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
@@ -286,7 +292,8 @@ class _CardPageScreenState extends State<CardPageScreen>
                 const SizedBox(height: 40),
                 Expanded(
                   child: PackCarousel(
-                    onPackSelected: _onPackSelected,
+                    onPackSelected: (cardPack) =>
+                        _onPackSelected(cardPack, context),
                   ),
                 ),
               ],
@@ -337,6 +344,9 @@ class _CardPageScreenState extends State<CardPageScreen>
 
     // Show main collection screen
     return BlocBuilder<CardCubit, CardState>(
+      buildWhen: (previous, current) =>
+          previous.userCards.length != current.userCards.length ||
+          previous.newCardsInTheLastPack != current.newCardsInTheLastPack,
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.palette_secondary,
@@ -377,162 +387,171 @@ class _CardPageScreenState extends State<CardPageScreen>
                           ),
                           itemCount: appCardsCompleteList.length,
                           itemBuilder: (context, index) {
-                            // Apply scale animation to the most recently added cards
-                            final cardElement = appCardsCompleteList[index];
-                            final CollectibleCard? userCard = state.userCards
-                                .where(
-                                  (c) => c.id == cardElement.id,
-                                )
-                                .firstOrNull;
-                            final isCardInCollection = userCard != null;
-                            final isNew = isCardInCollection &&
-                                context
-                                    .read<CardCubit>()
-                                    .state
-                                    .lastPacketCards
-                                    .any((card) => card.id == cardElement.id);
-
-                            return GestureDetector(
-                              onTap: () => {
-                                if (isCardInCollection)
-                                  {_inspectCard(cardElement)}
-                              },
-                              child: Transform.scale(
-                                scale: isNew &&
-                                        _cardCollectionController.status ==
-                                            AnimationStatus.forward
-                                    ? _cardScaleAnimation.value
-                                    : 1.0,
-                                child: Hero(
-                                  tag: 'card_${cardElement.id}',
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.5),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        ClipRRect(
+                            return BlocBuilder<CardCubit, CardState>(
+                              buildWhen: (previous, current) =>
+                                  previous.userCards.length !=
+                                      current.userCards.length ||
+                                  previous.newCardsInTheLastPack !=
+                                      current.newCardsInTheLastPack,
+                              builder: (context, state) {
+                                final cardElement = appCardsCompleteList[index];
+                                final CollectibleCard? userCard =
+                                    state.userCards
+                                        .where(
+                                          (c) => c.id == cardElement.id,
+                                        )
+                                        .firstOrNull;
+                                final isCardInCollection = userCard != null;
+                                return GestureDetector(
+                                  onTap: () => {
+                                    if (isCardInCollection)
+                                      {_inspectCard(cardElement)}
+                                  },
+                                  child: Transform.scale(
+                                    scale: 1.0,
+                                    child: Hero(
+                                      tag: 'card_${cardElement.id}',
+                                      child: Container(
+                                        decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: isCardInCollection
-                                              ? Image.asset(
-                                                  cardElement.imagePath,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Container(
-                                                  color: Colors.grey.shade800,
-                                                  child: Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                top: 8.0,
-                                                                left: 4.0,
-                                                                right: 4.0),
-                                                        child: Text(
-                                                          cardElement.name,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                            color: Colors
-                                                                .grey.shade600,
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Icon(
-                                                              Icons
-                                                                  .help_outline,
-                                                              size: 40,
-                                                              color: Colors.grey
-                                                                  .shade600,
-                                                            ),
-                                                            const SizedBox(
-                                                                height: 8),
-                                                            Text(
-                                                              'MANCANTE',
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.5),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Stack(
+                                          fit: StackFit.expand,
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: isCardInCollection
+                                                  ? Image.asset(
+                                                      cardElement.imagePath,
+                                                      fit: BoxFit.cover,
+                                                    )
+                                                  : Container(
+                                                      color:
+                                                          Colors.grey.shade800,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .only(
+                                                                    top: 8.0,
+                                                                    left: 4.0,
+                                                                    right: 4.0),
+                                                            child: Text(
+                                                              cardElement.name,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
                                                               style: TextStyle(
                                                                 color: Colors
                                                                     .grey
                                                                     .shade600,
-                                                                fontSize: 12,
+                                                                fontSize: 16,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
                                                               ),
                                                             ),
+                                                          ),
+                                                          Expanded(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Icon(
+                                                                  Icons
+                                                                      .help_outline,
+                                                                  size: 40,
+                                                                  color: Colors
+                                                                      .grey
+                                                                      .shade600,
+                                                                ),
+                                                                const SizedBox(
+                                                                    height: 8),
+                                                                Text(
+                                                                  'MANCANTE',
+                                                                  style:
+                                                                      TextStyle(
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .shade600,
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                            ),
+                                            if (isCardInCollection &&
+                                                cardElement.isFoil())
+                                              AnimatedBuilder(
+                                                animation: _shimmerAnimation,
+                                                builder: (context, child) {
+                                                  return ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        gradient:
+                                                            LinearGradient(
+                                                          begin: Alignment(
+                                                            -1.0 +
+                                                                _shimmerAnimation
+                                                                    .value,
+                                                            -0.5,
+                                                          ),
+                                                          end: Alignment(
+                                                            0.0 +
+                                                                _shimmerAnimation
+                                                                    .value,
+                                                            0.5,
+                                                          ),
+                                                          colors: const [
+                                                            Colors.transparent,
+                                                            Color(0x22FFFFFF),
+                                                            Color(0x44FFFFFF),
+                                                            Color(0x22FFFFFF),
+                                                            Colors.transparent,
+                                                          ],
+                                                          stops: const [
+                                                            0.0,
+                                                            0.35,
+                                                            0.5,
+                                                            0.65,
+                                                            1.0
                                                           ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
-                                        ),
-                                        if (isCardInCollection &&
-                                            cardElement.isFoil())
-                                          AnimatedBuilder(
-                                            animation: _shimmerAnimation,
-                                            builder: (context, child) {
-                                              return ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      begin: Alignment(
-                                                        -1.0 +
-                                                            _shimmerAnimation
-                                                                .value,
-                                                        -0.5,
-                                                      ),
-                                                      end: Alignment(
-                                                        0.0 +
-                                                            _shimmerAnimation
-                                                                .value,
-                                                        0.5,
-                                                      ),
-                                                      colors: const [
-                                                        Colors.transparent,
-                                                        Color(0x22FFFFFF),
-                                                        Color(0x44FFFFFF),
-                                                        Color(0x22FFFFFF),
-                                                        Colors.transparent,
-                                                      ],
-                                                      stops: const [
-                                                        0.0,
-                                                        0.35,
-                                                        0.5,
-                                                        0.65,
-                                                        1.0
-                                                      ],
                                                     ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          ),
-                                      ],
+                                                  );
+                                                },
+                                              ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             );
                           },
                         );

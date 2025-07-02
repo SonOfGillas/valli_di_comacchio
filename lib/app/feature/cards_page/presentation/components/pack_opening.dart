@@ -190,7 +190,7 @@ class _PackOpeningPageState extends State<PackOpeningPage>
     final card = _remainingCards[index];
 
     // add the cart to the user's collection
-    context.read<CardCubit>().addCardToCollection(card);
+    context.read<CardCubit>().cardRevealed(card);
 
     // Remove the card from remaining and add to revealed
     _remainingCards.removeAt(index);

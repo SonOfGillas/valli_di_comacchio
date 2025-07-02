@@ -6,8 +6,8 @@ class AppUser {
     required this.id,
     required this.email,
     required this.username,
-    this.inventory = const [],
-    this.cardCollection = const [],
+    this.inventory = const <TradeResourceInventory>[],
+    this.cardCollection = const <CollectibleCard>{},
     this.wealth = 0,
     this.isGuest = false,
   });
@@ -21,7 +21,7 @@ class AppUser {
   final int wealth;
 
   final List<TradeResourceInventory> inventory;
-  final List<CollectibleCard> cardCollection;
+  final Set<CollectibleCard> cardCollection;
   /* Guest is a local user not connected to the database */
   final bool isGuest;
 
@@ -31,7 +31,8 @@ class AppUser {
         'username': username,
         'wealth': wealth,
         'inventory': inventory.map((item) => item.toJson()).toList(),
-        'cardCollection': cardCollection.map((card) => card.toJson()).toList(),
+        'cardCollection':
+            cardCollection.toList().map((card) => card.toJson()).toList(),
         'isGuest': isGuest,
       };
 
@@ -56,14 +57,14 @@ class AppUser {
       username: json['username'] as String,
       wealth: json['wealth'] as int? ?? 0,
       inventory: inventory,
-      cardCollection: cardCollection,
+      cardCollection: cardCollection.toSet(),
       isGuest: json['isGuest'] as bool? ?? false,
     );
   }
 
   copyWith({
     List<TradeResourceInventory>? inventory,
-    List<CollectibleCard>? cardCollection,
+    Set<CollectibleCard>? cardCollection,
     int? wealth,
   }) {
     return AppUser(
@@ -73,6 +74,7 @@ class AppUser {
       inventory: inventory ?? this.inventory,
       wealth: wealth ?? this.wealth,
       cardCollection: cardCollection ?? this.cardCollection,
+      isGuest: isGuest,
     );
   }
 }

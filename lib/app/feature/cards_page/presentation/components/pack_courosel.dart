@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/cards_page_utils.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
@@ -12,7 +13,7 @@ class PackCarousel extends StatefulWidget {
 
   PackCarousel({
     super.key,
-    int packCount = 8,
+    int packCount = packetCarouselSize,
     required this.onPackSelected,
   }) {
     packs = List.generate(

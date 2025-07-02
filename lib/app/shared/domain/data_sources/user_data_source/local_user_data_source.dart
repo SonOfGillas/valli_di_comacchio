@@ -30,10 +30,14 @@ class AppStorageUserDataSource extends LocalUserDataSource {
   }
 
   @override
-  Future<void> updateUserData(AppUser user) async {
+  Future<void> updateUserData(AppUser user, {String password = ''}) async {
     await appStorage.write(
       key: AppStorage.userKey,
       value: jsonEncode(user.toJson()),
+    );
+    await appStorage.write(
+      key: AppStorage.userPasswordKey,
+      value: password,
     );
   }
 
@@ -43,7 +47,6 @@ class AppStorageUserDataSource extends LocalUserDataSource {
     await appStorage.delete(key: AppStorage.userPasswordKey);
   }
 
-  // create and user and save it to local storage
   @override
   Future<AppUser> createUser(String email,
       {String username = 'Ospite', bool isGuest = false}) async {

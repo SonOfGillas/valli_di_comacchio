@@ -1,19 +1,21 @@
-class CollectibleCard {
-  int id;
-  String name;
-  String imagePath;
-  /* from 1 to 100 max */
-  int rarity;
+import 'package:equatable/equatable.dart';
 
-  bool isFoil() {
-    return rarity >= 5;
-  }
-
-  CollectibleCard(
+class CollectibleCard extends Equatable {
+  const CollectibleCard(
       {required this.id,
       required this.name,
       required this.imagePath,
       required this.rarity});
+
+  final int id;
+  final String name;
+  final String imagePath;
+  /* from 1 to 100 max */
+  final int rarity;
+
+  bool isFoil() {
+    return rarity >= 5;
+  }
 
   factory CollectibleCard.fromJson(Map<String, dynamic> json) {
     return CollectibleCard(
@@ -31,6 +33,9 @@ class CollectibleCard {
       'rarity': rarity,
     };
   }
+
+  @override
+  List<Object?> get props => [id];
 }
 
 final appCardsCompleteList = [

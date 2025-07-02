@@ -91,7 +91,7 @@ Future<void> initServiceLocator() async {
     // CARDS
     ..registerFactory<CardCubit>(
       () => CardCubit(
-        appStorage: sl(),
+        appCubit: sl(),
         userRepository: sl(),
       ),
     );

@@ -85,6 +85,8 @@ class ValliAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               ),
               BlocBuilder<AppCubit, AppState>(
+                buildWhen: (previous, current) =>
+                    previous.user?.wealth != current.user?.wealth,
                 builder: (context, state) {
                   return LabelText(
                     formatNumber(state.user?.wealth ?? 0),

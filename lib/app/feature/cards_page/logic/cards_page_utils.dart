@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
+import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
 
 const cardWeightCoeff = 100;
 // for each card in appCardsCompleteList add add in weightedCardList 100/card.rarity instance of that card
@@ -15,8 +16,6 @@ CollectibleCard getRandomCard() {
   final index = random.nextInt(weightedCardList.length);
   return weightedCardList[index];
 }
-
-const packetSize = 5;
 
 CardPack getRandomPacket() {
   final packet = <CollectibleCard>[];
