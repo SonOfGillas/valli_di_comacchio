@@ -4,8 +4,8 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
+import 'package:valli_di_comacchio/app/shared/components/npc_location_detail/npc_location_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
-import 'package:valli_di_comacchio/app/feature/map/presentation/components/npc_location_detail.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
 class MapPage extends StatelessWidget {

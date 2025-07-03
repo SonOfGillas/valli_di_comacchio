@@ -31,7 +31,7 @@ class NpcLocationDetail extends StatelessWidget {
             ),
           ),
           Container(
-            color: AppColors.palette_secondary.withOpacity(0.6),
+            color: AppColors.palette_secondary.withOpacity(0.2),
           ),
           SafeArea(
             child: Column(
