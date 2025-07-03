@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
@@ -523,12 +522,17 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                                                             },
                                                           ),
                                                         // NEW badge for newly acquired cards
-                                                        if (state.newCardsInTheLastPack
-                                                            .any((c) => c.id == _currentRevealedCard!.id))
+                                                        if (state
+                                                            .newCardsInTheLastPack
+                                                            .any((c) =>
+                                                                c.id ==
+                                                                _currentRevealedCard!
+                                                                    .id))
                                                           Positioned(
                                                             top: 8,
                                                             right: 8,
-                                                            child: NewCardBadge(),
+                                                            child:
+                                                                NewCardBadge(),
                                                           ),
                                                       ],
                                                     ),
@@ -651,13 +655,16 @@ class _PackOpeningPageState extends State<PackOpeningPage>
                                               },
                                             ),
                                           // NEW badge for newly acquired cards
-                                          if (state.newCardsInTheLastPack
-                                              .any((c) => c.id == _revealedCards[index].id))
+                                          if (state.newCardsInTheLastPack.any(
+                                              (c) =>
+                                                  c.id ==
+                                                  _revealedCards[index].id))
                                             Positioned(
                                               top: 4,
                                               right: 4,
                                               child: Transform.scale(
-                                                scale: 0.8, // Smaller for the revealed cards area
+                                                scale:
+                                                    0.8, // Smaller for the revealed cards area
                                                 child: NewCardBadge(),
                                               ),
                                             ),

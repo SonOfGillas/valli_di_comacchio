@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:valli_di_comacchio/app/feature/auth/presentation/auth_page.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/cards_page.dart';
-import 'package:valli_di_comacchio/app/feature/map/map_page.dart';
+import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/profile/profile_page.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/quests_page.dart';
 import 'package:valli_di_comacchio/app/feature/slash/slash_screen.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/walks_and_places.dart';
+import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/walks_and_places_page.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 
 final GoRouter router = GoRouter(

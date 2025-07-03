@@ -4,6 +4,7 @@ import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart'
 import 'package:valli_di_comacchio/app/feature/slash/logic/splash_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
+import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_places_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
@@ -78,7 +79,7 @@ Future<void> initServiceLocator() async {
       ),
     )
 
-    // TRADE
+    // Trade
     ..registerFactoryParam<TradeBloc, TradePageParameters, void>(
       (param, _) => TradeBloc(
         appCubit: sl(),
@@ -88,11 +89,18 @@ Future<void> initServiceLocator() async {
       ),
     )
 
-    // CARDS
+    // Cards
     ..registerFactory<CardCubit>(
       () => CardCubit(
         appCubit: sl(),
         userRepository: sl(),
+      ),
+    )
+
+    // Walks and Places
+    ..registerFactory<WalksAndPlacesCubit>(
+      () => WalksAndPlacesCubit(
+        appCubit: sl(),
       ),
     );
 }

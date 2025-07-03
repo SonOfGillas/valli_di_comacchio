@@ -48,17 +48,6 @@ class FooterNavBar extends StatelessWidget {
           ),
           _FooterNavItem(
             icon: SvgPicture.asset(
-              AppIcons.walksAndPlaces,
-              height: 40,
-              colorFilter:
-                  ColorFilter.mode(AppColors.palette_tertiary, BlendMode.srcIn),
-            ),
-            index: 1,
-            selectedIndex: selectedIndex(),
-            onTap: (int _) => context.go(RoutesPaths.walksAndPlaces),
-          ),
-          _FooterNavItem(
-            icon: SvgPicture.asset(
               AppIcons.map,
               height: 40,
               colorFilter:
@@ -67,6 +56,17 @@ class FooterNavBar extends StatelessWidget {
             index: 2,
             selectedIndex: selectedIndex(),
             onTap: (int _) => context.go(RoutesPaths.map),
+          ),
+          _FooterNavItem(
+            icon: SvgPicture.asset(
+              AppIcons.walksAndPlaces,
+              height: 40,
+              colorFilter:
+                  ColorFilter.mode(AppColors.palette_tertiary, BlendMode.srcIn),
+            ),
+            index: 1,
+            selectedIndex: selectedIndex(),
+            onTap: (int _) => context.go(RoutesPaths.walksAndPlaces),
           ),
           _FooterNavItem(
             icon: SvgPicture.asset(

@@ -37,7 +37,7 @@ class _SlashScreenState extends State<SlashScreen> {
             if (state.loginFailed) {
               context.go(RoutesPaths.auth);
             } else {
-              context.go(RoutesPaths.map);
+              context.go(rootAfterLogin);
             }
           }
         },

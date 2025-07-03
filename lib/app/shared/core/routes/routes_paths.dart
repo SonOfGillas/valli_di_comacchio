@@ -9,4 +9,4 @@ class RoutesPaths {
   static const String walksAndPlaces = '/walks_and_places';
 }
 
-const rootAfterLogin = RoutesPaths.map;
+const rootAfterLogin = RoutesPaths.walksAndPlaces;
