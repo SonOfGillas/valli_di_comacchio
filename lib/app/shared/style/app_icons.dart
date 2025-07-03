@@ -20,6 +20,7 @@ class AppIcons {
   static final quest = _iconPath('quest-flag');
   static final walksAndPlaces = _iconPath('track');
   static final rotation = _iconPath('rotation_360');
+  static final search = _iconPath('search');
 
   static String _iconPath(String iconName) => 'assets/icons/$iconName.svg';
 }

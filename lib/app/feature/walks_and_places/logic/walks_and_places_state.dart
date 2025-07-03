@@ -2,22 +2,33 @@ import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
-class WalksAndPlacesState extends Equatable {
-  final List<Walk> walks;
-  final List<Npc> npcs;
+enum WalksAndPlaces {
+  walks,
+  places,
+}
 
-  const WalksAndPlacesState({this.walks = const [], this.npcs = const []});
+class WalksAndPlacesState extends Equatable {
+  final String? filter;
+  final List<Npc> filteredNpcs;
+  final List<Walk> filteredWalks;
+
+  const WalksAndPlacesState(
+      {this.filteredNpcs = const [],
+      this.filteredWalks = const [],
+      this.filter});
 
   @override
-  List<Object?> get props => [walks, npcs];
+  List<Object?> get props => [filteredNpcs, filteredWalks, filter];
 
   WalksAndPlacesState copyWith({
-    List<Walk>? walks,
-    List<Npc>? npcs,
+    String? filter,
+    List<Walk>? filteredWalks,
+    List<Npc>? filteredNpcs,
   }) {
     return WalksAndPlacesState(
-      walks: walks ?? this.walks,
-      npcs: npcs ?? this.npcs,
+      filter: filter ?? this.filter,
+      filteredWalks: filteredWalks ?? this.filteredWalks,
+      filteredNpcs: filteredNpcs ?? this.filteredNpcs,
     );
   }
 }

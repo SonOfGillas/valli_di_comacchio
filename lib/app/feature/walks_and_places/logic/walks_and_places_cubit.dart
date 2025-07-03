@@ -11,8 +11,21 @@ class WalksAndPlacesCubit extends Cubit<WalksAndPlacesState> {
 
   void loadWalksAndPlaces() {
     emit(state.copyWith(
-      walks: [], // Load actual walks data here
-      npcs: appCubit.state.npcs,
+      filteredWalks: [], // Load actual walks data here
+      filteredNpcs: appCubit.state.npcs,
     ));
+  }
+
+  void clearSearch() {
+    emit(state.copyWith(
+        filter: null, filteredWalks: [], filteredNpcs: appCubit.state.npcs));
+  }
+
+  void search(String query) {
+    final filteredNpcs = appCubit.state.npcs
+        .where((npc) =>
+            npc.locationName.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    emit(state.copyWith(filter: query, filteredNpcs: filteredNpcs));
   }
 }
