@@ -2,9 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
-enum WalksAndPlaces {
-  walks,
-  places,
+enum WalksAndPlacesType {
+  places('Luoghi'),
+  walks('Percorsi');
+
+  const WalksAndPlacesType(this.displayName);
+  final String displayName;
 }
 
 class WalksAndPlacesState extends Equatable {
