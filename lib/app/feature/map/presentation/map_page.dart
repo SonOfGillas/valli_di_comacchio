@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
@@ -7,9 +10,65 @@ import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_n
 import 'package:valli_di_comacchio/app/shared/components/npc_location_detail/npc_location_detail.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:xml/xml.dart';
 
-class MapPage extends StatelessWidget {
+class MapPage extends StatefulWidget {
   const MapPage({super.key});
+
+  @override
+  State<MapPage> createState() => _MapPageState();
+}
+
+class _MapPageState extends State<MapPage> {
+  late MapController mapController;
+  bool isWalkVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+    mapController = MapController(
+      initPosition: GeoPoint(latitude: 44.672905, longitude: 12.197045),
+      areaLimit: const BoundingBox(
+        east: 12.197045,
+        north: 44.672905,
+        south: 44.672905,
+        west: 12.197045,
+      ),
+    );
+  }
+
+  Future<void> _toggleWalkRoute() async {
+    try {
+      if (isWalkVisible) {
+        // Remove the walk route
+        await mapController.removeLastRoad();
+        setState(() {
+          isWalkVisible = false;
+        });
+      } else {
+        // For now, draw a sample route (replace with actual GPX coordinates)
+        await mapController.drawRoad(
+          GeoPoint(latitude: 44.672905, longitude: 12.197045),
+          GeoPoint(latitude: 44.675000, longitude: 12.200000),
+          roadType: RoadType.foot,
+          roadOption: const RoadOption(
+            roadColor: Colors.blue,
+            roadWidth: 100.0,
+            isDotted: true,
+          ),
+        );
+
+        setState(() {
+          isWalkVisible = true;
+        });
+      }
+    } catch (e) {
+      // Handle error loading walk route
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error loading walk route: $e')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +78,7 @@ class MapPage extends StatelessWidget {
             appBar: ValliAppBar(),
             backgroundColor: AppColors.palette_secondary,
             body: OSMFlutter(
-              controller: MapController(
-                initPosition:
-                    GeoPoint(latitude: 44.672905, longitude: 12.197045),
-                areaLimit: const BoundingBox(
-                  east: 12.197045,
-                  north: 44.672905,
-                  south: 44.672905,
-                  west: 12.197045,
-                ),
-              ),
+              controller: mapController,
               mapIsLoading: const Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -116,6 +166,23 @@ class MapPage extends StatelessWidget {
                 }
               },
             ),
+            floatingActionButton: FloatingActionButton.extended(
+              onPressed: _toggleWalkRoute,
+              backgroundColor:
+                  isWalkVisible ? Colors.red : AppColors.palette_primary,
+              icon: Icon(
+                isWalkVisible ? Icons.visibility_off : Icons.route,
+                color: Colors.white,
+              ),
+              label: Text(
+                isWalkVisible ? 'Hide Walk' : 'Show Walk',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
             bottomNavigationBar: FooterNavBar());
       },
     );

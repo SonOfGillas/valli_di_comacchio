@@ -21,6 +21,12 @@ class AppIcons {
   static final walksAndPlaces = _iconPath('track');
   static final rotation = _iconPath('rotation_360');
   static final search = _iconPath('search');
+  static final angle = _iconPath('angle');
+  static final distance = _iconPath('distance');
+  static final downHill = _iconPath('down_hill');
+  static final upHill = _iconPath('up_hill');
+  static final euro = _iconPath('euro');
+  static final time = _iconPath('time');
 
   static String _iconPath(String iconName) => 'assets/icons/$iconName.svg';
 }

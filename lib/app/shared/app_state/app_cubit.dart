@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
+import 'package:valli_di_comacchio/app/shared/utils/get_walk_from_file.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit({
@@ -65,8 +67,14 @@ class AppCubit extends Cubit<AppState> {
     return npcsList;
   }
 
+  Future<List<Walk>> getWalksData() async {
+    final walk = await getWalkFromGpxFile('assets/walks/walks_1.gpx');
+    return [walk];
+  }
+
   Future<void> loadSetUpData(AppUser? loggedUser) async {
     final npcs = await getNpcsData();
-    emit(state.copyWith(user: loggedUser, npcs: npcs));
+    final walks = await getWalksData();
+    emit(state.copyWith(user: loggedUser, npcs: npcs, walks: walks));
   }
 }

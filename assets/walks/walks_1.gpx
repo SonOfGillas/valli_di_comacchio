@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<gpx version="1.1" creator="OsmAndRouterV2" xmlns="http://www.topografix.com/GPX/1/1" xmlns:osmand="https://osmand.net/docs/technical/osmand-file-formats/osmand-gpx" xmlns:gpxtpx="https://www8.garmin.com/xmlschemas/TrackPointExtensionv1.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 https://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>Lungo Mare - Lido degli Estensi</name>
+  </metadata>
+  <rte>
+    <rtept lat="44.6617243" lon="12.2479105">
+      <extensions>
+        <osmand:profile>pedestrian</osmand:profile>
+        <osmand:trkpt_idx>0</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+    <rtept lat="44.673536" lon="12.246151">
+      <extensions>
+        <osmand:profile>pedestrian</osmand:profile>
+        <osmand:trkpt_idx>76</osmand:trkpt_idx>
+      </extensions>
+    </rtept>
+  </rte>
+  <trk>
+    <trkseg>
+      <trkpt lat="44.661713" lon="12.2479489">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6617204" lon="12.2479534">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6618578" lon="12.2479239">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.6619799" lon="12.2479132">
+        <ele>0.2</ele>
+      </trkpt>
+      <trkpt lat="44.6620886" lon="12.2479132">
+        <ele>0.4</ele>
+      </trkpt>
+      <trkpt lat="44.6621554" lon="12.2479212">
+        <ele>0.4</ele>
+      </trkpt>
+      <trkpt lat="44.6622126" lon="12.2479132">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.662247" lon="12.2479105">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.662289" lon="12.2479025">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6624282" lon="12.2478729">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6625522" lon="12.2478461">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6627583" lon="12.2478086">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6629185" lon="12.2477737">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6630616" lon="12.2477442">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6632085" lon="12.247712">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6632733" lon="12.2476986">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6635309" lon="12.247653">
+        <ele>0.7</ele>
+      </trkpt>
+      <trkpt lat="44.6637713" lon="12.2476128">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6641929" lon="12.2475591">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.664315" lon="12.2475457">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6646812" lon="12.2474518">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6651162" lon="12.2472453">
+        <ele>0.7</ele>
+      </trkpt>
+      <trkpt lat="44.6652154" lon="12.2472239">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6653527" lon="12.247197">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6656141" lon="12.2471648">
+        <ele>0.4</ele>
+      </trkpt>
+      <trkpt lat="44.6658373" lon="12.2471514">
+        <ele>0.2</ele>
+      </trkpt>
+      <trkpt lat="44.6660261" lon="12.2471246">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.666091" lon="12.2471139">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6661425" lon="12.2471058">
+        <ele>1.2</ele>
+      </trkpt>
+      <trkpt lat="44.6662035" lon="12.2470951">
+        <ele>1.2</ele>
+      </trkpt>
+      <trkpt lat="44.6664572" lon="12.2471005">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6665984" lon="12.2471112">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6667644" lon="12.2471005">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.666835" lon="12.2470817">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6669513" lon="12.2470549">
+        <ele>1.2</ele>
+      </trkpt>
+      <trkpt lat="44.6670124" lon="12.2470388">
+        <ele>1.2</ele>
+      </trkpt>
+      <trkpt lat="44.6673214" lon="12.2469583">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6676896" lon="12.246902">
+        <ele>1.2</ele>
+      </trkpt>
+      <trkpt lat="44.6680157" lon="12.2468483">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6680901" lon="12.2468349">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6682962" lon="12.2468027">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6684717" lon="12.2467732">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6687883" lon="12.2467357">
+        <ele>1.2</ele>
+      </trkpt>
+      <trkpt lat="44.6689924" lon="12.2467545">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6690992" lon="12.2467625">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6693167" lon="12.2467411">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.6693949" lon="12.2467357">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6695284" lon="12.2467411">
+        <ele>0.6</ele>
+      </trkpt>
+      <trkpt lat="44.6696906" lon="12.2467732">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6699729" lon="12.2468805">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6700778" lon="12.2469288">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6701732" lon="12.246953">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.670217" lon="12.2469476">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.670341" lon="12.2469315">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.670465" lon="12.2469074">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6707206" lon="12.2468537">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.6710163" lon="12.2468215">
+        <ele>0.7</ele>
+      </trkpt>
+      <trkpt lat="44.671064" lon="12.2468135">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6712013" lon="12.246792">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6713043" lon="12.2467867">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.671392" lon="12.2467813">
+        <ele>0.5</ele>
+      </trkpt>
+      <trkpt lat="44.6717163" lon="12.2467303">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6717659" lon="12.246725">
+        <ele>1</ele>
+      </trkpt>
+      <trkpt lat="44.6718937" lon="12.2467089">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6720024" lon="12.2466874">
+        <ele>0.9</ele>
+      </trkpt>
+      <trkpt lat="44.6724564" lon="12.2465909">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.672485" lon="12.2465882">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.6725861" lon="12.2465721">
+        <ele>0.8</ele>
+      </trkpt>
+      <trkpt lat="44.672712" lon="12.2465506">
+        <ele>0.2</ele>
+      </trkpt>
+      <trkpt lat="44.6727883" lon="12.2465372">
+        <ele>0</ele>
+      </trkpt>
+      <trkpt lat="44.6729962" lon="12.246505">
+        <ele>-0.1</ele>
+      </trkpt>
+      <trkpt lat="44.6731202" lon="12.2464862">
+        <ele>-0.1</ele>
+      </trkpt>
+      <trkpt lat="44.6731354" lon="12.2464836">
+        <ele>-0.1</ele>
+      </trkpt>
+      <trkpt lat="44.6731755" lon="12.2464755">
+        <ele>-0.2</ele>
+      </trkpt>
+      <trkpt lat="44.6734234" lon="12.2464299">
+        <ele>-0.2</ele>
+      </trkpt>
+      <trkpt lat="44.6736619" lon="12.246387">
+        <ele>0.3</ele>
+      </trkpt>
+      <trkpt lat="44.6736395" lon="12.2461329">
+        <ele>0.7</ele>
+      </trkpt>
+      <extensions>
+        <osmand:route>
+          <segment id="39950198" length="61" startTrkptIdx="0" segmentTime="1014.67" speed="1.07" turnType="C" types="0,1,2" pointTypes=";;3;3;;;;;;;;;;;;;;;3;;;;;;;4;;;;;;4;;;;;;;;;3;;;;3;3;;;;;3;;;;;3;;;;3;3" />
+          <segment id="39950198" length="17" startTrkptIdx="60" segmentTime="257.27" speed="1.07" types="0,1,2" pointTypes="3;;;;;;;3;3;3;;;;;3;;" />
+        </osmand:route>
+        <osmand:types>
+          <type t="highway" v="footway" />
+          <type t="surface" v="asphalt" />
+          <type t="osmand_highway_integrity_brouting" v="0" />
+          <type t="osmand_ele_decline_1" v="1" />
+          <type t="osmand_ele_decline_3" v="1" />
+          <type t="name" v="" />
+          <type t="ref" v="" />
+        </osmand:types>
+      </extensions>
+    </trkseg>
+  </trk>
+</gpx>

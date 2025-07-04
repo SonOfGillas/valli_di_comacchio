@@ -22,3 +22,8 @@ flutter build apk --debug
 
 ## WIKI About Birds on the Valli di comachcio
 https://www.salinadicomacchio.it/la-salina/fauna/avifauna/
+
+
+// TODO
+1) aggiungere eventi come catagoria
+2) aggiungere categorie ai p

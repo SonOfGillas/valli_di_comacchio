@@ -3,8 +3,8 @@ import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
 enum WalksAndPlacesType {
-  places('Luoghi'),
-  walks('Percorsi');
+  places('Punti di interesse'),
+  walks('Escursioni');
 
   const WalksAndPlacesType(this.displayName);
   final String displayName;

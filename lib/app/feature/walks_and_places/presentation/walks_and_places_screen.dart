@@ -5,6 +5,7 @@ import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_
 import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_places_state.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/location_element.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/search_app_bar.dart';
+import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/walk_element.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
@@ -42,7 +43,7 @@ class WalksAndPlacesScreen extends StatelessWidget {
                       dividerColor: AppColors.palette_tertiary,
                       indicatorColor: AppColors.palette_primary,
                       labelStyle: GoogleFonts.lilitaOne(
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.w400,
                       ),
                       tabs: WalksAndPlacesType.values.map((type) {
@@ -65,16 +66,11 @@ class WalksAndPlacesScreen extends StatelessWidget {
                             return LocationElement(npc: npc);
                           },
                         ),
-                        GridView.builder(
-                          itemCount: state.filteredNpcs.length,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 1.0,
-                          ),
+                        ListView.builder(
+                          itemCount: state.filteredWalks.length,
                           itemBuilder: (context, index) {
-                            final npc = state.filteredNpcs[index];
-                            return LocationElement(npc: npc);
+                            final walk = state.filteredWalks[index];
+                            return WalkElement(walk: walk);
                           },
                         ),
                       ],
