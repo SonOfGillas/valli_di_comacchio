@@ -13,7 +13,7 @@ class ChatGbtDataSource extends AiGenerationDataSource {
   static const String promptId =
       'pmpt_68543f419af88196a0a3684219d9f35b0236302a7c1f8e25';
   static const String promptVersion =
-      '11'; // english prompt 10, italian prompt 11
+      '13'; // english prompt 10 (outdated), italian prompt 13
 
   @override
   Future<CounterOfferResponse> getNpcReponseToCounterOffer(
