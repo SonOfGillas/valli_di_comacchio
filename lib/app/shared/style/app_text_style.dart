@@ -126,6 +126,9 @@ class AppTextStyles {
       ..color = AppColors.black_shadow_80,
   );
 
+  static final labelOnPaletteLight =
+      GoogleFonts.lilitaOne(color: AppColors.palette_secondary, fontSize: 14);
+
   static final buttonSectionTitle = GoogleFonts.roboto(
     color: AppColors.background_white,
     fontWeight: FontWeight.w500,

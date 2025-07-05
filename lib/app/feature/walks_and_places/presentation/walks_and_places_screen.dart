@@ -67,13 +67,14 @@ class WalksAndPlacesScreen extends StatelessWidget {
                             return LocationElement(npc: npc);
                           },
                         ),
-                        ListView.builder(
-                          itemCount: state.filteredEvents.length,
-                          itemBuilder: (context, index) {
-                            final event = state.filteredEvents[index];
-                            return EventElement(event: event);
-                          },
-                        ),
+                        // ListView.builder(
+                        //   itemCount: state.filteredEvents.length,
+                        //   itemBuilder: (context, index) {
+                        //     final event = state.filteredEvents[index];
+                        //     return EventElement(event: event);
+                        //   },
+                        // ),
+                        EventPanelList(events: state.filteredEvents),
                         ListView.builder(
                           itemCount: state.filteredWalks.length,
                           itemBuilder: (context, index) {
