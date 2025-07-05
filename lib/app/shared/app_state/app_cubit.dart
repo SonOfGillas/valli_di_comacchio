@@ -1,22 +1,28 @@
 import 'package:bloc/bloc.dart';
+import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
-import 'package:valli_di_comacchio/app/shared/utils/get_walk_from_file.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/walk_repository.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit({
     required this.userRepository,
     required this.npcRepository,
+    required this.walkRepository,
+    required this.eventRepository,
   }) : super(
           const AppState(),
         );
 
   final UserRepository userRepository;
   final NpcRepository npcRepository;
+  final WalkRepository walkRepository;
+  final EventRepository eventRepository;
 
   Future<void> setCurrentUser({
     required AppUser user,
@@ -68,13 +74,49 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<List<Walk>> getWalksData() async {
-    final walk = await getWalkFromGpxFile('assets/walks/walks_1.gpx');
-    return [walk];
+    List<Walk> walks = [];
+    final walksResult = await walkRepository.getAllWalks();
+    walksResult.fold(
+      onSuccess: (fetchedWalks) {
+        walks = fetchedWalks;
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error fetching walks: $error');
+      },
+    );
+    return walks;
+  }
+
+  Future<List<Event>> getEventsData() async {
+    List<Event> events = [];
+    final eventsResult = await eventRepository.getAllEvents();
+    eventsResult.fold(
+      onSuccess: (fetchedEvents) {
+        events = fetchedEvents;
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error fetching events: $error');
+      },
+    );
+    return events;
   }
 
   Future<void> loadSetUpData(AppUser? loggedUser) async {
-    final npcs = await getNpcsData();
-    final walks = await getWalksData();
-    emit(state.copyWith(user: loggedUser, npcs: npcs, walks: walks));
+    // Launch all async operations in parallel
+    final results = await Future.wait([
+      getNpcsData(),
+      getWalksData(),
+      getEventsData(),
+    ]);
+
+    // Extract results from the list
+    final npcs = results[0] as List<Npc>;
+    final walks = results[1] as List<Walk>;
+    final events = results[2] as List<Event>;
+
+    emit(state.copyWith(
+        user: loggedUser, npcs: npcs, walks: walks, events: events));
   }
 }

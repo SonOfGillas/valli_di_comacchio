@@ -15,6 +15,7 @@ enum WalkDifficulty {
 class Walk {
   Walk({
     this.name = '',
+    this.imageFilePath = '',
     this.trackGeoPoints = const [],
     this.type = WalkType.pedestrian,
     this.trackDistance = 0, // in meters
@@ -26,12 +27,13 @@ class Walk {
   });
 
   String name;
+  String imageFilePath; // path to the image file
   List<GeoPoint> trackGeoPoints;
   WalkType type = WalkType.pedestrian;
   int trackDistance; // in meters
   int trackDuration; // in seconds
-  double upHill; // in meters
-  double downHill; // in meters
+  int upHill; // in meters
+  int downHill; // in meters
   double slope; // in % from 0 to 100
   double price; // in euros
 
@@ -52,11 +54,11 @@ class Walk {
   }
 
   String get upHillFormatted {
-    return '${upHill.toStringAsFixed(2)} m';
+    return '${upHill.round()} m';
   }
 
   String get downHillFormatted {
-    return '${downHill.toStringAsFixed(2)} m';
+    return '${downHill.round()} m';
   }
 
   String get slopeFormatted {
@@ -65,5 +67,33 @@ class Walk {
 
   String get priceFormatted {
     return price > 0 ? price.toStringAsFixed(2) : 'Free';
+  }
+
+  WalkDifficulty get difficulty {
+    if (type == WalkType.bicycle) {
+      return _getBicycleDifficulty();
+    } else {
+      return _getPedestrianDifficulty();
+    }
+  }
+
+  WalkDifficulty _getBicycleDifficulty() {
+    if (trackDistance < 4000 && upHill < 100 && downHill < 100) {
+      return WalkDifficulty.easy;
+    } else if (trackDistance < 10000 && upHill < 300 && downHill < 300) {
+      return WalkDifficulty.medium;
+    } else {
+      return WalkDifficulty.hard;
+    }
+  }
+
+  WalkDifficulty _getPedestrianDifficulty() {
+    if (trackDistance < 2000 && upHill < 50 && downHill < 50) {
+      return WalkDifficulty.easy;
+    } else if (trackDistance < 4000 && upHill < 100 && downHill < 100) {
+      return WalkDifficulty.medium;
+    } else {
+      return WalkDifficulty.hard;
+    }
   }
 }

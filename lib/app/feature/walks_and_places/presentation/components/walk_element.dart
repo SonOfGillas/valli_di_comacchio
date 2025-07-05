@@ -15,6 +15,17 @@ class WalkElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String getWalkDifficultyTitle() {
+      switch (walk.difficulty) {
+        case WalkDifficulty.easy:
+          return 'Passeggiata facile';
+        case WalkDifficulty.medium:
+          return 'Passeggiata media';
+        case WalkDifficulty.hard:
+          return 'Passeggiata difficile';
+      }
+    }
+
     return InkWell(
       onTap: () {
         // showDialog(
@@ -26,79 +37,99 @@ class WalkElement extends StatelessWidget {
         //   ),
         // );
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Card(
-          color: AppColors.palette_primary,
+      child: Card(
+        color: AppColors.palette_primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
           child: Column(
             children: [
               SizedBox(
                 width: double.infinity,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/walks/walks_1.png',
-                    height: 130,
-                    fit: BoxFit.cover,
-                  ),
+                child: Image.asset(
+                  walk.imageFilePath,
+                  height: 130,
+                  fit: BoxFit.cover,
                 ),
               ),
-              H3(walk.name),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: H3(walk.name),
+              ),
               DecoratedBox(
                 decoration: BoxDecoration(color: AppColors.primary_light),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.directions_walk,
-                          color: AppColors.palette_secondary,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 8.0),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              walk.type == WalkType.pedestrian
+                                  ? Icons.directions_walk
+                                  : Icons.directions_bike,
+                              color: AppColors.palette_secondary,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              getWalkDifficultyTitle(),
+                              style: TextStyle(
+                                  color: AppColors.palette_secondary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            Spacer(),
+                            SvgPicture.asset(
+                              AppIcons.euro,
+                              height: 20,
+                              colorFilter: ColorFilter.mode(
+                                AppColors.palette_secondary,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            SizedBox(width: 4),
+                            Text(
+                              walk.priceFormatted,
+                              style: TextStyle(
+                                  color: AppColors.palette_secondary,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Passeggiata facile',
-                          style: TextStyle(color: AppColors.palette_secondary),
-                        ),
-                        Spacer(),
-                        SvgPicture.asset(
-                          AppIcons.euro,
-                          height: 20,
-                          colorFilter: ColorFilter.mode(
-                            AppColors.palette_secondary,
-                            BlendMode.srcIn,
+                      ),
+                      SizedBox(height: 12),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          WalkData(
+                            data: walk.trackDurationFormatted,
+                            iconPath: AppIcons.time,
                           ),
-                        ),
-                        Text(
-                          walk.priceFormatted,
-                          style: TextStyle(color: AppColors.palette_secondary),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        WalkData(
-                          data: walk.trackDurationFormatted,
-                          iconPath: AppIcons.time,
-                        ),
-                        WalkData(
-                          data: walk.trackDistanceFormatted,
-                          iconPath: AppIcons.distance,
-                        ),
-                        WalkData(
-                          data: walk.slopeFormatted,
-                          iconPath: AppIcons.angle,
-                        ),
-                        WalkData(
-                          data: walk.upHillFormatted,
-                          iconPath: AppIcons.upHill,
-                        ),
-                        WalkData(
-                          data: walk.downHillFormatted,
-                          iconPath: AppIcons.downHill,
-                        ),
-                      ],
-                    )
-                  ],
+                          WalkData(
+                            data: walk.trackDistanceFormatted,
+                            iconPath: AppIcons.distance,
+                          ),
+                          WalkData(
+                            data: walk.slopeFormatted,
+                            iconPath: AppIcons.angle,
+                          ),
+                          WalkData(
+                            data: walk.upHillFormatted,
+                            iconPath: AppIcons.upHill,
+                          ),
+                          WalkData(
+                            data: walk.downHillFormatted,
+                            iconPath: AppIcons.downHill,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               )
             ],

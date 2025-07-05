@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_places_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_places_state.dart';
+import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/event_element.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/location_element.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/search_app_bar.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/components/walk_element.dart';
@@ -64,6 +65,13 @@ class WalksAndPlacesScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final npc = state.filteredNpcs[index];
                             return LocationElement(npc: npc);
+                          },
+                        ),
+                        ListView.builder(
+                          itemCount: state.filteredEvents.length,
+                          itemBuilder: (context, index) {
+                            final event = state.filteredEvents[index];
+                            return EventElement(event: event);
                           },
                         ),
                         ListView.builder(

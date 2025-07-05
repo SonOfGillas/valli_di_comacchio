@@ -16,6 +16,7 @@ class WalksAndPlacesCubit extends Cubit<WalksAndPlacesState> {
     emit(state.copyWith(
       filteredWalks: unfilteredWalks,
       filteredNpcs: unfilteredNpcs,
+      filteredEvents: appCubit.state.events,
     ));
   }
 
@@ -24,6 +25,7 @@ class WalksAndPlacesCubit extends Cubit<WalksAndPlacesState> {
       filter: null,
       filteredWalks: unfilteredWalks,
       filteredNpcs: unfilteredNpcs,
+      filteredEvents: appCubit.state.events,
     ));
   }
 
@@ -35,9 +37,15 @@ class WalksAndPlacesCubit extends Cubit<WalksAndPlacesState> {
         .where((npc) =>
             npc.locationName.toLowerCase().contains(query.toLowerCase()))
         .toList();
+    final filteredEvents = appCubit.state.events
+        .where(
+            (event) => event.title.toLowerCase().contains(query.toLowerCase()))
+        .toList();
     emit(state.copyWith(
-        filter: query,
-        filteredNpcs: filteredNpcs,
-        filteredWalks: filteredWalks));
+      filter: query,
+      filteredNpcs: filteredNpcs,
+      filteredWalks: filteredWalks,
+      filteredEvents: filteredEvents,
+    ));
   }
 }

@@ -11,13 +11,17 @@ import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/chatgbt_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/auth_data_source/auth_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/cloud_firestore/cloud_firestore.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/event_data_source/event_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/firebase_npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/app_storage_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/firebase_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/walk_data_source/walk_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/walk_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
 final sl = GetIt.instance;
@@ -49,6 +53,12 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<AuthServiceDataSource>(
       () => AuthServiceDataSource(),
     )
+    ..registerLazySingleton<WalkDataSource>(
+      () => WalkDataSource(sl()),
+    )
+    ..registerLazySingleton<EventDataSource>(
+      () => EventDataSource(sl()),
+    )
 
     // Repositories
     ..registerLazySingleton<UserRepository>(
@@ -61,10 +71,19 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<NpcRepository>(
       () => NpcRepository(npcDataSource: sl(), aiGenerationDataSource: sl()),
     )
+    ..registerLazySingleton<WalkRepository>(
+      () => WalkRepository(sl()),
+    )
+    ..registerLazySingleton<EventRepository>(
+      () => EventRepository(sl()),
+    )
 
     // AppState
-    ..registerLazySingleton<AppCubit>(
-        () => AppCubit(userRepository: sl(), npcRepository: sl()))
+    ..registerLazySingleton<AppCubit>(() => AppCubit(
+        userRepository: sl(),
+        npcRepository: sl(),
+        walkRepository: sl(),
+        eventRepository: sl()))
 
     // Slash
     ..registerFactory<SplashCubit>(

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum DatabaseCollection { users, npcs }
+enum DatabaseCollection { users, npcs, walks, events }
 
 class CloudFirestoreDataSource {
   final db = FirebaseFirestore.instance;
