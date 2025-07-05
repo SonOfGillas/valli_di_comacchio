@@ -48,16 +48,21 @@ class MapCubit extends Cubit<MapState> {
   }
 
   void toggleShowTracking() {
+    if (state.enableTracking) {
+      state.mapController.disabledTracking();
+    } else {
+      state.mapController.enableTracking();
+    }
     emit(state.copyWith(enableTracking: !state.enableTracking));
   }
 
   void toggleShowWalk() {
     if (state.walk == null) return;
-    emit(state.copyWith(showWalk: !state.showWalk));
     if (state.showWalk) {
       state.mapController.removeLastRoad();
     } else {
       drawSelectedWalk();
     }
+    emit(state.copyWith(showWalk: !state.showWalk));
   }
 }

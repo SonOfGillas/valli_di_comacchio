@@ -59,6 +59,7 @@ class _EventPanelListState extends State<EventPanelList> {
                   // Header
                   Container(
                     padding: const EdgeInsets.only(bottom: 16.0),
+                    color: AppColors.palette_primary,
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(

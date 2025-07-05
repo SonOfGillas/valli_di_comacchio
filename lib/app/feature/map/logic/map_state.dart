@@ -33,7 +33,8 @@ class MapState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [walk, mapController, showNpc, enableTracking];
+  List<Object?> get props =>
+      [walk, mapController, showNpc, enableTracking, showWalk];
 
   MapState copyWith({
     MapController? mapController,
