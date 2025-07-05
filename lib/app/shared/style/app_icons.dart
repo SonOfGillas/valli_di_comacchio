@@ -27,6 +27,8 @@ class AppIcons {
   static final upHill = _iconPath('up_hill');
   static final euro = _iconPath('euro');
   static final time = _iconPath('time');
+  static final gps = _iconPath('gps');
+  static final npc = _iconPath('npc');
 
   static String _iconPath(String iconName) => 'assets/icons/$iconName.svg';
 }

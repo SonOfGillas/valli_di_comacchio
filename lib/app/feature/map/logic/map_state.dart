@@ -9,12 +9,14 @@ class MapState extends Equatable {
     this.walk,
     this.enableTracking = false,
     this.showNpc = true,
+    this.showWalk = false,
   });
 
   final MapController mapController;
   final Walk? walk;
   final bool enableTracking;
   final bool showNpc;
+  final bool showWalk;
 
   factory MapState.initial(MapParameters? parameters) {
     return MapState(
@@ -38,12 +40,14 @@ class MapState extends Equatable {
     Walk? walk,
     bool? enableTracking,
     bool? showNpc,
+    bool? showWalk,
   }) {
     return MapState(
       walk: walk ?? this.walk,
       mapController: mapController ?? this.mapController,
       enableTracking: enableTracking ?? this.enableTracking,
       showNpc: showNpc ?? this.showNpc,
+      showWalk: showWalk ?? this.showWalk,
     );
   }
 }

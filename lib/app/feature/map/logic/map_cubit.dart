@@ -9,7 +9,8 @@ class MapCubit extends Cubit<MapState> {
 
   void drawSelectedWalk() async {
     if (state.walk != null) {
-      emit(state.copyWith(enableTracking: false, showNpc: false));
+      emit(state.copyWith(
+          enableTracking: false, showNpc: false, showWalk: true));
       final firstGeoPoint = state.walk!.trackGeoPoints.first;
       final lastGeoPoint = state.walk!.trackGeoPoints.last;
       final geoPointBetweenFirstAndLast = state.walk!.trackGeoPoints
@@ -42,7 +43,21 @@ class MapCubit extends Cubit<MapState> {
     }
   }
 
-  void closeTracking() {
-    emit(state.copyWith(walk: null));
+  void toggleShowNpc() {
+    emit(state.copyWith(showNpc: !state.showNpc));
+  }
+
+  void toggleShowTracking() {
+    emit(state.copyWith(enableTracking: !state.enableTracking));
+  }
+
+  void toggleShowWalk() {
+    if (state.walk == null) return;
+    emit(state.copyWith(showWalk: !state.showWalk));
+    if (state.showWalk) {
+      state.mapController.removeLastRoad();
+    } else {
+      drawSelectedWalk();
+    }
   }
 }
