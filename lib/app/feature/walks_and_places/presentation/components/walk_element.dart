@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
+import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 
@@ -18,16 +21,20 @@ class WalkElement extends StatelessWidget {
     String getWalkDifficultyTitle() {
       switch (walk.difficulty) {
         case WalkDifficulty.easy:
-          return 'Passeggiata facile';
+          return 'Escursione facile';
         case WalkDifficulty.medium:
-          return 'Passeggiata media';
+          return 'Escursione media';
         case WalkDifficulty.hard:
-          return 'Passeggiata difficile';
+          return 'Escursione difficile';
       }
     }
 
     return InkWell(
       onTap: () {
+        context.go(
+          RoutesPaths.map,
+          extra: MapParameters(walk: walk),
+        );
         // showDialog(
         //   context: context,
         //   barrierColor: Colors.black.withOpacity(0.85),

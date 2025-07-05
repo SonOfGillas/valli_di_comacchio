@@ -28,7 +28,13 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutesPaths.map,
       builder: (BuildContext context, GoRouterState state) {
-        return const MapPage();
+        if (state.extra != null) {
+          final param = state.extra as MapParameters;
+          return MapPage(mapParameters: param);
+        }
+        return MapPage(
+          mapParameters: MapParameters(),
+        );
       },
     ),
     GoRoute(

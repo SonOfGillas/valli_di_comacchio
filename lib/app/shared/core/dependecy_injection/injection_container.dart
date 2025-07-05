@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:valli_di_comacchio/app/feature/auth/logic/auth_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
+import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
+import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/slash/logic/splash_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
@@ -97,6 +99,10 @@ Future<void> initServiceLocator() async {
         appCubit: sl(),
       ),
     )
+
+    // Map
+    ..registerFactoryParam<MapCubit, MapParameters, void>(
+        (param, _) => MapCubit(param))
 
     // Trade
     ..registerFactoryParam<TradeBloc, TradePageParameters, void>(

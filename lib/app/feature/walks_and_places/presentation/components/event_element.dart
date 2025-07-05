@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h1_on_primary/h1_on_primary.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
@@ -34,11 +32,11 @@ class _EventPanelListState extends State<EventPanelList> {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
+        spacing: 8,
         children: widget.events.asMap().entries.map<Widget>((entry) {
           int index = entry.key;
           Event event = entry.value;
           return Container(
-            margin: const EdgeInsets.symmetric(vertical: 4.0),
             decoration: BoxDecoration(
               color: AppColors.primary_light,
               borderRadius: BorderRadius.circular(8),
@@ -50,17 +48,17 @@ class _EventPanelListState extends State<EventPanelList> {
                 ),
               ],
             ),
-            child: Column(
-              children: [
-                // Header
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      expanded[index] = !expanded[index];
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(16.0),
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  expanded[index] = !expanded[index];
+                });
+              },
+              child: Column(
+                children: [
+                  // Header
+                  Container(
+                    padding: const EdgeInsets.only(bottom: 16.0),
                     child: SizedBox(
                       width: double.infinity,
                       child: Column(
@@ -79,58 +77,58 @@ class _EventPanelListState extends State<EventPanelList> {
                       ),
                     ),
                   ),
-                ),
-                // Expandable Body
-                if (expanded[index])
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary_light,
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
+                  // Expandable Body
+                  if (expanded[index])
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary_light,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (event.description.isNotEmpty) ...[
+                            const H3(
+                              'Descrizione:',
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              event.description,
+                              style: AppTextStyles.labelOnPaletteLight,
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          if (event.program.isNotEmpty) ...[
+                            const H3(
+                              'Programma:',
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              event.program,
+                              style: AppTextStyles.labelOnPaletteLight,
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                          if (event.contacts.isNotEmpty) ...[
+                            const H3(
+                              'Contatti:',
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              event.contacts,
+                              style: AppTextStyles.labelOnPaletteLight,
+                            ),
+                          ],
+                        ],
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (event.description.isNotEmpty) ...[
-                          const H3(
-                            'Descrizione:',
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            event.description,
-                            style: AppTextStyles.labelOnPaletteLight,
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                        if (event.program.isNotEmpty) ...[
-                          const H3(
-                            'Programma:',
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            event.program,
-                            style: AppTextStyles.labelOnPaletteLight,
-                          ),
-                          const SizedBox(height: 16),
-                        ],
-                        if (event.contacts.isNotEmpty) ...[
-                          const H3(
-                            'Contatti:',
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            event.contacts,
-                            style: AppTextStyles.labelOnPaletteLight,
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-              ],
+                ],
+              ),
             ),
           );
         }).toList(),
