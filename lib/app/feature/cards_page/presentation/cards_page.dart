@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/cards_page_screen.dart';
-import 'package:valli_di_comacchio/app/feature/cards_page/presentation/components/card_detail.dart';
-import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
-import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/core/dependecy_injection/injection_container.dart';

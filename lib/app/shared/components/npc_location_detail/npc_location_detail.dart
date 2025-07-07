@@ -26,7 +26,7 @@ class NpcLocationDetail extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              npc.locationImagePath,
+              npc.locationInformation.imagePath,
               fit: BoxFit.cover,
             ),
           ),
@@ -53,7 +53,7 @@ class NpcLocationDetail extends StatelessWidget {
                       const SizedBox(width: 8),
                       Expanded(
                         child: H1(
-                          npc.locationName,
+                          npc.locationInformation.name,
                         ),
                       ),
                     ],
@@ -63,7 +63,7 @@ class NpcLocationDetail extends StatelessWidget {
                 NpcDisplayHeader(
                   npc: npc,
                   npcMessage:
-                      'Benvenuto,  Puoi avere più informazioni su ${npc.locationName}. oppure accettare una quest.  o commerciare con me per iniziare a fare punti',
+                      'Benvenuto,  Puoi avere più informazioni su ${npc.locationInformation.name}. oppure accettare una quest.  o commerciare con me per iniziare a fare punti',
                   expanded: true,
                 ),
                 const SizedBox(height: 24),

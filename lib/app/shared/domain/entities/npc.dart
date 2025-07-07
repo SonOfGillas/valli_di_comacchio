@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/location_information.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 
 class Npc extends Equatable {
@@ -6,8 +7,7 @@ class Npc extends Equatable {
     required this.id,
     required this.name,
     required this.imageLocalPath,
-    required this.locationImagePath,
-    required this.locationName,
+    required this.locationInformation,
     required this.longitude,
     required this.latitude,
     required this.wealth,
@@ -18,8 +18,7 @@ class Npc extends Equatable {
   final String id;
   final String name;
   final String imageLocalPath;
-  final String locationImagePath;
-  final String locationName;
+  final LocationInformation locationInformation;
   final double longitude;
   final double latitude;
   final int wealth;
@@ -34,9 +33,8 @@ class Npc extends Equatable {
   List<Object?> get props => [
         id,
         name,
-        locationImagePath,
+        locationInformation,
         imageLocalPath,
-        locationName,
         longitude,
         latitude,
         wealth,
@@ -51,8 +49,7 @@ class Npc extends Equatable {
     return Npc(
         id: id,
         name: name,
-        locationImagePath: locationImagePath,
-        locationName: locationName,
+        locationInformation: locationInformation,
         longitude: longitude,
         latitude: latitude,
         imageLocalPath: imageLocalPath,
@@ -65,12 +62,14 @@ class Npc extends Equatable {
     final invetory = (json['inventory'] as List)
         .map((item) => TradeResourceInventory.fromJson(item))
         .toList();
+
     return Npc(
       id: json['id'] as String,
       name: json['name'] as String,
       imageLocalPath: json['imageLocalPath'] as String,
-      locationImagePath: json['locationImagePath'] as String,
-      locationName: json['locationName'] as String,
+      locationInformation: LocationInformation.fromJson(
+        json['locationInformation'] as Map<String, dynamic>,
+      ),
       longitude: json['longitude'] as double,
       latitude: json['latitude'] as double,
       wealth: json['wealth'] as int,
@@ -86,8 +85,7 @@ class Npc extends Equatable {
       'id': id,
       'name': name,
       'imageLocalPath': imageLocalPath,
-      'locationImagePath': locationImagePath,
-      'locationName': locationName,
+      'locationInformation': locationInformation.toJson(),
       'longitude': longitude,
       'latitude': latitude,
       'wealth': wealth,

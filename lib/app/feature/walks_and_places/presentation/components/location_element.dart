@@ -36,13 +36,13 @@ class LocationElement extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      npc.locationImagePath,
+                      npc.locationInformation.imagePath,
                       height: 130,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                H3(npc.locationName),
+                H3(npc.locationInformation.name),
               ],
             ),
             Image.asset(

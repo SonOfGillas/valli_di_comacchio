@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/need_level.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/location_information.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
@@ -74,14 +75,66 @@ generateRndInventory() {
       .toList();
 }
 
+// always open 00:00 - 23:59
+final openingAlways = [
+  DateTime(2023, 1, 1, 0, 0),
+  DateTime(2023, 1, 1, 0, 0),
+  DateTime(2023, 1, 1, 0, 0),
+  DateTime(2023, 1, 1, 0, 0),
+  DateTime(2023, 1, 1, 0, 0),
+  DateTime(2023, 1, 1, 0, 0),
+  DateTime(2023, 1, 1, 0, 0)
+];
+final closingAlways = [
+  DateTime(2023, 1, 1, 23, 59),
+  DateTime(2023, 1, 1, 23, 59),
+  DateTime(2023, 1, 1, 23, 59),
+  DateTime(2023, 1, 1, 23, 59),
+  DateTime(2023, 1, 1, 23, 59),
+  DateTime(2023, 1, 1, 23, 59),
+  DateTime(2023, 1, 1, 23, 59)
+];
+
+// open 08:00 - 20:00
+final openingStandard = [
+  DateTime(2023, 1, 1, 8, 0),
+  DateTime(2023, 1, 1, 8, 0),
+  DateTime(2023, 1, 1, 8, 0),
+  DateTime(2023, 1, 1, 8, 0),
+  DateTime(2023, 1, 1, 8, 0),
+  DateTime(2023, 1, 1, 8, 0),
+  DateTime(2023, 1, 1, 8, 0)
+];
+final closingStandard = [
+  DateTime(2023, 1, 1, 20, 0),
+  DateTime(2023, 1, 1, 20, 0),
+  DateTime(2023, 1, 1, 20, 0),
+  DateTime(2023, 1, 1, 20, 0),
+  DateTime(2023, 1, 1, 20, 0),
+  DateTime(2023, 1, 1, 20, 0),
+  DateTime(2023, 1, 1, 20, 0),
+];
+
 List<Npc> generateNpcResetData() {
   return [
     Npc(
       id: 'npc_1',
       name: 'Rosario',
       imageLocalPath: AppImages.rosario,
-      locationImagePath: AppImages.rosario_location,
-      locationName: 'Via dei Bilancioni',
+      locationInformation: LocationInformation(
+        name: 'Via dei Bilancioni',
+        imagePath: AppImages.rosario_location,
+        description:
+            'è un percorso nel pieno della laguna di comacchio, costeggiato da una serie di bilancioni da pesca',
+        subLocationsOrActivities: [
+          SubLocationOrActivity(
+            name: 'Passeggiata',
+            opening: openingAlways,
+            closing: closingAlways,
+            description: '',
+          ),
+        ],
+      ),
       longitude: 12.197045,
       latitude: 44.672905,
       wealth: generateRandomWealth(),
@@ -92,8 +145,20 @@ List<Npc> generateNpcResetData() {
       id: 'npc_2',
       name: 'Eelena',
       imageLocalPath: AppImages.eelena,
-      locationImagePath: AppImages.eelena_location,
-      locationName: 'Ponte Trepponti',
+      locationInformation: LocationInformation(
+        name: 'Ponte Trepponti',
+        imagePath: AppImages.eelena_location,
+        description:
+            'Il complesso architettonico dei Trepponti, conosciuto anche come Ponte Pallotta, è il più noto ponte di Comacchio nonché il suo monumento più rappresentativo. Esso è ubicato lungo l\'antico canale navigabile Pallotta che conduceva al mare Adriatico ed era la porta fortificata della città.',
+        subLocationsOrActivities: [
+          SubLocationOrActivity(
+            name: 'attrazione',
+            opening: openingAlways,
+            closing: closingAlways,
+            description: '',
+          ),
+        ],
+      ),
       longitude: 12.183259,
       latitude: 44.693005,
       wealth: generateRandomWealth(),
@@ -104,8 +169,37 @@ List<Npc> generateNpcResetData() {
       id: 'npc_3',
       name: 'Pino',
       imageLocalPath: AppImages.pino,
-      locationImagePath: AppImages.pino_location,
-      locationName: 'Lido di Spina',
+      locationInformation: LocationInformation(
+        name: 'Lido di Spina',
+        imagePath: AppImages.pino_location,
+        description: 'Un lido tranquillo e rilassante.',
+        subLocationsOrActivities: [
+          SubLocationOrActivity(
+            name: 'Bagno Faro',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Bagno hawaii',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Bagno Enjoy',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Al Sole',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+        ],
+      ),
       longitude: 12.252110,
       latitude: 44.653382,
       wealth: generateRandomWealth(),
@@ -116,8 +210,37 @@ List<Npc> generateNpcResetData() {
       id: 'npc_4',
       name: 'Al Carpone',
       imageLocalPath: AppImages.alCarpone,
-      locationImagePath: AppImages.alCarpone_location,
-      locationName: 'Lido degli Estensi',
+      locationInformation: LocationInformation(
+        name: 'Lido degli Estensi',
+        imagePath: AppImages.alCarpone_location,
+        description: 'Un lido vivace e pieno di vita.',
+        subLocationsOrActivities: [
+          SubLocationOrActivity(
+            name: 'Pineta Beach',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Bagno Perla',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Bagno Oro',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Bagno Astra',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+        ],
+      ),
       longitude: 12.247454,
       latitude: 44.669262,
       wealth: generateRandomWealth(),
@@ -128,8 +251,25 @@ List<Npc> generateNpcResetData() {
       id: 'npc_5',
       name: 'Qua Qua',
       imageLocalPath: AppImages.quaQua,
-      locationImagePath: AppImages.quaQua_location,
-      locationName: 'Porto Garibaldi',
+      locationInformation: LocationInformation(
+        name: 'Porto Garibaldi',
+        imagePath: AppImages.quaQua_location,
+        description: 'Un porto vivace e pieno di attività.',
+        subLocationsOrActivities: [
+          SubLocationOrActivity(
+            name: 'Quelli di Flip',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+          SubLocationOrActivity(
+            name: 'Bagno venere',
+            opening: openingStandard,
+            closing: closingStandard,
+            description: 'Stabilimento balneare',
+          ),
+        ],
+      ),
       longitude: 12.243106,
       latitude: 44.678690,
       wealth: generateRandomWealth(),
