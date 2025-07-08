@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc_dislay_header.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_button.dart';
@@ -212,7 +213,7 @@ class SubLocationOrActivityWidget extends StatelessWidget {
     final sundayOpening = subLocationOrActivity.opening[6];
     final sundayClosing = subLocationOrActivity.closing[6];
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -269,7 +270,61 @@ class SubLocationOrActivityWidget extends StatelessWidget {
                 closing: sundayClosing,
               ),
             ],
-          )
+          ),
+          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: () {
+              launchUrl(Uri.parse('https://flutter.dev'));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: AppColors.primary_light,
+                borderRadius: BorderRadius.circular(16.0),
+                border: Border.all(
+                  color: AppColors.background_white.withOpacity(0.3),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      size: 16,
+                      color: AppColors.background_white,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      'Per saperne di più',
+                      style: TextStyle(
+                        color: AppColors.background_white,
+                        decoration: TextDecoration.underline,
+                        decorationColor: AppColors.background_white,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 12,
+                      color: AppColors.background_white,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
