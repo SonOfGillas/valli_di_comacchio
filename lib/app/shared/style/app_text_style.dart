@@ -56,6 +56,36 @@ class AppTextStyles {
       ..color = AppColors.black_shadow_80,
   );
 
+  static final h2FontSize = 28.0;
+  static final h2Height = 40 / 28;
+  static final h2LetterSpacing = defaultLetterSpacing * h2FontSize;
+
+  static final h2WithBorder = GoogleFonts.lilitaOne(
+    color: AppColors.background_white,
+    fontWeight: FontWeight.w400,
+    fontSize: h2FontSize,
+    height: h2Height,
+    letterSpacing: h2LetterSpacing,
+    shadows: [
+      Shadow(
+        color: AppColors.black_shadow_80,
+        offset: Offset(shadowXoffset * h2FontSize, shadowYoffset * h2FontSize),
+        blurRadius: 0,
+      ),
+    ],
+  );
+
+  static final h2Boarder = GoogleFonts.lilitaOne(
+    fontWeight: FontWeight.w900,
+    fontSize: h2FontSize,
+    height: h2Height,
+    letterSpacing: h2LetterSpacing,
+    foreground: Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = defaultBorderWidth
+      ..color = AppColors.black_shadow_80,
+  );
+
   static final h3FontSize = 22.0;
   static final h3Height = 32 / 22;
   static final h3LetterSpacing = defaultLetterSpacing * h3FontSize;

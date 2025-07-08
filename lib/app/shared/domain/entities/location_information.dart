@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
+
 class SubLocationOrActivity {
   final String name;
-  final List<DateTime> opening; // 7 values one for each day of the week
-  final List<DateTime> closing;
+  final List<TimeOfDay> opening; // 7 values one for each day of the week
+  final List<TimeOfDay> closing;
   final String description;
   final Uri? infoUrl;
 
@@ -15,10 +17,12 @@ class SubLocationOrActivity {
 
   factory SubLocationOrActivity.fromJson(Map<String, dynamic> json) {
     final opening = (json['opening'] as List)
-        .map((item) => DateTime.fromMillisecondsSinceEpoch(item as int))
+        .map((item) => TimeOfDay.fromDateTime(
+            DateTime.fromMillisecondsSinceEpoch(item as int)))
         .toList();
     final closing = (json['closing'] as List)
-        .map((item) => DateTime.fromMillisecondsSinceEpoch(item as int))
+        .map((item) => TimeOfDay.fromDateTime(
+            DateTime.fromMillisecondsSinceEpoch(item as int)))
         .toList();
     return SubLocationOrActivity(
       name: json['name'] as String,
@@ -33,8 +37,8 @@ class SubLocationOrActivity {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'opening': opening.map((dt) => dt.millisecondsSinceEpoch).toList(),
-      'closing': closing.map((dt) => dt.millisecondsSinceEpoch).toList(),
+      'opening': opening.map((dt) => dt.hour * 3600 + dt.minute * 60).toList(),
+      'closing': closing.map((dt) => dt.hour * 3600 + dt.minute * 60).toList(),
       'description': description,
       'infoUrl': infoUrl?.toString(),
     };

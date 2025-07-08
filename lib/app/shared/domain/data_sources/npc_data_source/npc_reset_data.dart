@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/need_level.dart';
 import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/location_information.dart';
@@ -77,42 +78,42 @@ generateRndInventory() {
 
 // always open 00:00 - 23:59
 final openingAlways = [
-  DateTime(2023, 1, 1, 0, 0),
-  DateTime(2023, 1, 1, 0, 0),
-  DateTime(2023, 1, 1, 0, 0),
-  DateTime(2023, 1, 1, 0, 0),
-  DateTime(2023, 1, 1, 0, 0),
-  DateTime(2023, 1, 1, 0, 0),
-  DateTime(2023, 1, 1, 0, 0)
+  TimeOfDay(hour: 0, minute: 0),
+  TimeOfDay(hour: 0, minute: 0),
+  TimeOfDay(hour: 0, minute: 0),
+  TimeOfDay(hour: 0, minute: 0),
+  TimeOfDay(hour: 0, minute: 0),
+  TimeOfDay(hour: 0, minute: 0),
+  TimeOfDay(hour: 0, minute: 0),
 ];
 final closingAlways = [
-  DateTime(2023, 1, 1, 23, 59),
-  DateTime(2023, 1, 1, 23, 59),
-  DateTime(2023, 1, 1, 23, 59),
-  DateTime(2023, 1, 1, 23, 59),
-  DateTime(2023, 1, 1, 23, 59),
-  DateTime(2023, 1, 1, 23, 59),
-  DateTime(2023, 1, 1, 23, 59)
+  TimeOfDay(hour: 23, minute: 59),
+  TimeOfDay(hour: 23, minute: 59),
+  TimeOfDay(hour: 23, minute: 59),
+  TimeOfDay(hour: 23, minute: 59),
+  TimeOfDay(hour: 23, minute: 59),
+  TimeOfDay(hour: 23, minute: 59),
+  TimeOfDay(hour: 23, minute: 59)
 ];
 
 // open 08:00 - 20:00
 final openingStandard = [
-  DateTime(2023, 1, 1, 8, 0),
-  DateTime(2023, 1, 1, 8, 0),
-  DateTime(2023, 1, 1, 8, 0),
-  DateTime(2023, 1, 1, 8, 0),
-  DateTime(2023, 1, 1, 8, 0),
-  DateTime(2023, 1, 1, 8, 0),
-  DateTime(2023, 1, 1, 8, 0)
+  TimeOfDay(hour: 8, minute: 0),
+  TimeOfDay(hour: 8, minute: 0),
+  TimeOfDay(hour: 8, minute: 0),
+  TimeOfDay(hour: 8, minute: 0),
+  TimeOfDay(hour: 8, minute: 0),
+  TimeOfDay(hour: 8, minute: 0),
+  TimeOfDay(hour: 8, minute: 0),
 ];
 final closingStandard = [
-  DateTime(2023, 1, 1, 20, 0),
-  DateTime(2023, 1, 1, 20, 0),
-  DateTime(2023, 1, 1, 20, 0),
-  DateTime(2023, 1, 1, 20, 0),
-  DateTime(2023, 1, 1, 20, 0),
-  DateTime(2023, 1, 1, 20, 0),
-  DateTime(2023, 1, 1, 20, 0),
+  TimeOfDay(hour: 20, minute: 0),
+  TimeOfDay(hour: 20, minute: 0),
+  TimeOfDay(hour: 20, minute: 0),
+  TimeOfDay(hour: 20, minute: 0),
+  TimeOfDay(hour: 20, minute: 0),
+  TimeOfDay(hour: 20, minute: 0),
+  TimeOfDay(hour: 20, minute: 0),
 ];
 
 List<Npc> generateNpcResetData() {
@@ -131,7 +132,7 @@ List<Npc> generateNpcResetData() {
             name: 'Passeggiata',
             opening: openingAlways,
             closing: closingAlways,
-            description: '',
+            description: 'è possibile passeggiare lungo il canale liberamente',
           ),
         ],
       ),
@@ -152,10 +153,11 @@ List<Npc> generateNpcResetData() {
             'Il complesso architettonico dei Trepponti, conosciuto anche come Ponte Pallotta, è il più noto ponte di Comacchio nonché il suo monumento più rappresentativo. Esso è ubicato lungo l\'antico canale navigabile Pallotta che conduceva al mare Adriatico ed era la porta fortificata della città.',
         subLocationsOrActivities: [
           SubLocationOrActivity(
-            name: 'attrazione',
+            name: 'Attrazione',
             opening: openingAlways,
             closing: closingAlways,
-            description: '',
+            description:
+                'è possibile visitare l\'attrazione in qualsiasi momento',
           ),
         ],
       ),
