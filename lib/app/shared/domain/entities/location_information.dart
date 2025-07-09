@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 class SubLocationOrActivity {
@@ -45,13 +46,13 @@ class SubLocationOrActivity {
   }
 }
 
-class LocationInformation {
+class LocationInformation extends Equatable {
   final String name;
   final String imagePath;
   final String description;
   final List<SubLocationOrActivity> subLocationsOrActivities;
 
-  LocationInformation({
+  const LocationInformation({
     required this.name,
     required this.imagePath,
     required this.description,
@@ -78,4 +79,8 @@ class LocationInformation {
           subLocationsOrActivities.map((item) => item.toJson()).toList(),
     };
   }
+
+  @override
+  List<Object?> get props =>
+      [name, imagePath, description, subLocationsOrActivities];
 }

@@ -102,7 +102,10 @@ Future<void> initServiceLocator() async {
 
     // Map
     ..registerFactoryParam<MapCubit, MapParameters, void>(
-        (param, _) => MapCubit(param))
+        (param, _) => MapCubit(
+              parameters: param,
+              appCubit: sl<AppCubit>(),
+            ))
 
     // Trade
     ..registerFactoryParam<TradeBloc, TradePageParameters, void>(

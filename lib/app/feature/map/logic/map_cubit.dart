@@ -3,9 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
 class MapCubit extends Cubit<MapState> {
-  MapCubit(MapParameters parameters) : super(MapState.initial(parameters));
+  MapCubit({required this.parameters, required this.appCubit})
+      : super(MapState.initial(parameters));
+
+  final AppCubit appCubit;
+  final MapParameters parameters;
+
+  List<Npc> get npcs => appCubit.state.npcs;
 
   void drawSelectedWalk() async {
     if (state.walk != null) {
@@ -20,11 +28,6 @@ class MapCubit extends Cubit<MapState> {
         lastGeoPoint,
         roadType: RoadType.foot,
         intersectPoint: geoPointBetweenFirstAndLast,
-        roadOption: const RoadOption(
-            roadColor: Colors.purple,
-            roadBorderColor: Colors.purple,
-            roadWidth: 2,
-            roadBorderWidth: 4),
       );
       // move the camera at the center of the walk
       final latMean = state.walk!.trackGeoPoints.fold(
@@ -45,6 +48,36 @@ class MapCubit extends Cubit<MapState> {
 
   void toggleShowNpc() {
     emit(state.copyWith(showNpc: !state.showNpc));
+    if (state.showNpc) {
+      for (var npc in npcs) {
+        final npcGeoPoint = GeoPoint(
+          latitude: npc.latitude,
+          longitude: npc.longitude,
+        );
+        state.mapController.addMarker(
+          npcGeoPoint,
+        );
+        state.mapController.setMarkerIcon(
+            npcGeoPoint,
+            MarkerIcon(
+              iconWidget: Container(
+                key: ValueKey(npc.id),
+                child: Image.asset(
+                  npc.imageLocalPath,
+                  height: 160,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ));
+      }
+    } else {
+      final geoPoints = npcs
+          .map(
+            (npc) => GeoPoint(latitude: npc.latitude, longitude: npc.longitude),
+          )
+          .toList();
+      state.mapController.removeMarkers(geoPoints);
+    }
   }
 
   void toggleShowTracking() {

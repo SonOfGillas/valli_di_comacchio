@@ -19,15 +19,26 @@ class MapState extends Equatable {
   final bool showWalk;
 
   factory MapState.initial(MapParameters? parameters) {
+    // nord-ovest corner 44.715405, 12.084026
+    // sud-ovest corner 44.538891, 12.089158
+    // nord-east corner 44.710786, 12.225312
+    // sud-est corner 44.544011, 12.277653
+
+    // Calculate center point from the 4 corners
+    const double centerLat =
+        (44.715405 + 44.538891 + 44.710786 + 44.544011) / 4;
+    const double centerLng =
+        (12.084026 + 12.089158 + 12.225312 + 12.277653) / 4;
+
     return MapState(
         walk: parameters?.walk,
         mapController: MapController(
-          initPosition: GeoPoint(latitude: 44.672905, longitude: 12.197045),
+          initPosition: GeoPoint(latitude: centerLat, longitude: centerLng),
           areaLimit: const BoundingBox(
-            east: 12.197045,
-            north: 44.672905,
-            south: 44.672905,
-            west: 12.197045,
+            east: 12.277653, // easternmost longitude
+            north: 44.715405, // northernmost latitude
+            south: 44.538891, // southernmost latitude
+            west: 12.084026, // westernmost longitude
           ),
         ));
   }

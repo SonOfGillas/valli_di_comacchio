@@ -59,7 +59,7 @@ class MapScreen extends StatelessWidget {
                             unFollowUser: false,
                           ),
                           zoomOption: const ZoomOption(
-                            initZoom: 8,
+                            initZoom: 7,
                             minZoomLevel: 3,
                             maxZoomLevel: 19,
                             stepZoom: 1.0,
@@ -80,8 +80,10 @@ class MapScreen extends StatelessWidget {
                             ),
                           ),
                           roadConfiguration: const RoadOption(
-                            roadColor: Colors.blue,
-                          ),
+                              roadColor: Colors.purple,
+                              roadBorderColor: Colors.purple,
+                              roadWidth: 2,
+                              roadBorderWidth: 4),
                           staticPoints: state.showNpc
                               ? appState.npcs
                                   .map(
@@ -103,6 +105,7 @@ class MapScreen extends StatelessWidget {
                                   .toList()
                               : []),
                       onGeoPointClicked: (geoPoint) {
+                        final appState = context.read<AppCubit>().state;
                         final npc = appState.npcs
                             .where(
                               (n) =>
@@ -140,21 +143,21 @@ class MapScreen extends StatelessWidget {
                                 svgPath: AppIcons.gps,
                                 selected: state.enableTracking,
                               ),
-                              AppCircularIconButton(
-                                onPressed: () {
-                                  context.read<MapCubit>().toggleShowNpc();
-                                },
-                                svgPath: AppIcons.npc,
-                                selected: state.showNpc,
-                              ),
-                              if (state.walk != null)
-                                AppCircularIconButton(
-                                  onPressed: () {
-                                    context.read<MapCubit>().toggleShowWalk();
-                                  },
-                                  svgPath: AppIcons.distance,
-                                  selected: state.showWalk,
-                                ),
+                              // AppCircularIconButton(
+                              //   onPressed: () {
+                              //     context.read<MapCubit>().toggleShowNpc();
+                              //   },
+                              //   svgPath: AppIcons.npc,
+                              //   selected: state.showNpc,
+                              // ),
+                              // if (state.walk != null)
+                              //   AppCircularIconButton(
+                              //     onPressed: () {
+                              //       context.read<MapCubit>().toggleShowWalk();
+                              //     },
+                              //     svgPath: AppIcons.distance,
+                              //     selected: state.showWalk,
+                              //   ),
                             ],
                           ),
                         );
