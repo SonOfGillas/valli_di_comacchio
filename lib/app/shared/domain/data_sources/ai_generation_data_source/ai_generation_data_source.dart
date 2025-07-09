@@ -4,4 +4,6 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/counter_offer_resp
 abstract class AiGenerationDataSource {
   Future<CounterOfferResponse> getNpcReponseToCounterOffer(
       CounterOfferRequest counterOfferRequest);
+
+  Future<void> generateRndNft();
 }

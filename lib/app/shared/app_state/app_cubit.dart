@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
+import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';
@@ -103,20 +104,44 @@ class AppCubit extends Cubit<AppState> {
     return events;
   }
 
+  Future<bool> getIsDevMode() async {
+    final result = await userRepository.isDevUser();
+    bool isDev = false;
+    result.fold(onSuccess: (devMode) {
+      emit(state.copyWith(devMode: devMode));
+      isDev = devMode;
+    });
+    return isDev;
+  }
+
   Future<void> loadSetUpData(AppUser? loggedUser) async {
     // Launch all async operations in parallel
-    final results = await Future.wait([
-      getNpcsData(),
-      getWalksData(),
-      getEventsData(),
-    ]);
+    final results = await Future.wait(
+        [getNpcsData(), getWalksData(), getEventsData(), getIsDevMode()]);
 
     // Extract results from the list
     final npcs = results[0] as List<Npc>;
     final walks = results[1] as List<Walk>;
     final events = results[2] as List<Event>;
+    final isDevMode = results[3] as bool;
 
     emit(state.copyWith(
-        user: loggedUser, npcs: npcs, walks: walks, events: events));
+        user: loggedUser,
+        npcs: npcs,
+        walks: walks,
+        events: events,
+        devMode: isDevMode));
+  }
+
+  Future<void> setDevMode(bool isDev) async {
+    final result = await userRepository.setDevMode(isDev);
+    result.fold(
+      onSuccess: (_) {
+        emit(state.copyWith(devMode: isDev));
+      },
+      onFailure: (error) {
+        // Handle error if needed
+      },
+    );
   }
 }

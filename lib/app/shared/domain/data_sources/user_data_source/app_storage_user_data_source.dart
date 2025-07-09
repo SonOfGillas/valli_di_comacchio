@@ -80,4 +80,18 @@ class AppStorageUserDataSource extends LocalUserDataSource {
       value: password,
     );
   }
+
+  @override
+  Future<bool> isDevUser() async {
+    final isDev = await appStorage.read(key: AppStorage.devModeEnabled);
+    return isDev == 'true';
+  }
+
+  @override
+  Future<void> setDevMode(bool isDev) {
+    return appStorage.write(
+      key: AppStorage.devModeEnabled,
+      value: isDev.toString(),
+    );
+  }
 }

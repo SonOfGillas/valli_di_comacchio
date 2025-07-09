@@ -19,9 +19,14 @@ class ProfilePage extends StatelessWidget {
             children: [
               H3('Profile'),
               GlowingButton(
-                  text: 'delete your profile',
+                  text: 'enable dev mode',
                   onPressed: () {
-                    context.read<AppCubit>().logout();
+                    context.read<AppCubit>().setDevMode(true);
+                  }),
+              GlowingButton(
+                  text: 'disable dev mode',
+                  onPressed: () {
+                    context.read<AppCubit>().setDevMode(false);
                   })
             ],
           ),

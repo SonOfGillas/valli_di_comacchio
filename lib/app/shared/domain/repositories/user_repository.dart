@@ -223,4 +223,26 @@ class UserRepository {
       return Error(UnknownFailure());
     }
   }
+
+  AsyncResult<bool> isDevUser() async {
+    try {
+      final isDev = await localUserDataSource.isDevUser();
+      return Success(isDev);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (e) {
+      return Error(UnknownFailure());
+    }
+  }
+
+  AsyncResult<void> setDevMode(bool isDev) async {
+    try {
+      await localUserDataSource.setDevMode(isDev);
+      return Success(null);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (e) {
+      return Error(UnknownFailure());
+    }
+  }
 }

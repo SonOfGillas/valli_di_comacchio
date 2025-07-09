@@ -14,4 +14,6 @@ abstract class LocalUserDataSource {
   Future<void> deleteUserData();
   Future<void> saveUserPassword(String password);
   Future<String?> getUserPassword();
+  Future<void> setDevMode(bool isDev);
+  Future<bool> isDevUser();
 }

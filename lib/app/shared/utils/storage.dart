@@ -5,7 +5,7 @@ class AppStorage {
 
   static const userKey = 'user';
   static const userPasswordKey = 'userPassword';
-  static const fcmToken = 'fcmToken';
+  static const devModeEnabled = 'devModeEnabled';
   final storage = const FlutterSecureStorage();
 
   Future<void> write({
