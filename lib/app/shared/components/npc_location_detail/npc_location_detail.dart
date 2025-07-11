@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc_dislay_header.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
 import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_button.dart';
@@ -60,8 +61,13 @@ class NpcLocationDetail extends StatelessWidget {
                       children: [
                         GlowingButton(
                           text: 'Missioni',
-                          onPressed: () {},
-                          disabled: true,
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            context.push(
+                              RoutesPaths.quest,
+                              extra: QuestPageParameters(selectedNpc: npc),
+                            );
+                          },
                         ),
                         GlowingButton(
                           text: 'Commercia',

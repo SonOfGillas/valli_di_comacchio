@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
-import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
-import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
-import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/presentation/quests_screen.dart';
+import 'package:valli_di_comacchio/app/shared/core/dependecy_injection/injection_container.dart';
 
 class QuestsPage extends StatelessWidget {
-  const QuestsPage({super.key});
+  const QuestsPage({super.key, required this.questPageParameters});
+
+  final QuestPageParameters questPageParameters;
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit, AppState>(
-      builder: (context, state) {
-        return Scaffold(
-            appBar: ValliAppBar(),
-            body: const Center(
-              child: Text('Quest Page'),
-            ),
-            bottomNavigationBar: FooterNavBar());
-      },
-    );
+    return BlocProvider<QuestsCubit>(
+        create: (context) => sl<QuestsCubit>(param1: questPageParameters),
+        child: const QuestsScreen());
   }
 }

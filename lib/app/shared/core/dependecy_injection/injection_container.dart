@@ -3,6 +3,7 @@ import 'package:valli_di_comacchio/app/feature/auth/logic/auth_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/slash/logic/splash_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
@@ -16,12 +17,14 @@ import 'package:valli_di_comacchio/app/shared/domain/data_sources/cloud_firestor
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/event_data_source/event_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/firebase_npc_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/data_sources/quest_data_source/quest_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/app_storage_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/firebase_user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/walk_data_source/walk_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/quest_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/walk_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
@@ -61,6 +64,9 @@ Future<void> initServiceLocator() async {
     ..registerLazySingleton<EventDataSource>(
       () => EventDataSource(sl()),
     )
+    ..registerLazySingleton<QuestDataSource>(
+      () => QuestDataSource(aiGenerationDataSource: sl(), appStorage: sl()),
+    )
 
     // Repositories
     ..registerLazySingleton<UserRepository>(
@@ -78,6 +84,12 @@ Future<void> initServiceLocator() async {
     )
     ..registerLazySingleton<EventRepository>(
       () => EventRepository(sl()),
+    )
+    ..registerLazySingleton<QuestRepository>(
+      () => QuestRepository(
+        questDataSource: sl(),
+        userRepository: sl(),
+      ),
     )
 
     // AppState
@@ -114,6 +126,15 @@ Future<void> initServiceLocator() async {
         userRepository: sl(),
         npcRepository: sl(),
         tradePageParameters: param,
+      ),
+    )
+
+    // Quests
+    ..registerFactoryParam<QuestsCubit, QuestPageParameters, void>(
+      (param, _) => QuestsCubit(
+        appCubit: sl(),
+        questRepository: sl(),
+        parameters: param,
       ),
     )
 

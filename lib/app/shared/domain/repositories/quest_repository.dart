@@ -7,6 +7,7 @@ import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/quest_data_source/quest_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
 const questByNpc = 3;
@@ -20,7 +21,7 @@ class QuestRepository {
     required this.userRepository,
   });
 
-  AsyncResult<List<BasicQuest>> getNpcQuest(Npc npc, List<Npc> allNpcs) async {
+  AsyncResult<AllQuests> getNpcQuest(Npc npc, List<Npc> allNpcs) async {
     try {
       final quests = await questDataSource.generateQuestsForNpc(npc, allNpcs);
       return Success(quests);
@@ -31,10 +32,10 @@ class QuestRepository {
     }
   }
 
-  AsyncResult<List<BasicQuest>> acceptedQuests(Npc npc) async {
+  AsyncResult<AllQuests> localSavedQuests() async {
     try {
-      final quests = await questDataSource.acceptedQuests();
-      return Success(quests);
+      final localSavedQuests = await questDataSource.getLocalSavedQuests();
+      return Success(localSavedQuests);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
     } catch (exception) {
@@ -42,9 +43,9 @@ class QuestRepository {
     }
   }
 
-  AsyncResult<List<BasicQuest>> acceptQuest(BasicQuest quest) async {
+  AsyncResult<AllQuests> acceptQuest(Npc npc, BasicQuest quest) async {
     try {
-      final quests = await questDataSource.acceptQuest(quest);
+      final quests = await questDataSource.acceptQuest(npc, quest);
       return Success(quests);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
@@ -54,12 +55,12 @@ class QuestRepository {
   }
 
   AsyncResult<CompleteQuestResponse> completeQuest(
-      BasicQuest quest, AppUser user) async {
+      Npc npc, BasicQuest quest, AppUser user) async {
     try {
       final updatedUser = user.copyWith(
         wealth: (user.wealth + quest.coinReward),
       );
-      final updatedQuestList = await questDataSource.completeQuest(quest);
+      final updatedQuestList = await questDataSource.completeQuest(npc, quest);
       await userRepository.updateUserData(user: updatedUser);
       return Success(CompleteQuestResponse(
         updatedQuests: updatedQuestList,
@@ -85,7 +86,7 @@ class QuestRepository {
 }
 
 class CompleteQuestResponse {
-  final List<BasicQuest> updatedQuests;
+  final AllQuests updatedQuests;
   final User updatedUser;
 
   CompleteQuestResponse({

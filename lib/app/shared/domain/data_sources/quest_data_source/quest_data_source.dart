@@ -9,7 +9,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_qu
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/nft_collection.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/quests.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/quest_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
@@ -20,43 +20,42 @@ class QuestDataSource {
   QuestDataSource(
       {required this.aiGenerationDataSource, required this.appStorage});
 
-  Future<List<BasicQuest>> getLocalSavedQuests() async {
-    final questData = await appStorage.read(key: AppStorage.questsKey);
-    if (questData != null) {
-      final quests = Quests.fromJson(jsonDecode(questData));
-      return Future.value(quests.quests);
-    }
-    return Future.value([]);
-  }
-
-  Future<void> saveQuestsLocally(List<BasicQuest> quests) async {
+  Future<void> saveQuestsLocally(AllQuests allQuests) async {
     await appStorage.write(
       key: AppStorage.questsKey,
-      value: jsonEncode(Quests(quests: quests).toJson()),
+      value: jsonEncode(allQuests.toJson()),
     );
   }
 
+  Future<AllQuests> getLocalSavedQuests() async {
+    final questData = await appStorage.read(key: AppStorage.questsKey);
+    if (questData != null) {
+      final quests = AllQuests.fromJson(jsonDecode(questData));
+      return Future.value(quests);
+    }
+    return Future.value(AllQuests());
+  }
+
   /* get quests for a specific NPC, if there aren't enough quests generate new ones */
-  Future<List<BasicQuest>> generateQuestsForNpc(
-      Npc npc, List<Npc> allNpcs) async {
-    final localSavedQuests = await getLocalSavedQuests();
+  Future<AllQuests> generateQuestsForNpc(Npc npc, List<Npc> allNpcs) async {
+    final allQuests = await getLocalSavedQuests();
     final List<BasicQuest> npcQuests = [];
-    final savedNpcQuests =
-        localSavedQuests.where((q) => q.npc.id == npc.id).toList();
+    final savedNpcQuests = allQuests.getNpcQuests(npc);
     if (savedNpcQuests.isNotEmpty) {
       npcQuests.addAll(savedNpcQuests);
     }
     if (npcQuests.length < questByNpc) {
       final newQuests =
-          await generateNewQuests(npc, questByNpc - npcQuests.length, allNpcs);
+          await _generateNewQuests(npc, questByNpc - npcQuests.length, allNpcs);
       npcQuests.addAll(newQuests);
     }
     // save updated quests to storage
-    await saveQuestsLocally(npcQuests);
-    return Future.value(npcQuests);
+    final allQuestUpdated = allQuests.editNpcQuests(npc, npcQuests);
+    await saveQuestsLocally(allQuestUpdated);
+    return Future.value(allQuestUpdated);
   }
 
-  Future<List<BasicQuest>> generateNewQuests(
+  Future<List<BasicQuest>> _generateNewQuests(
       Npc npc, int count, List<Npc> allNpcs) async {
     // Create a list of futures for parallel execution
     final List<Future<BasicQuest>> questFutures = [];
@@ -119,28 +118,18 @@ class QuestDataSource {
     return newQuests;
   }
 
-  Future<List<BasicQuest>> acceptedQuests() async {
+  Future<AllQuests> acceptQuest(Npc npc, BasicQuest quest) async {
     final localSavedQuests = await getLocalSavedQuests();
-    final acceptedQuests = localSavedQuests.where((q) => q.accepted).toList();
-    return Future.value(acceptedQuests);
-  }
-
-  Future<List<BasicQuest>> acceptQuest(BasicQuest quest) async {
-    final localSavedQuests = await getLocalSavedQuests();
-    final updatedQuests = localSavedQuests.map((q) {
-      if (q.uuid == quest.uuid) {
-        return q.copyWith(accepted: true);
-      }
-      return q;
-    }).toList();
-    await saveQuestsLocally(updatedQuests);
-    return Future.value(updatedQuests);
+    localSavedQuests.acceptQuest(npc, quest);
+    await saveQuestsLocally(localSavedQuests);
+    return Future.value(localSavedQuests);
   }
 
   /// Completes a quest by removing it from the local storage.
   /// If the quest is of type NFT treasure hunt, the nft will be saved in the user's collection.
   /// Returns the updated list of quests after completion.
-  Future<List<BasicQuest>> completeQuest(BasicQuest quest) async {
+  /// NOTE this method does not update the user's wealth, this is done in the quest_repository.
+  Future<AllQuests> completeQuest(Npc npc, BasicQuest quest) async {
     if (quest.type == QuestType.nftTreasureHunt) {
       // save the NFT to the user's collection
       final nftQuest = quest as NftTreasureQuest;
@@ -155,10 +144,9 @@ class QuestDataSource {
           value: jsonEncode(collectionFilePaths));
     }
     final localSavedQuests = await getLocalSavedQuests();
-    final updatedQuests =
-        localSavedQuests.where((q) => q.uuid != quest.uuid).toList();
-    await saveQuestsLocally(updatedQuests);
-    return Future.value(updatedQuests);
+    localSavedQuests.removeQuest(npc, quest);
+    await saveQuestsLocally(localSavedQuests);
+    return Future.value(localSavedQuests);
   }
 
   Future<List<File>> collectedNfts() async {

@@ -4,6 +4,7 @@ import 'package:valli_di_comacchio/app/feature/auth/presentation/auth_page.dart'
 import 'package:valli_di_comacchio/app/feature/cards_page/presentation/cards_page.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/profile/profile_page.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/quests_page.dart';
 import 'package:valli_di_comacchio/app/feature/slash/slash_screen.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
@@ -63,7 +64,12 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: RoutesPaths.quest,
       builder: (BuildContext context, GoRouterState state) {
-        return const QuestsPage();
+        if (state.extra != null) {
+          final param = state.extra as QuestPageParameters;
+          return QuestsPage(questPageParameters: param);
+        }
+        return QuestsPage(
+            questPageParameters: QuestPageParameters(selectedNpc: null));
       },
     )
   ],
