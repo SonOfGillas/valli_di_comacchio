@@ -6,7 +6,7 @@ import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
-const packetCost = 500;
+const packetCost = 2500;
 const packetSize = 5;
 const packetCarouselSize = 8;
 

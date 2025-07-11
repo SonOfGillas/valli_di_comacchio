@@ -1,53 +1,53 @@
-import 'dart:io';
-
-import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:uuid/uuid.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
 enum QuestType {
-  // birdWatching,
+  // birdWatching, <- use AI to recognize birds and give hints and rewards
   quiz,
   nftTreasureHunt,
+  nftTreasureHide,
   talkToNpc,
 }
 
-abstract class Quest {
+const uuidGenerator = Uuid();
+
+class BasicQuest {
+  final String uuid;
   final QuestType type;
   final Npc npc;
+  final int coinReward;
+  final bool accepted;
+//  final List<TradeResourceInventory> resourceReward;
 
-  Quest({required this.type, required this.npc});
-}
+  BasicQuest({
+    required this.type,
+    required this.npc,
+    this.coinReward = 0,
+    this.accepted = false,
+  }) : uuid = uuidGenerator.v1();
 
-class QuizQuest extends Quest {
-  final String question;
-  final List<String> answers;
-  final int correctAnswerIndex;
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': uuid,
+      'type': type.toString(),
+      'npc': npc.toJson(),
+      'coinReward': coinReward,
+      'accepted': accepted,
+    };
+  }
 
-  QuizQuest({
-    required this.question,
-    required this.answers,
-    required this.correctAnswerIndex,
-    required super.npc,
-  }) : super(type: QuestType.quiz);
-}
+  factory BasicQuest.fromJson(Map<String, dynamic> json) {
+    final typeString = json['type'] as String?;
+    final type = QuestType.values.firstWhere(
+      (e) => e.toString() == typeString,
+      orElse: () => QuestType.quiz,
+    );
 
-class NftTreasureHuntQuest extends Quest {
-  final File nft;
-  final GeoPoint location;
-
-  NftTreasureHuntQuest({
-    required this.nft,
-    required this.location,
-    required super.npc,
-  }) : super(type: QuestType.nftTreasureHunt);
-}
-
-class TalkToNpcQuest extends Quest {
-  final String senderNpcMessage;
-  final Npc receiverNpc;
-
-  TalkToNpcQuest({
-    required this.senderNpcMessage,
-    required this.receiverNpc,
-    required super.npc,
-  }) : super(type: QuestType.talkToNpc);
+    return BasicQuest(
+      type: type,
+      npc: Npc.fromJson(json['npc'] as Map<String, dynamic>),
+      coinReward: json['coinReward'] as int? ?? 0,
+      accepted: json['accepted'] as bool? ?? false,
+    );
+  }
 }
