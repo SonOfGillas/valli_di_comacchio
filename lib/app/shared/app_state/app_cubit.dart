@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
-import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';

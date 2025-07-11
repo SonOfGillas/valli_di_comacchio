@@ -7,6 +7,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quiz_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/nft_collection.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quests.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/quest_repository.dart';
@@ -19,18 +20,31 @@ class QuestDataSource {
   QuestDataSource(
       {required this.aiGenerationDataSource, required this.appStorage});
 
+  Future<List<BasicQuest>> getLocalSavedQuests() async {
+    final questData = await appStorage.read(key: AppStorage.questsKey);
+    if (questData != null) {
+      final quests = Quests.fromJson(jsonDecode(questData));
+      return Future.value(quests.quests);
+    }
+    return Future.value([]);
+  }
+
+  Future<void> saveQuestsLocally(List<BasicQuest> quests) async {
+    await appStorage.write(
+      key: AppStorage.questsKey,
+      value: jsonEncode(Quests(quests: quests).toJson()),
+    );
+  }
+
   /* get quests for a specific NPC, if there aren't enough quests generate new ones */
   Future<List<BasicQuest>> generateQuestsForNpc(
       Npc npc, List<Npc> allNpcs) async {
-    final questData = await appStorage.read(key: AppStorage.questsKey);
+    final localSavedQuests = await getLocalSavedQuests();
     final List<BasicQuest> npcQuests = [];
-    if (questData != null) {
-      final quests = Quests.fromJson(jsonDecode(questData));
-      final savedNpcQuests =
-          quests.quests.where((q) => q.npc.id == npc.id).toList();
-      if (savedNpcQuests.isNotEmpty) {
-        npcQuests.addAll(savedNpcQuests);
-      }
+    final savedNpcQuests =
+        localSavedQuests.where((q) => q.npc.id == npc.id).toList();
+    if (savedNpcQuests.isNotEmpty) {
+      npcQuests.addAll(savedNpcQuests);
     }
     if (npcQuests.length < questByNpc) {
       final newQuests =
@@ -38,81 +52,122 @@ class QuestDataSource {
       npcQuests.addAll(newQuests);
     }
     // save updated quests to storage
-    await appStorage.write(
-      key: AppStorage.questsKey,
-      value: jsonEncode(Quests(quests: npcQuests).toJson()),
-    );
+    await saveQuestsLocally(npcQuests);
     return Future.value(npcQuests);
   }
 
   Future<List<BasicQuest>> generateNewQuests(
       Npc npc, int count, List<Npc> allNpcs) async {
-    final List<BasicQuest> newQuests = [];
+    // Create a list of futures for parallel execution
+    final List<Future<BasicQuest>> questFutures = [];
+
     for (int i = 0; i < count; i++) {
       // get quest types
       final questTypes = QuestType.values;
       // randomly select a quest type
       final randomType = questTypes[Random().nextInt(questTypes.length)];
-      // generate quest based on type
+
+      // Create future for each quest type
       switch (randomType) {
         case QuestType.talkToNpc:
           final possibleNpcReceivers =
               allNpcs.where((n) => n.id != npc.id).toList();
           final randomReceiver = possibleNpcReceivers[
               Random().nextInt(possibleNpcReceivers.length)];
-          final talkToNpcData = await aiGenerationDataSource
-              .generateTalkToNpcQuestData(randomReceiver);
-          final quest = TalkToNpcQuest(
-            receiverNpc: randomReceiver,
-            talkToNpcData: talkToNpcData,
-            npc: npc,
-          );
-          newQuests.add(quest);
+
+          questFutures.add(aiGenerationDataSource
+              .generateTalkToNpcQuestData(randomReceiver)
+              .then((talkToNpcData) => TalkToNpcQuest(
+                    receiverNpc: randomReceiver,
+                    talkToNpcData: talkToNpcData,
+                    npc: npc,
+                  )));
           break;
+
         case QuestType.quiz:
-          final quiz = await aiGenerationDataSource.generateQuiz();
-          final quest = QuizQuest(
-            npc: npc,
-            question: quiz,
-          );
-          newQuests.add(quest);
+          questFutures.add(
+              aiGenerationDataSource.generateQuiz().then((quiz) => QuizQuest(
+                    npc: npc,
+                    question: quiz,
+                  )));
           break;
+
         case QuestType.nftTreasureHide:
-          final nft = await aiGenerationDataSource.generateNft();
-          final quest = NftTreasureQuest(
-            type: QuestType.nftTreasureHide,
-            nft: nft,
-            npc: npc,
-          );
-          newQuests.add(quest);
+          questFutures.add(aiGenerationDataSource
+              .generateNft()
+              .then((nft) => NftTreasureQuest(
+                    type: QuestType.nftTreasureHide,
+                    nft: nft,
+                    npc: npc,
+                  )));
           break;
+
         case QuestType.nftTreasureHunt:
-          final nftHunt = await aiGenerationDataSource.generateNft();
-          final quest = NftTreasureQuest(
-            type: QuestType.nftTreasureHunt,
-            nft: nftHunt,
-            npc: npc,
-          );
-          newQuests.add(quest);
+          questFutures.add(aiGenerationDataSource
+              .generateNft()
+              .then((nft) => NftTreasureQuest(
+                    type: QuestType.nftTreasureHunt,
+                    nft: nft,
+                    npc: npc,
+                  )));
           break;
       }
     }
-    return Future.value(newQuests);
+
+    // Wait for all quest generation to complete in parallel
+    final newQuests = await Future.wait(questFutures);
+    return newQuests;
   }
 
-  Future<List<BasicQuest>> acceptedQuests(Npc npc) async {
-    return Future.value([]);
+  Future<List<BasicQuest>> acceptedQuests() async {
+    final localSavedQuests = await getLocalSavedQuests();
+    final acceptedQuests = localSavedQuests.where((q) => q.accepted).toList();
+    return Future.value(acceptedQuests);
   }
 
-  Future<void> acceptQuest(BasicQuest quest) async {
-    return Future.value(null);
+  Future<List<BasicQuest>> acceptQuest(BasicQuest quest) async {
+    final localSavedQuests = await getLocalSavedQuests();
+    final updatedQuests = localSavedQuests.map((q) {
+      if (q.uuid == quest.uuid) {
+        return q.copyWith(accepted: true);
+      }
+      return q;
+    }).toList();
+    await saveQuestsLocally(updatedQuests);
+    return Future.value(updatedQuests);
   }
 
-  Future<void> completeQuest(BasicQuest quest) async {
-    return Future.value(null);
+  /// Completes a quest by removing it from the local storage.
+  /// If the quest is of type NFT treasure hunt, the nft will be saved in the user's collection.
+  /// Returns the updated list of quests after completion.
+  Future<List<BasicQuest>> completeQuest(BasicQuest quest) async {
+    if (quest.type == QuestType.nftTreasureHunt) {
+      // save the NFT to the user's collection
+      final nftQuest = quest as NftTreasureQuest;
+      // read the current NFT collection from storage
+      final collection = await collectedNfts();
+      final collectionFilePaths = collection.map((file) => file.path).toList();
+      // add the NFT to the collection
+      collectionFilePaths.add(nftQuest.nft.path);
+      // save the updated collection back to storage
+      await appStorage.write(
+          key: AppStorage.nftCollectionKey,
+          value: jsonEncode(collectionFilePaths));
+    }
+    final localSavedQuests = await getLocalSavedQuests();
+    final updatedQuests =
+        localSavedQuests.where((q) => q.uuid != quest.uuid).toList();
+    await saveQuestsLocally(updatedQuests);
+    return Future.value(updatedQuests);
   }
 
   Future<List<File>> collectedNfts() async {
-    return Future.value([]);
+    final response = await appStorage.read(key: AppStorage.nftCollectionKey);
+    if (response == null) {
+      return Future.value([]);
+    }
+    final nftCollection = NftCollection.fromJson(jsonDecode(response));
+
+    return Future.value(nftCollection.nftFiles);
   }
 }

@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
@@ -11,7 +12,7 @@ enum QuestType {
 
 const uuidGenerator = Uuid();
 
-class BasicQuest {
+class BasicQuest extends Equatable {
   final String uuid;
   final QuestType type;
   final Npc npc;
@@ -20,11 +21,12 @@ class BasicQuest {
 //  final List<TradeResourceInventory> resourceReward;
 
   BasicQuest({
+    String? uuid,
     required this.type,
     required this.npc,
     this.coinReward = 0,
     this.accepted = false,
-  }) : uuid = uuidGenerator.v1();
+  }) : uuid = uuid ?? uuidGenerator.v1();
 
   Map<String, dynamic> toJson() {
     return {
@@ -44,10 +46,26 @@ class BasicQuest {
     );
 
     return BasicQuest(
+      uuid: json['uuid'] as String? ?? uuidGenerator.v1(),
       type: type,
       npc: Npc.fromJson(json['npc'] as Map<String, dynamic>),
       coinReward: json['coinReward'] as int? ?? 0,
       accepted: json['accepted'] as bool? ?? false,
+    );
+  }
+
+  @override
+  List<Object?> get props => [uuid, type, npc, coinReward, accepted];
+
+  BasicQuest copyWith({
+    bool? accepted,
+  }) {
+    return BasicQuest(
+      uuid: uuid,
+      type: type,
+      npc: npc,
+      coinReward: coinReward,
+      accepted: accepted ?? this.accepted,
     );
   }
 }

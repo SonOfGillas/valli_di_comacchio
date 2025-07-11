@@ -13,6 +13,7 @@ class NftTreasureQuest extends BasicQuest {
   final GeoPoint? location;
 
   NftTreasureQuest({
+    super.uuid,
     required this.nft,
     required super.type,
     required super.npc,
@@ -40,6 +41,19 @@ class NftTreasureQuest extends BasicQuest {
       nft: File(json['nft'] as String),
       npc: basicQuestData.npc,
       accepted: basicQuestData.accepted,
+    );
+  }
+
+  @override
+  NftTreasureQuest copyWith({
+    bool? accepted,
+  }) {
+    return NftTreasureQuest(
+      uuid: uuid,
+      nft: nft,
+      type: type,
+      npc: npc,
+      accepted: accepted ?? this.accepted,
     );
   }
 }

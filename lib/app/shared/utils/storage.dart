@@ -7,6 +7,7 @@ class AppStorage {
   static const userPasswordKey = 'userPassword';
   static const devModeEnabled = 'devModeEnabled';
   static const questsKey = 'quests';
+  static const nftCollectionKey = 'nftCollection';
   final storage = const FlutterSecureStorage();
 
   Future<void> write({

@@ -10,6 +10,7 @@ class TalkToNpcQuest extends BasicQuest {
   final List<QuestItem> questItems;
 
   TalkToNpcQuest({
+    super.uuid,
     required this.receiverNpc,
     required this.talkToNpcData,
     required super.npc,
@@ -43,5 +44,19 @@ class TalkToNpcQuest extends BasicQuest {
       'talkToNpcData': talkToNpcData.toJson(),
       'questItems': questItems.map((item) => item.toJson()).toList(),
     };
+  }
+
+  @override
+  TalkToNpcQuest copyWith({
+    bool? accepted,
+  }) {
+    return TalkToNpcQuest(
+      uuid: uuid,
+      receiverNpc: receiverNpc,
+      talkToNpcData: talkToNpcData,
+      npc: npc,
+      accepted: accepted ?? this.accepted,
+      coinReward: coinReward,
+    );
   }
 }

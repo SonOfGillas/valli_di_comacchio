@@ -9,6 +9,7 @@ class QuizQuest extends BasicQuest {
   final Quiz question;
 
   QuizQuest({
+    super.uuid,
     required this.question,
     required super.npc,
     super.accepted = false,
@@ -30,5 +31,15 @@ class QuizQuest extends BasicQuest {
       ...basicQuestData,
       'question': question.toJson(),
     };
+  }
+
+  @override
+  QuizQuest copyWith({bool? accepted}) {
+    return QuizQuest(
+      uuid: uuid,
+      question: question,
+      npc: npc,
+      accepted: accepted ?? this.accepted,
+    );
   }
 }
