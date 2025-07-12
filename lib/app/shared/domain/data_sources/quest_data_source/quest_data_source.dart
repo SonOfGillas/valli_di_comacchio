@@ -65,7 +65,7 @@ class QuestDataSource {
       final questTypes = QuestType.values;
       // randomly select a quest type
       final randomType =
-          QuestType.quiz; // [Random().nextInt(questTypes.length)];
+          QuestType.talkToNpc; // [Random().nextInt(questTypes.length)];
 
       // Create future for each quest type
       switch (randomType) {

@@ -198,12 +198,17 @@ class ChatGbtDataSource extends AiGenerationDataSource {
       'input': [
         {
           'role': 'user',
-          'content': {
-            "npc_name": receiverNpc.name,
-            "theme": randomTheme,
-            "subTheme": randomTheme.randomSubTheme,
-          },
-        },
+          'content': [
+            {
+              "type": "input_text",
+              "text": TalkToNpcInput(
+                npcName: receiverNpc.name,
+                theme: randomTheme.themeName,
+                subTheme: randomTheme.randomSubTheme,
+              ).toJson().toString(),
+            }
+          ]
+        }
       ]
     });
 
@@ -242,10 +247,24 @@ class QuizInput {
       'theme': theme,
     };
   }
+}
 
-  factory QuizInput.fromJson(Map<String, dynamic> json) {
-    return QuizInput(
-      theme: json['theme'] as String,
-    );
+class TalkToNpcInput {
+  TalkToNpcInput({
+    required this.npcName,
+    required this.theme,
+    required this.subTheme,
+  });
+
+  final String npcName;
+  final String theme;
+  final String subTheme;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'npc_name': npcName,
+      'theme': theme,
+      'subTheme': subTheme,
+    };
   }
 }
