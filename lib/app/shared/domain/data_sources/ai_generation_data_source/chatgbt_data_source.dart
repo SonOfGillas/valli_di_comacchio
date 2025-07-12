@@ -143,9 +143,14 @@ class ChatGbtDataSource extends AiGenerationDataSource {
       'input': [
         {
           'role': 'user',
-          'content': {
-            'theme': randomTheme,
-          },
+          'content': [
+            {
+              'type': 'input_text',
+              'text': QuizInput(
+                theme: randomTheme,
+              ).toJson().toString(),
+            }
+          ],
         },
       ]
     });
@@ -222,5 +227,25 @@ class ChatGbtDataSource extends AiGenerationDataSource {
     } else {
       throw Exception('Failed to generate response: ${response.body}');
     }
+  }
+}
+
+class QuizInput {
+  QuizInput({
+    required this.theme,
+  });
+
+  final String theme;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'theme': theme,
+    };
+  }
+
+  factory QuizInput.fromJson(Map<String, dynamic> json) {
+    return QuizInput(
+      theme: json['theme'] as String,
+    );
   }
 }

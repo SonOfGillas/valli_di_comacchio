@@ -8,7 +8,8 @@ class QuestsByNpc {
   final Npc npc;
   List<BasicQuest> quests;
 
-  QuestsByNpc({required this.npc, this.quests = const []});
+  QuestsByNpc({required this.npc, List<BasicQuest>? quests})
+      : quests = quests ?? <BasicQuest>[];
 
   factory QuestsByNpc.fromJson(Map<String, dynamic> json) {
     final List<BasicQuest> questList = [];
@@ -45,34 +46,36 @@ class QuestsByNpc {
   Map<String, dynamic> toJson() {
     return {
       'npc': npc.toJson(),
-      'quests': quests
-          .map((quest) => {
-                if (quest is NftTreasureQuest)
-                  {
-                    ...quest.toJson(),
-                  }
-                else if (quest is TalkToNpcQuest)
-                  {
-                    ...quest.toJson(),
-                  }
-                else if (quest is QuizQuest)
-                  {
-                    ...quest.toJson(),
-                  }
-                else
-                  {
-                    ...quest.toJson(),
-                  }
-              })
-          .toList(),
+      'quests': quests.map((quest) {
+        if (quest is NftTreasureQuest) {
+          return quest.toJson();
+        } else if (quest is TalkToNpcQuest) {
+          return quest.toJson();
+        } else if (quest is QuizQuest) {
+          return quest.toJson();
+        } else {
+          return quest.toJson();
+        }
+      }).toList(),
     };
+  }
+
+  copyWith({
+    Npc? npc,
+    List<BasicQuest>? quests,
+  }) {
+    return QuestsByNpc(
+      npc: npc ?? this.npc,
+      quests: quests ?? this.quests,
+    );
   }
 }
 
 class AllQuests {
   List<QuestsByNpc> npcsWithQuests;
 
-  AllQuests({this.npcsWithQuests = const []});
+  AllQuests({List<QuestsByNpc>? npcsWithQuests})
+      : npcsWithQuests = npcsWithQuests ?? <QuestsByNpc>[];
 
   List<BasicQuest> get allAcceptedQuests {
     return npcsWithQuests
@@ -81,14 +84,15 @@ class AllQuests {
         .toList();
   }
 
-  editNpcQuests(Npc npc, List<BasicQuest> quests) {
-    final existingNpcQuests = npcsWithQuests.firstWhere(
-      (npcQuest) => npcQuest.npc.id == npc.id,
-      orElse: () => QuestsByNpc(npc: npc),
-    );
-    existingNpcQuests.quests = quests;
-    npcsWithQuests.removeWhere((npcQuest) => npcQuest.npc.id == npc.id);
-    npcsWithQuests.add(existingNpcQuests);
+  AllQuests editNpcQuests(Npc npc, List<BasicQuest> quests) {
+    // Create a copy of the current list
+    final updatedNpcsWithQuests = List<QuestsByNpc>.from(npcsWithQuests);
+    // Remove existing entry for this NPC
+    updatedNpcsWithQuests.removeWhere((npcQuest) => npcQuest.npc.id == npc.id);
+    // Add the updated entry
+    updatedNpcsWithQuests.add(QuestsByNpc(npc: npc, quests: quests));
+    // Return a new AllQuests instance with the updated list
+    return AllQuests(npcsWithQuests: updatedNpcsWithQuests);
   }
 
   List<BasicQuest> getNpcQuests(Npc npc) {
@@ -100,7 +104,7 @@ class AllQuests {
         .quests;
   }
 
-  acceptQuest(Npc npc, BasicQuest quest) {
+  AllQuests acceptQuest(Npc npc, BasicQuest quest) {
     final npcQuests = getNpcQuests(npc);
     final updatedQuests = npcQuests.map((q) {
       if (q.uuid == quest.uuid) {
@@ -108,16 +112,16 @@ class AllQuests {
       }
       return q;
     }).toList();
-    editNpcQuests(npc, updatedQuests);
+    return editNpcQuests(npc, updatedQuests);
   }
 
-  removeQuest(Npc npc, BasicQuest quest) {
+  AllQuests removeQuest(Npc npc, BasicQuest quest) {
     final npcQuests = getNpcQuests(npc);
     final updatedQuests = npcQuests.where((q) => q.uuid != quest.uuid).toList();
-    editNpcQuests(npc, updatedQuests);
+    return editNpcQuests(npc, updatedQuests);
   }
 
-  toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'npcsWithQuests':
           npcsWithQuests.map((npcQuest) => npcQuest.toJson()).toList(),

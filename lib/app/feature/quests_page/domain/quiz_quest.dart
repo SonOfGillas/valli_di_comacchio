@@ -6,11 +6,11 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quiz.dart';
 
 class QuizQuest extends BasicQuest {
-  final Quiz question;
+  final Quiz quiz;
 
   QuizQuest({
     super.uuid,
-    required this.question,
+    required this.quiz,
     required super.npc,
     super.accepted = false,
   }) : super(type: QuestType.quiz, coinReward: packetCost);
@@ -18,7 +18,7 @@ class QuizQuest extends BasicQuest {
   factory QuizQuest.fromJson(Map<String, dynamic> json) {
     final BasicQuest basicQuestData = BasicQuest.fromJson(json);
     return QuizQuest(
-      question: Quiz.fromJson(json['question']),
+      quiz: Quiz.fromJson(json['quiz']),
       npc: basicQuestData.npc,
       accepted: basicQuestData.accepted,
     );
@@ -29,7 +29,7 @@ class QuizQuest extends BasicQuest {
     final basicQuestData = super.toJson();
     return {
       ...basicQuestData,
-      'question': question.toJson(),
+      'quiz': quiz.toJson(),
     };
   }
 
@@ -37,7 +37,7 @@ class QuizQuest extends BasicQuest {
   QuizQuest copyWith({bool? accepted}) {
     return QuizQuest(
       uuid: uuid,
-      question: question,
+      quiz: quiz,
       npc: npc,
       accepted: accepted ?? this.accepted,
     );

@@ -37,6 +37,7 @@ class QuestsCubit extends Cubit<QuestsState> {
       result.fold(
         onSuccess: (quests) {
           emit(state.copyWith(
+              mode: QuestPageMode.npcQuests,
               selectedNpc: npc,
               allQuests: quests,
               status: QuestPageStatus.idle));
@@ -59,6 +60,7 @@ class QuestsCubit extends Cubit<QuestsState> {
         },
         onFailure: (failure) {
           emit(state.copyWith(
+            mode: QuestPageMode.acceptedQuests,
             status: QuestPageStatus.error,
             error: failure.message(),
           ));

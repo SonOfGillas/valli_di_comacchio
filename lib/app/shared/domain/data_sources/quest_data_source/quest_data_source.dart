@@ -39,14 +39,14 @@ class QuestDataSource {
   /* get quests for a specific NPC, if there aren't enough quests generate new ones */
   Future<AllQuests> generateQuestsForNpc(Npc npc, List<Npc> allNpcs) async {
     final allQuests = await getLocalSavedQuests();
-    final List<BasicQuest> npcQuests = [];
+    List<BasicQuest> npcQuests = [];
     final savedNpcQuests = allQuests.getNpcQuests(npc);
     if (savedNpcQuests.isNotEmpty) {
       npcQuests.addAll(savedNpcQuests);
     }
     if (npcQuests.length < questByNpc) {
-      final newQuests =
-          await _generateNewQuests(npc, questByNpc - npcQuests.length, allNpcs);
+      final questToGenerate = questByNpc - npcQuests.length;
+      final newQuests = await _generateNewQuests(npc, 1, allNpcs);
       npcQuests.addAll(newQuests);
     }
     // save updated quests to storage
@@ -58,13 +58,14 @@ class QuestDataSource {
   Future<List<BasicQuest>> _generateNewQuests(
       Npc npc, int count, List<Npc> allNpcs) async {
     // Create a list of futures for parallel execution
-    final List<Future<BasicQuest>> questFutures = [];
+    List<Future<BasicQuest>> questFutures = [];
 
     for (int i = 0; i < count; i++) {
       // get quest types
       final questTypes = QuestType.values;
       // randomly select a quest type
-      final randomType = questTypes[Random().nextInt(questTypes.length)];
+      final randomType =
+          QuestType.quiz; // [Random().nextInt(questTypes.length)];
 
       // Create future for each quest type
       switch (randomType) {
@@ -87,7 +88,7 @@ class QuestDataSource {
           questFutures.add(
               aiGenerationDataSource.generateQuiz().then((quiz) => QuizQuest(
                     npc: npc,
-                    question: quiz,
+                    quiz: quiz,
                   )));
           break;
 
@@ -114,7 +115,7 @@ class QuestDataSource {
     }
 
     // Wait for all quest generation to complete in parallel
-    final newQuests = await Future.wait(questFutures);
+    var newQuests = await Future.wait(questFutures);
     return newQuests;
   }
 
