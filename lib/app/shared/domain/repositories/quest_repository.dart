@@ -10,7 +10,7 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
-const questByNpc = 2;
+const questByNpc = 3;
 
 class QuestRepository {
   final QuestDataSource questDataSource;

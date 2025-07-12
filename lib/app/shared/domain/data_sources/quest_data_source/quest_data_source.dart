@@ -46,7 +46,7 @@ class QuestDataSource {
     }
     if (npcQuests.length < questByNpc) {
       final questToGenerate = questByNpc - npcQuests.length;
-      final newQuests = await _generateNewQuests(npc, 1, allNpcs);
+      final newQuests = await _generateNewQuests(npc, questToGenerate, allNpcs);
       npcQuests.addAll(newQuests);
     }
     // save updated quests to storage
@@ -61,11 +61,18 @@ class QuestDataSource {
     List<Future<BasicQuest>> questFutures = [];
 
     for (int i = 0; i < count; i++) {
-      // get quest types
-      final questTypes = QuestType.values;
-      // randomly select a quest type
+      // // get quest types
+      // final questTypes =  QuestType.values;
+      // // randomly select a quest type
+      // final randomType = [Random().nextInt(questTypes.length)];
+
+      // TODO: remove this code
+      // get a random quest type between
+      final limitedQuestSet = QuestType.values.where((type) =>
+          type != QuestType.nftTreasureHunt &&
+          type != QuestType.nftTreasureHide);
       final randomType =
-          QuestType.talkToNpc; // [Random().nextInt(questTypes.length)];
+          limitedQuestSet.elementAt(Random().nextInt(limitedQuestSet.length));
 
       // Create future for each quest type
       switch (randomType) {
