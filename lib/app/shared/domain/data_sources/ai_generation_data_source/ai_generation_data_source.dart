@@ -6,6 +6,8 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quiz.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/talk_to_npc_data.dart';
 
+final Directory nftDirectory = Directory('nft');
+
 abstract class AiGenerationDataSource {
   Future<CounterOfferResponse> getNpcReponseToCounterOffer(
       CounterOfferRequest counterOfferRequest);

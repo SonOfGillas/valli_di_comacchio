@@ -64,6 +64,14 @@ final nftRandomAccessoryList = [
   'headphones',
   'mask',
   'cape',
+  'crown',
+  'helmet',
+  'top hat',
+  'gold cap',
+  'monocle',
+  'wings',
+  'tricorn',
+  'horn',
 ];
 
 final nftRandomExpressionList = [

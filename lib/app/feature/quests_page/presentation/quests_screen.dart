@@ -183,7 +183,7 @@ class NftTreasureQuestWidget extends StatelessWidget {
           if (quest.type == QuestType.nftTreasureHide)
             Text('Nascondi l\'NFT per completare la missione.'),
           // display the Nft image (it is a file)
-          // if (quest.type == QuestType.nftTreasureHide) Image.file(quest.nft),
+          if (quest.type == QuestType.nftTreasureHide) Image.file(quest.nft),
         ],
       ),
     );

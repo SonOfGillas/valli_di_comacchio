@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
@@ -10,6 +12,8 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/counter_offer_resp
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quiz.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/talk_to_npc_data.dart';
+
+List<String> mockNftGenerated = [];
 
 class ChatGbtDataSource extends AiGenerationDataSource {
   ChatGbtDataSource({required this.config});
@@ -68,8 +72,7 @@ class ChatGbtDataSource extends AiGenerationDataSource {
   @override
   Future<File> generateNft() async {
     // Mock implementation for generating a random NFT image.
-    File mockFile = File('assets/images/fox.png');
-    return mockFile;
+    return getMockNft();
 
     // REAL IMPLEMENTATION
     // Real implementation is expensive so it is commented out for tests
@@ -120,6 +123,54 @@ class ChatGbtDataSource extends AiGenerationDataSource {
         random.nextInt(nftRandomBackgroundThemeList.length)];
 
     return 'Generate a game-like image of a\n$animal badge\nStyle: flat, bold lines\nBackground: $backgroundTheme\nPose: $pose\nAccessory: $accessory\nExpression: $expression';
+  }
+
+  Future<File> getMockNft() async {
+    try {
+      final mockNfsName = [
+        'nft_1.png',
+        'nft_2.png',
+        'nft_3.png',
+        'nft_4.png',
+        'nft_5.png',
+        'nft_6.png',
+      ];
+      String randomMockNftName;
+      do {
+        randomMockNftName = mockNfsName[Random().nextInt(mockNfsName.length)];
+      } while (mockNftGenerated.contains(randomMockNftName));
+      mockNftGenerated.add(randomMockNftName);
+
+      // Load asset as bytes
+      final ByteData assetData =
+          await rootBundle.load('assets/images/$randomMockNftName');
+      final Uint8List bytes = assetData.buffer.asUint8List();
+
+      // Get the application documents directory (writable)
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final Directory nftDirectory = Directory('${appDocDir.path}/nft');
+
+      // Create the directory if it doesn't exist
+      if (!await nftDirectory.exists()) {
+        await nftDirectory.create(recursive: true);
+      }
+
+      // Create a temporary file with unique name
+      final String fileName = 'mock_$randomMockNftName.png';
+      final File tempFile = File('${nftDirectory.path}/$fileName');
+
+      // Write asset data to the file
+      await tempFile.writeAsBytes(bytes);
+
+      // Verify the file exists
+      if (await tempFile.exists()) {
+        return tempFile;
+      } else {
+        throw Exception('Failed to create NFT file');
+      }
+    } catch (e) {
+      throw Exception('Failed to generate mock NFT: $e');
+    }
   }
 
   @override
