@@ -23,9 +23,16 @@ class QuestsCubit extends Cubit<QuestsState> {
   final AppCubit appCubit;
   final QuestRepository questRepository;
 
+  List<Npc> get npcs => appCubit.state.npcs;
+
   void loadQuests(QuestPageParameters parameters) {
     emit(state.copyWith(status: QuestPageStatus.loading));
     if (parameters.selectedNpc != null) {
+      emit(state.copyWith(
+          mode: QuestPageMode.npcQuests,
+          selectedNpc: parameters.selectedNpc,
+          status: QuestPageStatus.loading,
+          selectedTabIndex: 1)); // Switch to NPC quests tab
       _loadNpcQuests(parameters.selectedNpc!);
     } else {
       _loadLocalSavedQuests();
@@ -90,5 +97,24 @@ class QuestsCubit extends Cubit<QuestsState> {
         },
       );
     });
+  }
+
+  void showNpcQuests(Npc npc) {
+    emit(state.copyWith(
+        selectedNpc: npc,
+        status: QuestPageStatus.loading,
+        mode: QuestPageMode.npcQuests));
+    _loadNpcQuests(npc);
+  }
+
+  void goToNpcList() {
+    emit(state.copyWith(
+        status: QuestPageStatus.idle, mode: QuestPageMode.npcList));
+  }
+
+  void changeTab(int tabIndex) {
+    final newMode =
+        tabIndex == 0 ? QuestPageMode.acceptedQuests : QuestPageMode.npcQuests;
+    emit(state.copyWith(mode: newMode, selectedTabIndex: tabIndex));
   }
 }

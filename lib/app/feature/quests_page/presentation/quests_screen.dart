@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
@@ -9,32 +10,78 @@ import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_n
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
-class QuestsScreen extends StatelessWidget {
+class QuestsScreen extends StatefulWidget {
   const QuestsScreen({super.key});
 
   @override
+  State<QuestsScreen> createState() => _QuestsScreenState();
+}
+
+class _QuestsScreenState extends State<QuestsScreen>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QuestsCubit, QuestsState>(
+    return BlocConsumer<QuestsCubit, QuestsState>(
+      listener: (context, state) {
+        // Update tab when state changes
+        if (_tabController.index != state.selectedTabIndex) {
+          _tabController.animateTo(state.selectedTabIndex);
+        }
+      },
       builder: (context, state) {
         return Scaffold(
             appBar: ValliAppBar(),
             backgroundColor: AppColors.palette_secondary,
-            body: state.status == QuestPageStatus.loading
-                ? const Center(
-                    child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      LabelText(
-                          'Stiamo generando delle nuove missioni per te!'),
-                    ],
-                  ))
-                : SingleChildScrollView(
-                    child: state.mode == QuestPageMode.acceptedQuests
-                        ? const AcceptedQuestsWidget()
-                        : const NpcQuestsWidget(),
+            body: Column(
+              children: [
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.palette_tertiary,
                   ),
+                  child: TabBar(
+                    controller: _tabController,
+                    onTap: (index) {
+                      context.read<QuestsCubit>().changeTab(index);
+                    },
+                    labelColor: AppColors.palette_primary,
+                    unselectedLabelColor: AppColors.primary_light,
+                    dividerColor: AppColors.palette_tertiary,
+                    indicatorColor: AppColors.palette_primary,
+                    labelStyle: GoogleFonts.lilitaOne(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    tabs: [
+                      Tab(text: 'Missioni accettate'),
+                      Tab(text: 'Elenco missioni'),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      AcceptedQuestsWidget(),
+                      NpcQuestsWidget(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
             bottomNavigationBar: FooterNavBar());
       },
     );
@@ -48,25 +95,34 @@ class AcceptedQuestsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestsCubit, QuestsState>(
       builder: (context, state) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          // Implement the UI for accepted quests
-          children: [
-            Text('Accepted Quests'),
-            ...state.acceptedQuests.map((quest) {
-              return ListTile(
-                title: Text(quest.uuid),
-                subtitle: Text(quest.type.toString()),
-                trailing: IconButton(
-                  icon: const Icon(Icons.check),
-                  onPressed: () {
-                    // Handle quest completion
-                  },
+        return state.status == QuestPageStatus.loading
+            ? const Center(
+                child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                ],
+              ))
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  // Implement the UI for accepted quests
+                  children: [
+                    ...state.acceptedQuests.map((quest) {
+                      return ListTile(
+                        title: Text(quest.uuid),
+                        subtitle: Text(quest.type.toString()),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.check),
+                          onPressed: () {
+                            // Handle quest completion
+                          },
+                        ),
+                      );
+                    })
+                  ],
                 ),
               );
-            })
-          ],
-        );
       },
     );
   }
@@ -79,31 +135,63 @@ class NpcQuestsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestsCubit, QuestsState>(
       builder: (context, state) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (state.selectedNpc != null)
-              NpcDisplayHeader(
-                npc: state.selectedNpc!,
-                npcMessage: 'Completa una missione per guardagnare monete!',
-                showBalance: false,
-              ),
-            ...state.npcQuests.map((quest) {
-              return BasicQuestComponent(
-                quest: quest,
+        return state.status == QuestPageStatus.loading
+            ? const Center(
+                child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  LabelText('Stiamo generando delle nuove missioni per te!'),
+                ],
+              ))
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (state.mode == QuestPageMode.npcList)
+                      ...context.read<QuestsCubit>().npcs.map((npc) {
+                        return ListTile(
+                          title: Text(npc.name),
+                          onTap: () {
+                            context.read<QuestsCubit>().showNpcQuests(npc);
+                          },
+                        );
+                      }),
+                    if (state.mode == QuestPageMode.npcQuests)
+                      Stack(
+                        children: [
+                          NpcDisplayHeader(
+                            npc: state.selectedNpc!,
+                            npcMessage:
+                                'Completa una missione per guardagnare monete!',
+                            showBalance: false,
+                          ),
+                          Positioned(
+                            top: 16,
+                            right: 16,
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                size: 36,
+                                color: AppColors.palette_primary,
+                              ),
+                              onPressed: () {
+                                context.read<QuestsCubit>().goToNpcList();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    if (state.mode == QuestPageMode.npcQuests)
+                      ...state.npcQuests.map((quest) {
+                        return BasicQuestComponent(
+                          quest: quest,
+                        );
+                      })
+                  ],
+                ),
               );
-              //  switch (quest.type) {
-              //   QuestType.quiz => QuizQuestWidget(quest: quest as QuizQuest),
-              //   QuestType.talkToNpc =>
-              //     TalkToNpcQuestWidget(quest: quest as TalkToNpcQuest),
-              //   QuestType.nftTreasureHunt =>
-              //     NftTreasureQuestWidget(quest: quest as NftTreasureQuest),
-              //   QuestType.nftTreasureHide =>
-              //     NftTreasureQuestWidget(quest: quest as NftTreasureQuest),
-              // };
-            })
-          ],
-        );
       },
     );
   }
