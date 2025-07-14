@@ -38,10 +38,6 @@ class QuestDataSource {
 
   /* get quests for a specific NPC, if there aren't enough quests generate new ones */
   Future<AllQuests> generateQuestsForNpc(Npc npc, List<Npc> allNpcs) async {
-    // remove all quests for the npc
-    await appStorage.delete(
-      key: AppStorage.questsKey,
-    );
     final allQuests = await getLocalSavedQuests();
     List<BasicQuest> npcQuests = [];
     final savedNpcQuests = allQuests.getNpcQuests(npc);
@@ -65,18 +61,10 @@ class QuestDataSource {
     List<Future<BasicQuest>> questFutures = [];
 
     for (int i = 0; i < count; i++) {
-      // // get quest types
-      // final questTypes =  QuestType.values;
-      // // randomly select a quest type
-      // final randomType = [Random().nextInt(questTypes.length)];
-
-      // TODO: remove this code
-      // get a random quest type between
-      final limitedQuestSet = QuestType.values.where((type) =>
-          type != QuestType.nftTreasureHunt &&
-          type != QuestType.nftTreasureHide);
-      final randomType = QuestType.nftTreasureHide;
-      // limitedQuestSet.elementAt(Random().nextInt(limitedQuestSet.length));
+      // get quest types
+      final questTypes = QuestType.values;
+      // randomly select a quest type
+      final randomType = questTypes[Random().nextInt(questTypes.length)];
 
       // Create future for each quest type
       switch (randomType) {
