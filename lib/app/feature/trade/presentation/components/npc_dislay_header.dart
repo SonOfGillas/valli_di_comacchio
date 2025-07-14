@@ -13,12 +13,14 @@ class NpcDisplayHeader extends StatelessWidget {
     required this.npc,
     required this.npcMessage,
     this.expanded = false,
+    this.showBalance = true,
     super.key,
   });
 
   final Npc npc;
   final String npcMessage;
   final bool expanded;
+  final bool showBalance;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class NpcDisplayHeader extends StatelessWidget {
               npc.imageLocalPath,
               height: expanded ? 280 : 230,
             ),
-            if (!expanded)
+            if (!expanded && showBalance)
               Expanded(
                 child: SizedBox(
                   height: 230,

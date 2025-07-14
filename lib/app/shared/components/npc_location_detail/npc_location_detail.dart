@@ -63,7 +63,7 @@ class NpcLocationDetail extends StatelessWidget {
                           text: 'Missioni',
                           onPressed: () {
                             Navigator.of(context).pop();
-                            context.push(
+                            context.go(
                               RoutesPaths.quest,
                               extra: QuestPageParameters(selectedNpc: npc),
                             );

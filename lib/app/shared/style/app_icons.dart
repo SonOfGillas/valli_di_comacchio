@@ -29,6 +29,10 @@ class AppIcons {
   static final time = _iconPath('time');
   static final gps = _iconPath('gps');
   static final npc = _iconPath('npc');
+  static final chat = _iconPath('chat');
+  static final treasure_hide = _iconPath('hide');
+  static final quiz = _iconPath('quiz');
+  static final treasure_hunt = _iconPath('treasure_hunt');
 
   static String _iconPath(String iconName) => 'assets/icons/$iconName.svg';
 }

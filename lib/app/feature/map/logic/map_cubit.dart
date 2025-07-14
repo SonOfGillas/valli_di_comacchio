@@ -15,6 +15,26 @@ class MapCubit extends Cubit<MapState> {
 
   List<Npc> get npcs => appCubit.state.npcs;
 
+  void drawPositionToShowMarker() async {
+    if (state.positionToShow != null) {
+      final geoPoint = state.positionToShow!;
+      await state.mapController.addMarker(geoPoint);
+      state.mapController.setMarkerIcon(
+        geoPoint,
+        MarkerIcon(
+          iconWidget: Container(
+            key: const ValueKey('positionToShowMarker'),
+            child: const Icon(Icons.location_on, color: Colors.red, size: 40),
+          ),
+        ),
+      );
+      await state.mapController.moveTo(geoPoint);
+      await state.mapController.setZoom(
+        zoomLevel: 15,
+      );
+    }
+  }
+
   void drawSelectedWalk() async {
     if (state.walk != null) {
       emit(state.copyWith(

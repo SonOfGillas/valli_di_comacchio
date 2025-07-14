@@ -7,6 +7,7 @@ class MapState extends Equatable {
   const MapState({
     required this.mapController,
     this.walk,
+    this.positionToShow,
     this.enableTracking = false,
     this.showNpc = true,
     this.showWalk = false,
@@ -14,6 +15,7 @@ class MapState extends Equatable {
 
   final MapController mapController;
   final Walk? walk;
+  final GeoPoint? positionToShow;
   final bool enableTracking;
   final bool showNpc;
   final bool showWalk;
@@ -30,8 +32,13 @@ class MapState extends Equatable {
     const double centerLng =
         (12.084026 + 12.089158 + 12.225312 + 12.277653) / 4;
 
+    final showNpcs =
+        parameters?.positionToShow == null && parameters?.walk == null;
+
     return MapState(
         walk: parameters?.walk,
+        positionToShow: parameters?.positionToShow,
+        showNpc: showNpcs,
         mapController: MapController(
           initPosition: GeoPoint(latitude: centerLat, longitude: centerLng),
           areaLimit: const BoundingBox(

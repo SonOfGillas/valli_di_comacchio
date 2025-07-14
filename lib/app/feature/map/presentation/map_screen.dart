@@ -33,6 +33,9 @@ class MapScreen extends StatelessWidget {
                         if (state.walk != null) {
                           context.read<MapCubit>().drawSelectedWalk();
                         }
+                        if (state.positionToShow != null) {
+                          context.read<MapCubit>().drawPositionToShowMarker();
+                        }
                       },
                       mapIsLoading: Center(
                         child: Container(
