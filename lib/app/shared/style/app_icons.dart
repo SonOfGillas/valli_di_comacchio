@@ -33,6 +33,7 @@ class AppIcons {
   static final treasure_hide = _iconPath('hide');
   static final quiz = _iconPath('quiz');
   static final treasure_hunt = _iconPath('treasure_hunt');
+  static final empty_folder = _iconPath('empty_folder');
 
   static String _iconPath(String iconName) => 'assets/icons/$iconName.svg';
 }

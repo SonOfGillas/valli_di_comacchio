@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
@@ -9,6 +10,8 @@ import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
+import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
 class QuestsScreen extends StatefulWidget {
   const QuestsScreen({super.key});
@@ -103,26 +106,50 @@ class AcceptedQuestsWidget extends StatelessWidget {
                   CircularProgressIndicator(),
                 ],
               ))
-            : SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  // Implement the UI for accepted quests
-                  children: [
-                    ...state.acceptedQuests.map((quest) {
-                      return ListTile(
-                        title: Text(quest.uuid),
-                        subtitle: Text(quest.type.toString()),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.check),
-                          onPressed: () {
-                            // Handle quest completion
-                          },
-                        ),
-                      );
-                    })
-                  ],
-                ),
-              );
+            : state.acceptedQuests.isEmpty
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(
+                            AppIcons.empty_folder,
+                            height: 64,
+                            colorFilter: ColorFilter.mode(
+                              AppColors.palette_primary,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          LabelText(
+                            'Non hai ancora accettato nessuna missione.',
+                            withBoarder: false,
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      // Implement the UI for accepted quests
+                      children: [
+                        ...state.acceptedQuests.map((quest) {
+                          return ListTile(
+                            title: Text(quest.uuid),
+                            subtitle: Text(quest.type.toString()),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.check),
+                              onPressed: () {
+                                // Handle quest completion
+                              },
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  );
       },
     );
   }
