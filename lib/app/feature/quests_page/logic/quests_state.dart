@@ -46,7 +46,7 @@ class QuestsState extends Equatable {
   QuestsState copyWith({
     QuestPageMode? mode,
     AllQuests? allQuests,
-    Npc? selectedNpc,
+    required Npc? selectedNpc,
     QuestPageStatus? status,
     String? error,
     int? selectedTabIndex,
@@ -54,7 +54,7 @@ class QuestsState extends Equatable {
     return QuestsState(
       mode: mode ?? this.mode,
       allQuests: allQuests ?? this.allQuests,
-      selectedNpc: selectedNpc ?? this.selectedNpc,
+      selectedNpc: selectedNpc,
       status: status ?? this.status,
       error: error,
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,

@@ -26,7 +26,8 @@ class QuestsCubit extends Cubit<QuestsState> {
   List<Npc> get npcs => appCubit.state.npcs;
 
   void loadQuests(QuestPageParameters parameters) {
-    emit(state.copyWith(status: QuestPageStatus.loading));
+    emit(state.copyWith(
+        selectedNpc: parameters.selectedNpc, status: QuestPageStatus.loading));
     if (parameters.selectedNpc != null) {
       emit(state.copyWith(
           mode: QuestPageMode.npcQuests,
@@ -51,6 +52,7 @@ class QuestsCubit extends Cubit<QuestsState> {
         },
         onFailure: (failure) {
           emit(state.copyWith(
+            selectedNpc: state.selectedNpc,
             status: QuestPageStatus.error,
             error: failure.message(),
           ));
@@ -63,10 +65,14 @@ class QuestsCubit extends Cubit<QuestsState> {
     questRepository.localSavedQuests().then((result) {
       result.fold(
         onSuccess: (quests) {
-          emit(state.copyWith(allQuests: quests, status: QuestPageStatus.idle));
+          emit(state.copyWith(
+              selectedNpc: state.selectedNpc,
+              allQuests: quests,
+              status: QuestPageStatus.idle));
         },
         onFailure: (failure) {
           emit(state.copyWith(
+            selectedNpc: state.selectedNpc,
             mode: QuestPageMode.acceptedQuests,
             status: QuestPageStatus.error,
             error: failure.message(),
@@ -79,6 +85,7 @@ class QuestsCubit extends Cubit<QuestsState> {
   void acceptQuest(BasicQuest quest) {
     if (state.selectedNpc == null) {
       emit(state.copyWith(
+        selectedNpc: state.selectedNpc,
         status: QuestPageStatus.error,
         error: 'No NPC selected for quest acceptance.',
       ));
@@ -87,10 +94,14 @@ class QuestsCubit extends Cubit<QuestsState> {
     questRepository.acceptQuest(state.selectedNpc!, quest).then((result) {
       result.fold(
         onSuccess: (quests) {
-          emit(state.copyWith(allQuests: quests, status: QuestPageStatus.idle));
+          emit(state.copyWith(
+              selectedNpc: state.selectedNpc,
+              allQuests: quests,
+              status: QuestPageStatus.idle));
         },
         onFailure: (failure) {
           emit(state.copyWith(
+            selectedNpc: state.selectedNpc,
             status: QuestPageStatus.error,
             error: failure.message(),
           ));
@@ -109,7 +120,9 @@ class QuestsCubit extends Cubit<QuestsState> {
 
   void goToNpcList() {
     emit(state.copyWith(
-        status: QuestPageStatus.idle, mode: QuestPageMode.npcList));
+        selectedNpc: null,
+        status: QuestPageStatus.idle,
+        mode: QuestPageMode.npcList));
   }
 
   void changeTab(int tabIndex) {
@@ -123,6 +136,9 @@ class QuestsCubit extends Cubit<QuestsState> {
         newMode = QuestPageMode.npcQuests;
       }
     }
-    emit(state.copyWith(mode: newMode, selectedTabIndex: tabIndex));
+    emit(state.copyWith(
+        selectedNpc: state.selectedNpc,
+        mode: newMode,
+        selectedTabIndex: tabIndex));
   }
 }
