@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 
 class MapState extends Equatable {
   const MapState({

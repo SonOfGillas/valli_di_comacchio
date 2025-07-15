@@ -11,7 +11,6 @@ import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_n
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
 class QuestsScreen extends StatefulWidget {
   const QuestsScreen({super.key});

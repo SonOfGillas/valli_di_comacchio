@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';

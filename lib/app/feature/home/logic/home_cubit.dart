@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_places_state.dart';
+import 'package:valli_di_comacchio/app/feature/home/logic/home_state.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 
-class WalksAndPlacesCubit extends Cubit<WalksAndPlacesState> {
-  WalksAndPlacesCubit({required this.appCubit}) : super(WalksAndPlacesState()) {
+class HomeCubit extends Cubit<HomeState> {
+  HomeCubit({required this.appCubit}) : super(HomeState()) {
     loadWalksAndPlaces();
   }
 

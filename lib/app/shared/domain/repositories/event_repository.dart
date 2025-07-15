@@ -1,4 +1,4 @@
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/event_data_source/event_data_source.dart';

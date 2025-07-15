@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h1_on_primary/h1_on_primary.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';

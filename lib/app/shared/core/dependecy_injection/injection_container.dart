@@ -7,7 +7,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.da
 import 'package:valli_di_comacchio/app/feature/slash/logic/splash_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/trade/logic/trade_bloc.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/logic/walks_and_places_cubit.dart';
+import 'package:valli_di_comacchio/app/feature/home/logic/home_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/core/config/config.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
@@ -147,8 +147,8 @@ Future<void> initServiceLocator() async {
     )
 
     // Walks and Places
-    ..registerFactory<WalksAndPlacesCubit>(
-      () => WalksAndPlacesCubit(
+    ..registerFactory<HomeCubit>(
+      () => HomeCubit(
         appCubit: sl(),
       ),
     );

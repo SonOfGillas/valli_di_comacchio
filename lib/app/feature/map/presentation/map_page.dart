@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_screen.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/core/dependecy_injection/injection_container.dart';
 
 class MapParameters {

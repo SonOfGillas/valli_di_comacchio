@@ -113,8 +113,16 @@ class QuestsCubit extends Cubit<QuestsState> {
   }
 
   void changeTab(int tabIndex) {
-    final newMode =
-        tabIndex == 0 ? QuestPageMode.acceptedQuests : QuestPageMode.npcQuests;
+    QuestPageMode newMode;
+    if (tabIndex == 0) {
+      newMode = QuestPageMode.acceptedQuests;
+    } else {
+      if (state.selectedNpc == null) {
+        newMode = QuestPageMode.npcList;
+      } else {
+        newMode = QuestPageMode.npcQuests;
+      }
+    }
     emit(state.copyWith(mode: newMode, selectedTabIndex: tabIndex));
   }
 }

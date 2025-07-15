@@ -8,7 +8,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.da
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/quests_page.dart';
 import 'package:valli_di_comacchio/app/feature/slash/slash_screen.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/trade_page.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/presentation/walks_and_places_page.dart';
+import 'package:valli_di_comacchio/app/feature/home/presentation/home_page.dart';
 import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 
 final GoRouter router = GoRouter(

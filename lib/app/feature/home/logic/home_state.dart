@@ -1,24 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/event.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
-enum WalksAndPlacesType {
+enum HomeType {
   places('Luoghi'),
   events('Eventi'),
   walks('Escursioni');
 
-  const WalksAndPlacesType(this.displayName);
+  const HomeType(this.displayName);
   final String displayName;
 }
 
-class WalksAndPlacesState extends Equatable {
+class HomeState extends Equatable {
   final String? filter;
   final List<Npc> filteredNpcs;
   final List<Event> filteredEvents;
   final List<Walk> filteredWalks;
 
-  const WalksAndPlacesState(
+  const HomeState(
       {this.filteredNpcs = const [],
       this.filteredEvents = const [],
       this.filteredWalks = const [],
@@ -28,13 +28,13 @@ class WalksAndPlacesState extends Equatable {
   List<Object?> get props =>
       [filteredNpcs, filteredEvents, filteredWalks, filter];
 
-  WalksAndPlacesState copyWith({
+  HomeState copyWith({
     String? filter,
     List<Walk>? filteredWalks,
     List<Npc>? filteredNpcs,
     List<Event>? filteredEvents,
   }) {
-    return WalksAndPlacesState(
+    return HomeState(
       filter: filter ?? this.filter,
       filteredWalks: filteredWalks ?? this.filteredWalks,
       filteredNpcs: filteredNpcs ?? this.filteredNpcs,

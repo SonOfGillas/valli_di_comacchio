@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:valli_di_comacchio/app/feature/walks_and_places/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/walk_data_source/walk_data_source.dart';
 import 'package:xml/xml.dart';
 
