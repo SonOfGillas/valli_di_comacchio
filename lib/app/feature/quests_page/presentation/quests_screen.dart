@@ -6,6 +6,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.da
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc_dislay_header.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
@@ -161,8 +162,11 @@ class NpcQuestsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestsCubit, QuestsState>(
       builder: (context, state) {
-        return state.status == QuestPageStatus.loading
-            ? const Center(
+        return state.status != QuestPageStatus.loading
+            ? (state.mode == QuestPageMode.npcQuests)
+                ? NpcQuestList()
+                : NpcList()
+            : const Center(
                 child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -170,54 +174,101 @@ class NpcQuestsWidget extends StatelessWidget {
                   SizedBox(height: 16),
                   LabelText('Stiamo generando delle nuove missioni per te!'),
                 ],
-              ))
-            : SingleChildScrollView(
+              ));
+      },
+    );
+  }
+}
+
+class NpcList extends StatelessWidget {
+  const NpcList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<QuestsCubit, QuestsState>(
+      builder: (context, state) {
+        final npcList = context.read<QuestsCubit>().npcs;
+        return GridView.builder(
+          itemCount: npcList.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 1.0,
+          ),
+          itemBuilder: (context, index) {
+            final npc = npcList[index];
+            return InkWell(
+              onTap: () {
+                context.read<QuestsCubit>().loadQuests(
+                      QuestPageParameters(selectedNpc: npc),
+                    );
+              },
+              child: Card(
+                color: AppColors.palette_primary,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (state.mode == QuestPageMode.npcList)
-                      ...context.read<QuestsCubit>().npcs.map((npc) {
-                        return ListTile(
-                          title: Text(npc.name),
-                          onTap: () {
-                            context.read<QuestsCubit>().showNpcQuests(npc);
-                          },
-                        );
-                      }),
-                    if (state.mode == QuestPageMode.npcQuests)
-                      Stack(
-                        children: [
-                          NpcDisplayHeader(
-                            npc: state.selectedNpc!,
-                            npcMessage:
-                                'Completa una missione per guardagnare monete!',
-                            showBalance: false,
-                          ),
-                          Positioned(
-                            top: 16,
-                            right: 16,
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.close,
-                                size: 36,
-                                color: AppColors.palette_primary,
-                              ),
-                              onPressed: () {
-                                context.read<QuestsCubit>().goToNpcList();
-                              },
-                            ),
-                          ),
-                        ],
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(
+                        npc.imageLocalPath,
+                        height: 130,
+                        fit: BoxFit.cover,
                       ),
-                    if (state.mode == QuestPageMode.npcQuests)
-                      ...state.npcQuests.map((quest) {
-                        return BasicQuestComponent(
-                          quest: quest,
-                        );
-                      })
+                    ),
+                    H3(npc.name),
                   ],
                 ),
-              );
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class NpcQuestList extends StatelessWidget {
+  const NpcQuestList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<QuestsCubit, QuestsState>(
+      builder: (context, state) {
+        return SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Stack(
+                children: [
+                  NpcDisplayHeader(
+                    npc: state.selectedNpc!,
+                    npcMessage: 'Completa una missione per guardagnare monete!',
+                    showBalance: false,
+                  ),
+                  Positioned(
+                    top: 16,
+                    right: 16,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        size: 36,
+                        color: AppColors.palette_primary,
+                      ),
+                      onPressed: () {
+                        context.read<QuestsCubit>().goToNpcList();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              ...state.npcQuests.map((quest) {
+                return BasicQuestComponent(
+                  quest: quest,
+                );
+              })
+            ],
+          ),
+        );
       },
     );
   }
