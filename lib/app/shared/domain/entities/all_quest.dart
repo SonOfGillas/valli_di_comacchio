@@ -11,6 +11,10 @@ class AllQuests {
   List<QuestsByNpc> get allAcceptedQuests {
     return npcsWithQuests
         .where((npcQuest) => npcQuest.quests.any((quest) => quest.accepted))
+        .map((npcQuest) => QuestsByNpc(
+              npc: npcQuest.npc,
+              quests: npcQuest.quests.where((quest) => quest.accepted).toList(),
+            ))
         .toList();
   }
 

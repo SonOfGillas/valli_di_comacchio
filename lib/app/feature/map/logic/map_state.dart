@@ -2,12 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
 class MapState extends Equatable {
   const MapState({
     required this.mapController,
     this.walk,
     this.positionToShow,
+    this.npcLocationSelected,
     this.enableTracking = false,
     this.showNpc = true,
     this.showWalk = false,
@@ -16,6 +18,7 @@ class MapState extends Equatable {
   final MapController mapController;
   final Walk? walk;
   final GeoPoint? positionToShow;
+  final Npc? npcLocationSelected;
   final bool enableTracking;
   final bool showNpc;
   final bool showWalk;
@@ -51,8 +54,14 @@ class MapState extends Equatable {
   }
 
   @override
-  List<Object?> get props =>
-      [walk, mapController, showNpc, enableTracking, showWalk];
+  List<Object?> get props => [
+        walk,
+        mapController,
+        showNpc,
+        enableTracking,
+        showWalk,
+        npcLocationSelected
+      ];
 
   MapState copyWith({
     MapController? mapController,
@@ -60,6 +69,7 @@ class MapState extends Equatable {
     bool? enableTracking,
     bool? showNpc,
     bool? showWalk,
+    Npc? npcLocationSelected,
   }) {
     return MapState(
       walk: walk ?? this.walk,
@@ -67,6 +77,7 @@ class MapState extends Equatable {
       enableTracking: enableTracking ?? this.enableTracking,
       showNpc: showNpc ?? this.showNpc,
       showWalk: showWalk ?? this.showWalk,
+      npcLocationSelected: npcLocationSelected,
     );
   }
 }

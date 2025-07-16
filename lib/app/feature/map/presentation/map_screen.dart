@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
+
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/app_icon_button/app_icon_button.dart';
@@ -20,8 +22,53 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, appState) {
-        return BlocBuilder<MapCubit, MapState>(
+        return BlocConsumer<MapCubit, MapState>(
+          listener: (context, state) {
+            if (state.npcLocationSelected != null) {
+              showDialog(
+                context: context,
+                barrierColor: Colors.black.withOpacity(0.85),
+                builder: (context) => NpcLocationDetail(
+                  npc: state.npcLocationSelected!,
+                  onBack: () => Navigator.of(context).pop(),
+                ),
+              );
+            }
+          },
           builder: (context, state) {
+            final npcStaticPoints = appState.npcs
+                .map(
+                  (npc) => StaticPositionGeoPoint(
+                    npc.id,
+                    MarkerIcon(
+                      iconWidget: Image.asset(
+                        npc.imageLocalPath,
+                        height: 300,
+                      ),
+                    ),
+                    [
+                      GeoPoint(latitude: npc.latitude, longitude: npc.longitude)
+                    ],
+                  ),
+                )
+                .toList();
+            final acceptedQuestsStaticPoints = context
+                .read<MapCubit>()
+                .acceptedQuests
+                .map((quest) => StaticPositionGeoPoint(
+                    quest.id,
+                    MarkerIcon(
+                      iconWidget: SvgPicture.asset(
+                        quest.icon,
+                        height: 100,
+                        colorFilter: ColorFilter.mode(
+                          AppColors.palette_primary,
+                          BlendMode.srcIn,
+                        ),
+                      ),
+                    ),
+                    [quest.geoPoint]))
+                .toList();
             return Scaffold(
                 appBar: ValliAppBar(),
                 backgroundColor: AppColors.palette_secondary,
@@ -57,75 +104,43 @@ class MapScreen extends StatelessWidget {
                         ),
                       ),
                       osmOption: OSMOption(
-                          userTrackingOption: UserTrackingOption(
-                            enableTracking: state.enableTracking,
-                            unFollowUser: false,
-                          ),
-                          zoomOption: const ZoomOption(
-                            initZoom: 7,
-                            minZoomLevel: 3,
-                            maxZoomLevel: 19,
-                            stepZoom: 1.0,
-                          ),
-                          userLocationMarker: UserLocationMaker(
-                            personMarker: const MarkerIcon(
-                              icon: Icon(
-                                Icons.location_history_rounded,
-                                color: Colors.red,
-                                size: 48,
-                              ),
-                            ),
-                            directionArrowMarker: const MarkerIcon(
-                              icon: Icon(
-                                Icons.double_arrow,
-                                size: 48,
-                              ),
+                        userTrackingOption: UserTrackingOption(
+                          enableTracking: state.enableTracking,
+                          unFollowUser: false,
+                        ),
+                        zoomOption: const ZoomOption(
+                          initZoom: 7,
+                          minZoomLevel: 3,
+                          maxZoomLevel: 19,
+                          stepZoom: 1.0,
+                        ),
+                        userLocationMarker: UserLocationMaker(
+                          personMarker: const MarkerIcon(
+                            icon: Icon(
+                              Icons.location_history_rounded,
+                              color: Colors.red,
+                              size: 48,
                             ),
                           ),
-                          roadConfiguration: const RoadOption(
-                              roadColor: Colors.purple,
-                              roadBorderColor: Colors.purple,
-                              roadWidth: 2,
-                              roadBorderWidth: 4),
-                          staticPoints: state.showNpc
-                              ? appState.npcs
-                                  .map(
-                                    (npc) => StaticPositionGeoPoint(
-                                      npc.id,
-                                      MarkerIcon(
-                                        iconWidget: Image.asset(
-                                          npc.imageLocalPath,
-                                          height: 300,
-                                        ),
-                                      ),
-                                      [
-                                        GeoPoint(
-                                            latitude: npc.latitude,
-                                            longitude: npc.longitude)
-                                      ],
-                                    ),
-                                  )
-                                  .toList()
-                              : []),
+                          directionArrowMarker: const MarkerIcon(
+                            icon: Icon(
+                              Icons.double_arrow,
+                              size: 48,
+                            ),
+                          ),
+                        ),
+                        roadConfiguration: const RoadOption(
+                            roadColor: Colors.purple,
+                            roadBorderColor: Colors.purple,
+                            roadWidth: 2,
+                            roadBorderWidth: 4),
+                        staticPoints: [
+                          ...npcStaticPoints,
+                          ...acceptedQuestsStaticPoints
+                        ],
+                      ),
                       onGeoPointClicked: (geoPoint) {
-                        final appState = context.read<AppCubit>().state;
-                        final npc = appState.npcs
-                            .where(
-                              (n) =>
-                                  n.latitude == geoPoint.latitude &&
-                                  n.longitude == geoPoint.longitude,
-                            )
-                            .firstOrNull;
-                        if (npc != null) {
-                          showDialog(
-                            context: context,
-                            barrierColor: Colors.black.withOpacity(0.85),
-                            builder: (context) => NpcLocationDetail(
-                              npc: npc,
-                              onBack: () => Navigator.of(context).pop(),
-                            ),
-                          );
-                        }
+                        context.read<MapCubit>().onGeoPointClicked(geoPoint);
                       },
                     ),
                     BlocBuilder<MapCubit, MapState>(

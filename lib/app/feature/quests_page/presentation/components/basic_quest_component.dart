@@ -15,19 +15,19 @@ import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 
+String questIcon(QuestType type) {
+  return switch (type) {
+    QuestType.nftTreasureHunt => AppIcons.treasure_hunt,
+    QuestType.nftTreasureHide => AppIcons.treasure_hide,
+    QuestType.talkToNpc => AppIcons.chat,
+    QuestType.quiz => AppIcons.quiz,
+  };
+}
+
 class BasicQuestComponent extends StatelessWidget {
   final BasicQuest quest;
 
   const BasicQuestComponent({super.key, required this.quest});
-
-  String get questIcon {
-    return switch (quest.type) {
-      QuestType.nftTreasureHunt => AppIcons.treasure_hunt,
-      QuestType.nftTreasureHide => AppIcons.treasure_hide,
-      QuestType.talkToNpc => AppIcons.chat,
-      QuestType.quiz => AppIcons.quiz,
-    };
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class BasicQuestComponent extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: SvgPicture.asset(
-                      questIcon,
+                      questIcon(quest.type),
                       height: 40,
                       colorFilter: ColorFilter.mode(
                         AppColors.palette_tertiary,

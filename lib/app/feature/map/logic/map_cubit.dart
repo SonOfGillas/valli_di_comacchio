@@ -3,8 +3,54 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/nft_treasure_quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+
+class MapQuestItems {
+  final BasicQuest quest;
+  final List<GeoPoint> geoPoints;
+  final String icon;
+
+  static List<GeoPoint> getGeoPoint(BasicQuest quest) {
+    switch (quest.type) {
+      case QuestType.talkToNpc:
+        final talkToNpcQuest = quest as TalkToNpcQuest;
+        return talkToNpcQuest.questItems
+            .map((item) => item.itemLocation)
+            .toList();
+      case QuestType.nftTreasureHunt:
+        final treasureHuntQuest = quest as NftTreasureQuest;
+        return [
+          GeoPoint(
+              latitude: treasureHuntQuest.location!.latitude,
+              longitude: treasureHuntQuest.location!.longitude)
+        ];
+      default:
+        // For other quest types, return an empty list
+        return [];
+    }
+  }
+
+  MapQuestItems({
+    required this.quest,
+  })  : geoPoints = getGeoPoint(quest),
+        icon = questIcon(quest.type);
+}
+
+class QuestStaticMarker {
+  final String id;
+  final String icon;
+  final GeoPoint geoPoint;
+
+  QuestStaticMarker({
+    required this.icon,
+    required this.geoPoint,
+  }) : id = geoPoint.toString();
+}
 
 class MapCubit extends Cubit<MapState> {
   MapCubit({required this.parameters, required this.appCubit})
@@ -14,6 +60,22 @@ class MapCubit extends Cubit<MapState> {
   final MapParameters parameters;
 
   List<Npc> get npcs => appCubit.state.npcs;
+  List<QuestStaticMarker> get acceptedQuests =>
+      appCubit.state.allQuests.allAcceptedQuests
+          .expand((questByNpc) => questByNpc.quests)
+          .map(
+            (quest) => MapQuestItems(quest: quest),
+          )
+          .where(
+            (questItem) => questItem.geoPoints.isNotEmpty,
+          )
+          .expand((questItem) => questItem.geoPoints.map(
+                (geoPoint) => QuestStaticMarker(
+                  icon: questItem.icon,
+                  geoPoint: geoPoint,
+                ),
+              ))
+          .toList();
 
   void drawPositionToShowMarker() async {
     if (state.positionToShow != null) {
@@ -117,5 +179,25 @@ class MapCubit extends Cubit<MapState> {
       drawSelectedWalk();
     }
     emit(state.copyWith(showWalk: !state.showWalk));
+  }
+
+  void onGeoPointClicked(GeoPoint geoPoint) {
+    final questMarker = acceptedQuests
+        .where(
+          (quest) => quest.geoPoint == geoPoint,
+        )
+        .firstOrNull;
+    final selectedNpc = npcs
+        .where(
+          (npc) =>
+              npc.latitude == geoPoint.latitude &&
+              npc.longitude == geoPoint.longitude,
+        )
+        .firstOrNull;
+    if (selectedNpc != null) {
+      emit(state.copyWith(
+        npcLocationSelected: selectedNpc,
+      ));
+    }
   }
 }
