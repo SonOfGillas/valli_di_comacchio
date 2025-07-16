@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
@@ -12,6 +14,7 @@ class AppState extends Equatable {
     this.npcs = const [],
     this.walks = const [],
     this.events = const [],
+    this.collectedNFTs = const [],
     AllQuests? allQuests,
   }) : allQuests = allQuests ?? AllQuests(npcsWithQuests: const []);
 
@@ -21,6 +24,7 @@ class AppState extends Equatable {
   final List<Walk> walks;
   final List<Event> events;
   final AllQuests allQuests;
+  final List<File> collectedNFTs;
 
   AppState copyWith({
     AppUser? user,
@@ -28,6 +32,7 @@ class AppState extends Equatable {
     List<Npc>? npcs,
     List<Walk>? walks,
     List<Event>? events,
+    List<File>? collectedNFTs,
     AllQuests? allQuests,
   }) {
     return AppState(
@@ -36,10 +41,12 @@ class AppState extends Equatable {
       npcs: npcs ?? this.npcs,
       walks: walks ?? this.walks,
       events: events ?? this.events,
+      collectedNFTs: collectedNFTs ?? this.collectedNFTs,
       allQuests: allQuests ?? this.allQuests,
     );
   }
 
   @override
-  List<Object?> get props => [user, devMode, npcs, walks, events, allQuests];
+  List<Object?> get props =>
+      [user, devMode, npcs, walks, events, collectedNFTs, allQuests];
 }

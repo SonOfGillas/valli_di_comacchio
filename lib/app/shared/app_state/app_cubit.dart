@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
@@ -122,23 +124,46 @@ class AppCubit extends Cubit<AppState> {
     return isDev;
   }
 
+  Future<List<File>> getCollectedNFTs() async {
+    List<File> nfts = [];
+    final nftsResult = await _questRepository.collectedNfts();
+    nftsResult.fold(
+      onSuccess: (fetchedNfts) {
+        nfts = fetchedNfts;
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error fetching collected NFTs: $error');
+      },
+    );
+    return nfts;
+  }
+
   Future<void> loadSetUpData(AppUser? loggedUser) async {
     // Launch all async operations in parallel
-    final results = await Future.wait(
-        [getNpcsData(), getWalksData(), getEventsData(), getIsDevMode()]);
+    final results = await Future.wait([
+      getNpcsData(),
+      getWalksData(),
+      getEventsData(),
+      getIsDevMode(),
+      getCollectedNFTs()
+    ]);
 
     // Extract results from the list
     final npcs = results[0] as List<Npc>;
     final walks = results[1] as List<Walk>;
     final events = results[2] as List<Event>;
     final isDevMode = results[3] as bool;
+    final collectedNFTs = results[4] as List<File>;
 
     emit(state.copyWith(
-        user: loggedUser,
-        npcs: npcs,
-        walks: walks,
-        events: events,
-        devMode: isDevMode));
+      user: loggedUser,
+      npcs: npcs,
+      walks: walks,
+      events: events,
+      devMode: isDevMode,
+      collectedNFTs: collectedNFTs,
+    ));
   }
 
   Future<void> setDevMode(bool isDev) async {
@@ -190,5 +215,7 @@ class AppCubit extends Cubit<AppState> {
         print('Error accepting quest: $error');
       },
     );
+    final updateNftCollection = await getCollectedNFTs();
+    emit(state.copyWith(collectedNFTs: updateNftCollection));
   }
 }

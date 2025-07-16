@@ -17,12 +17,14 @@ class TradeResourceElement extends StatelessWidget {
     this.onTap,
     this.size = TradeResourceElmentSize.medium,
     this.isUserResource = false,
+    this.showQuantityMedium = false,
   });
 
   final TradeResourceInventory resource;
   final TradeResourceElmentSize size;
   final bool isUserResource;
   final VoidCallback? onTap;
+  final bool showQuantityMedium;
 
   double get containerDimension {
     switch (size) {
@@ -83,9 +85,15 @@ class TradeResourceElement extends StatelessWidget {
             ),
             if (size == TradeResourceElmentSize.large)
               H3('x${resource.storage}'),
-            if (size == TradeResourceElmentSize.medium)
+            if (size == TradeResourceElmentSize.medium && !showQuantityMedium)
               LabelText(
                 resource.tradeResource.name,
+                textAlign: TextAlign.center,
+                withBoarder: true,
+              ),
+            if (size == TradeResourceElmentSize.medium && showQuantityMedium)
+              LabelText(
+                "x${resource.storage.toString()}",
                 textAlign: TextAlign.center,
                 withBoarder: true,
               ),
