@@ -5,6 +5,7 @@ import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/all_quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';
@@ -146,7 +147,8 @@ class AppCubit extends Cubit<AppState> {
       getWalksData(),
       getEventsData(),
       getIsDevMode(),
-      getCollectedNFTs()
+      getCollectedNFTs(),
+      getLocalSavedQuests(emitResult: false)
     ]);
 
     // Extract results from the list
@@ -155,6 +157,7 @@ class AppCubit extends Cubit<AppState> {
     final events = results[2] as List<Event>;
     final isDevMode = results[3] as bool;
     final collectedNFTs = results[4] as List<File>;
+    final localSavedQuests = results[5] as AllQuests;
 
     emit(state.copyWith(
       user: loggedUser,
@@ -163,6 +166,7 @@ class AppCubit extends Cubit<AppState> {
       events: events,
       devMode: isDevMode,
       collectedNFTs: collectedNFTs,
+      allQuests: localSavedQuests,
     ));
   }
 
@@ -191,17 +195,22 @@ class AppCubit extends Cubit<AppState> {
     );
   }
 
-  Future<void> getLocalSavedQuests() async {
+  Future<AllQuests> getLocalSavedQuests({bool emitResult = true}) async {
     final result = await _questRepository.localSavedQuests();
+    AllQuests localSavedQuests = AllQuests(npcsWithQuests: const []);
     result.fold(
       onSuccess: (quests) {
-        emit(state.copyWith(allQuests: quests));
+        if (emitResult) {
+          emit(state.copyWith(allQuests: quests));
+        }
+        localSavedQuests = quests;
       },
       onFailure: (error) {
         // Handle error if needed
         print('Error fetching local saved quests: $error');
       },
     );
+    return localSavedQuests;
   }
 
   Future<void> acceptQuest(Npc npc, BasicQuest quest) async {

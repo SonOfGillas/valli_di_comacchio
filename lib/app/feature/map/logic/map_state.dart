@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
@@ -10,6 +11,7 @@ class MapState extends Equatable {
     this.walk,
     this.positionToShow,
     this.npcLocationSelected,
+    this.questItemSelected,
     this.enableTracking = false,
     this.showNpc = true,
     this.showWalk = false,
@@ -19,6 +21,7 @@ class MapState extends Equatable {
   final Walk? walk;
   final GeoPoint? positionToShow;
   final Npc? npcLocationSelected;
+  final QuestStaticMarker? questItemSelected;
   final bool enableTracking;
   final bool showNpc;
   final bool showWalk;
@@ -60,7 +63,8 @@ class MapState extends Equatable {
         showNpc,
         enableTracking,
         showWalk,
-        npcLocationSelected
+        npcLocationSelected,
+        questItemSelected
       ];
 
   MapState copyWith({
@@ -70,6 +74,7 @@ class MapState extends Equatable {
     bool? showNpc,
     bool? showWalk,
     Npc? npcLocationSelected,
+    QuestStaticMarker? questItemSelected,
   }) {
     return MapState(
       walk: walk ?? this.walk,
@@ -78,6 +83,7 @@ class MapState extends Equatable {
       showNpc: showNpc ?? this.showNpc,
       showWalk: showWalk ?? this.showWalk,
       npcLocationSelected: npcLocationSelected,
+      questItemSelected: questItemSelected,
     );
   }
 }

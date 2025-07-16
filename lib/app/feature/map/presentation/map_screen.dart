@@ -4,6 +4,7 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
+import 'package:valli_di_comacchio/app/feature/map/presentation/components/pick_quest_item_modal.dart';
 
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
@@ -32,6 +33,12 @@ class MapScreen extends StatelessWidget {
                   npc: state.npcLocationSelected!,
                   onBack: () => Navigator.of(context).pop(),
                 ),
+              );
+            }
+            if (state.questItemSelected != null) {
+              showPickQuestItemModal(
+                context,
+                state.questItemSelected!,
               );
             }
           },

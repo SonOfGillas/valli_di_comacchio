@@ -10,12 +10,18 @@ class BaseModal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      color: AppColors.background_black.withValues(alpha: 0.5),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-        child: child,
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        color: AppColors.background_black.withValues(alpha: 0.5),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+          child: GestureDetector(
+            onTap: () {}, // Prevent tap from propagating to parent
+            child: child,
+          ),
+        ),
       ),
     );
   }
