@@ -8,8 +8,8 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/quiz.dart';
 class QuizQuest extends BasicQuest {
   final Quiz quiz;
 
-  QuizQuest({
-    super.uuid,
+  const QuizQuest({
+    required super.uuid,
     required this.quiz,
     required super.npc,
     super.accepted = false,
@@ -18,6 +18,7 @@ class QuizQuest extends BasicQuest {
   factory QuizQuest.fromJson(Map<String, dynamic> json) {
     final BasicQuest basicQuestData = BasicQuest.fromJson(json);
     return QuizQuest(
+      uuid: basicQuestData.uuid,
       quiz: Quiz.fromJson(json['quiz']),
       npc: basicQuestData.npc,
       accepted: basicQuestData.accepted,

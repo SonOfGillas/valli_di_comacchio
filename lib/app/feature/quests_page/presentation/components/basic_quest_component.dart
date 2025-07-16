@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/nft_treasure_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quiz_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/nft_tresure_hunt_widget.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/quiz_quest_widget.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/talk_to_npc_widget.dart';
@@ -119,7 +121,13 @@ class BasicQuestComponent extends StatelessWidget {
                                     withBoarder: true,
                                   ),
                                 ))
-                            : GlowingButton(text: 'Accetta', onPressed: () {}),
+                            : GlowingButton(
+                                text: 'Accetta',
+                                onPressed: () {
+                                  context
+                                      .read<QuestsCubit>()
+                                      .acceptQuest(quest);
+                                }),
                       ),
                     )
                   ],

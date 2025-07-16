@@ -3,7 +3,6 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/repositories/quest_repository.dart';
 
 class QuestPageParameters {
   final Npc? selectedNpc;
@@ -14,16 +13,19 @@ class QuestPageParameters {
 class QuestsCubit extends Cubit<QuestsState> {
   QuestsCubit({
     required this.appCubit,
-    required this.questRepository,
     required QuestPageParameters parameters,
   }) : super(QuestsState.initial()) {
     loadQuests(parameters);
   }
 
   final AppCubit appCubit;
-  final QuestRepository questRepository;
 
   List<Npc> get npcs => appCubit.state.npcs;
+  List<BasicQuest> get acceptedQuests =>
+      appCubit.state.allQuests.allAcceptedQuests;
+  List<BasicQuest> get npcQuests => (state.selectedNpc != null)
+      ? appCubit.state.allQuests.getNpcQuests(state.selectedNpc!)
+      : [];
 
   void loadQuests(QuestPageParameters parameters) {
     emit(state.copyWith(
@@ -32,7 +34,6 @@ class QuestsCubit extends Cubit<QuestsState> {
       emit(state.copyWith(
           mode: QuestPageMode.npcQuests,
           selectedNpc: parameters.selectedNpc,
-          status: QuestPageStatus.loading,
           selectedTabIndex: 1)); // Switch to NPC quests tab
       _loadNpcQuests(parameters.selectedNpc!);
     } else {
@@ -40,49 +41,21 @@ class QuestsCubit extends Cubit<QuestsState> {
     }
   }
 
-  void _loadNpcQuests(Npc npc) {
-    questRepository.getNpcQuest(npc, appCubit.state.npcs).then((result) {
-      result.fold(
-        onSuccess: (quests) {
-          emit(state.copyWith(
-              mode: QuestPageMode.npcQuests,
-              selectedNpc: npc,
-              allQuests: quests,
-              status: QuestPageStatus.idle));
-        },
-        onFailure: (failure) {
-          emit(state.copyWith(
-            selectedNpc: state.selectedNpc,
-            status: QuestPageStatus.error,
-            error: failure.message(),
-          ));
-        },
-      );
-    });
+  void _loadNpcQuests(Npc npc) async {
+    await appCubit.getNpcQuests(npc);
+    emit(state.copyWith(
+        mode: QuestPageMode.npcQuests,
+        selectedNpc: npc,
+        status: QuestPageStatus.idle));
   }
 
-  void _loadLocalSavedQuests() {
-    questRepository.localSavedQuests().then((result) {
-      result.fold(
-        onSuccess: (quests) {
-          emit(state.copyWith(
-              selectedNpc: state.selectedNpc,
-              allQuests: quests,
-              status: QuestPageStatus.idle));
-        },
-        onFailure: (failure) {
-          emit(state.copyWith(
-            selectedNpc: state.selectedNpc,
-            mode: QuestPageMode.acceptedQuests,
-            status: QuestPageStatus.error,
-            error: failure.message(),
-          ));
-        },
-      );
-    });
+  void _loadLocalSavedQuests() async {
+    await appCubit.getLocalSavedQuests();
+    emit(state.copyWith(
+        selectedNpc: state.selectedNpc, status: QuestPageStatus.idle));
   }
 
-  void acceptQuest(BasicQuest quest) {
+  void acceptQuest(BasicQuest quest) async {
     if (state.selectedNpc == null) {
       emit(state.copyWith(
         selectedNpc: state.selectedNpc,
@@ -91,23 +64,9 @@ class QuestsCubit extends Cubit<QuestsState> {
       ));
       return;
     }
-    questRepository.acceptQuest(state.selectedNpc!, quest).then((result) {
-      result.fold(
-        onSuccess: (quests) {
-          emit(state.copyWith(
-              selectedNpc: state.selectedNpc,
-              allQuests: quests,
-              status: QuestPageStatus.idle));
-        },
-        onFailure: (failure) {
-          emit(state.copyWith(
-            selectedNpc: state.selectedNpc,
-            status: QuestPageStatus.error,
-            error: failure.message(),
-          ));
-        },
-      );
-    });
+    await appCubit.acceptQuest(state.selectedNpc!, quest);
+    emit(state.copyWith(
+        selectedNpc: state.selectedNpc, status: QuestPageStatus.idle));
   }
 
   void showNpcQuests(Npc npc) {

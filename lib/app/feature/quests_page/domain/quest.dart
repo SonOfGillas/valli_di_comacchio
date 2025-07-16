@@ -20,13 +20,13 @@ class BasicQuest extends Equatable {
   final bool accepted;
 //  final List<TradeResourceInventory> resourceReward;
 
-  BasicQuest({
-    String? uuid,
+  const BasicQuest({
+    required this.uuid,
     required this.type,
     required this.npc,
     this.coinReward = 0,
     this.accepted = false,
-  }) : uuid = uuid ?? uuidGenerator.v1();
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -44,9 +44,8 @@ class BasicQuest extends Equatable {
       (e) => e.toString() == typeString,
       orElse: () => QuestType.quiz,
     );
-
     return BasicQuest(
-      uuid: json['uuid'] as String? ?? uuidGenerator.v1(),
+      uuid: json['uuid'] as String,
       type: type,
       npc: Npc.fromJson(json['npc'] as Map<String, dynamic>),
       coinReward: json['coinReward'] as int? ?? 0,

@@ -10,7 +10,7 @@ class TalkToNpcQuest extends BasicQuest {
   final List<QuestItem> questItems;
 
   TalkToNpcQuest({
-    super.uuid,
+    required super.uuid,
     required this.receiverNpc,
     required this.talkToNpcData,
     required super.npc,
@@ -27,6 +27,7 @@ class TalkToNpcQuest extends BasicQuest {
   factory TalkToNpcQuest.fromJson(Map<String, dynamic> json) {
     final basicQuestData = BasicQuest.fromJson(json);
     return TalkToNpcQuest(
+      uuid: basicQuestData.uuid,
       receiverNpc: Npc.fromJson(json['receiverNpc'] as Map<String, dynamic>),
       talkToNpcData:
           TalkToNpcData.fromJson(json['talkToNpcData'] as Map<String, dynamic>),

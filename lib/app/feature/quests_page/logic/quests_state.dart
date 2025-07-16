@@ -13,7 +13,6 @@ enum QuestPageStatus {
 
 class QuestsState extends Equatable {
   final QuestPageMode mode;
-  final AllQuests allQuests;
   final Npc? selectedNpc;
   final QuestPageStatus status;
   final String? error;
@@ -21,21 +20,15 @@ class QuestsState extends Equatable {
 
   const QuestsState({
     required this.mode,
-    required this.allQuests,
     this.selectedNpc,
     this.status = QuestPageStatus.idle,
     this.error,
     this.selectedTabIndex = 0,
   });
 
-  List<BasicQuest> get acceptedQuests => allQuests.allAcceptedQuests;
-  List<BasicQuest> get npcQuests =>
-      (selectedNpc != null) ? allQuests.getNpcQuests(selectedNpc!) : [];
-
   factory QuestsState.initial() {
     return QuestsState(
       mode: QuestPageMode.acceptedQuests,
-      allQuests: AllQuests(),
       selectedNpc: null,
       status: QuestPageStatus.idle,
       error: null,
@@ -45,7 +38,6 @@ class QuestsState extends Equatable {
 
   QuestsState copyWith({
     QuestPageMode? mode,
-    AllQuests? allQuests,
     required Npc? selectedNpc,
     QuestPageStatus? status,
     String? error,
@@ -53,7 +45,6 @@ class QuestsState extends Equatable {
   }) {
     return QuestsState(
       mode: mode ?? this.mode,
-      allQuests: allQuests ?? this.allQuests,
       selectedNpc: selectedNpc,
       status: status ?? this.status,
       error: error,
@@ -64,7 +55,6 @@ class QuestsState extends Equatable {
   @override
   List<Object?> get props => [
         mode,
-        allQuests,
         selectedNpc,
         status,
         error,

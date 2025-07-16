@@ -6,6 +6,8 @@ import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.da
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
 import 'package:valli_di_comacchio/app/feature/trade/presentation/components/npc_dislay_header.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
@@ -98,6 +100,7 @@ class AcceptedQuestsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestsCubit, QuestsState>(
       builder: (context, state) {
+        final acceptedQuests = context.read<QuestsCubit>().acceptedQuests;
         return state.status == QuestPageStatus.loading
             ? const Center(
                 child: Column(
@@ -106,7 +109,7 @@ class AcceptedQuestsWidget extends StatelessWidget {
                   CircularProgressIndicator(),
                 ],
               ))
-            : state.acceptedQuests.isEmpty
+            : acceptedQuests.isEmpty
                 ? Center(
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -135,7 +138,7 @@ class AcceptedQuestsWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       // Implement the UI for accepted quests
                       children: [
-                        ...state.acceptedQuests.map((quest) {
+                        ...acceptedQuests.map((quest) {
                           return ListTile(
                             title: Text(quest.uuid),
                             subtitle: Text(quest.type.toString()),
@@ -160,21 +163,27 @@ class NpcQuestsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QuestsCubit, QuestsState>(
-      builder: (context, state) {
-        return state.status != QuestPageStatus.loading
-            ? (state.mode == QuestPageMode.npcQuests)
-                ? NpcQuestList()
-                : NpcList()
-            : const Center(
-                child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  LabelText('Stiamo generando delle nuove missioni per te!'),
-                ],
-              ));
+    return BlocBuilder<AppCubit, AppState>(
+      buildWhen: (previous, current) => previous.allQuests != current.allQuests,
+      builder: (context, appState) {
+        return BlocBuilder<QuestsCubit, QuestsState>(
+          builder: (context, state) {
+            return state.status != QuestPageStatus.loading
+                ? (state.mode == QuestPageMode.npcQuests)
+                    ? NpcQuestList()
+                    : NpcList()
+                : const Center(
+                    child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      LabelText(
+                          'Stiamo generando delle nuove missioni per te!'),
+                    ],
+                  ));
+          },
+        );
       },
     );
   }
@@ -234,6 +243,7 @@ class NpcQuestList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<QuestsCubit, QuestsState>(
       builder: (context, state) {
+        final npcQuests = context.read<QuestsCubit>().npcQuests;
         return SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -261,7 +271,7 @@ class NpcQuestList extends StatelessWidget {
                   ),
                 ],
               ),
-              ...state.npcQuests.map((quest) {
+              ...npcQuests.map((quest) {
                 return BasicQuestComponent(
                   quest: quest,
                 );

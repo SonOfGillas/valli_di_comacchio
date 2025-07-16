@@ -13,7 +13,7 @@ class NftTreasureQuest extends BasicQuest {
   final GeoPoint? location;
 
   NftTreasureQuest({
-    super.uuid,
+    required super.uuid,
     required this.nft,
     required super.type,
     required super.npc,
@@ -37,6 +37,7 @@ class NftTreasureQuest extends BasicQuest {
   factory NftTreasureQuest.fromJson(Map<String, dynamic> json) {
     final basicQuestData = BasicQuest.fromJson(json);
     return NftTreasureQuest(
+      uuid: basicQuestData.uuid,
       type: basicQuestData.type,
       nft: File(json['nft'] as String),
       npc: basicQuestData.npc,

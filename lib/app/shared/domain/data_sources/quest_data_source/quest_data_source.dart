@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:uuid/uuid.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/nft_treasure_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quiz_quest.dart';
@@ -77,6 +78,7 @@ class QuestDataSource {
           questFutures.add(aiGenerationDataSource
               .generateTalkToNpcQuestData(randomReceiver)
               .then((talkToNpcData) => TalkToNpcQuest(
+                    uuid: Uuid().v1(),
                     receiverNpc: randomReceiver,
                     talkToNpcData: talkToNpcData,
                     npc: npc,
@@ -86,6 +88,7 @@ class QuestDataSource {
         case QuestType.quiz:
           questFutures.add(
               aiGenerationDataSource.generateQuiz().then((quiz) => QuizQuest(
+                    uuid: Uuid().v1(),
                     npc: npc,
                     quiz: quiz,
                   )));
@@ -95,6 +98,7 @@ class QuestDataSource {
           questFutures.add(aiGenerationDataSource
               .generateNft()
               .then((nft) => NftTreasureQuest(
+                    uuid: Uuid().v1(),
                     type: QuestType.nftTreasureHide,
                     nft: nft,
                     npc: npc,
@@ -105,6 +109,7 @@ class QuestDataSource {
           questFutures.add(aiGenerationDataSource
               .generateNft()
               .then((nft) => NftTreasureQuest(
+                    uuid: Uuid().v1(),
                     type: QuestType.nftTreasureHunt,
                     nft: nft,
                     npc: npc,
@@ -120,9 +125,9 @@ class QuestDataSource {
 
   Future<AllQuests> acceptQuest(Npc npc, BasicQuest quest) async {
     final localSavedQuests = await getLocalSavedQuests();
-    localSavedQuests.acceptQuest(npc, quest);
-    await saveQuestsLocally(localSavedQuests);
-    return Future.value(localSavedQuests);
+    final updatedQuest = localSavedQuests.acceptQuest(npc, quest);
+    await saveQuestsLocally(updatedQuest);
+    return Future.value(updatedQuest);
   }
 
   /// Completes a quest by removing it from the local storage.

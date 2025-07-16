@@ -94,10 +94,12 @@ Future<void> initServiceLocator() async {
 
     // AppState
     ..registerLazySingleton<AppCubit>(() => AppCubit(
-        userRepository: sl(),
-        npcRepository: sl(),
-        walkRepository: sl(),
-        eventRepository: sl()))
+          userRepository: sl(),
+          npcRepository: sl(),
+          walkRepository: sl(),
+          eventRepository: sl(),
+          questRepository: sl(),
+        ))
 
     // Slash
     ..registerFactory<SplashCubit>(
@@ -133,7 +135,6 @@ Future<void> initServiceLocator() async {
     ..registerFactoryParam<QuestsCubit, QuestPageParameters, void>(
       (param, _) => QuestsCubit(
         appCubit: sl(),
-        questRepository: sl(),
         parameters: param,
       ),
     )

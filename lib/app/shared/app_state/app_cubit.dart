@@ -1,28 +1,37 @@
 import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/event_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/npc_repository.dart';
+import 'package:valli_di_comacchio/app/shared/domain/repositories/quest_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/walk_repository.dart';
 
 class AppCubit extends Cubit<AppState> {
   AppCubit({
-    required this.userRepository,
-    required this.npcRepository,
-    required this.walkRepository,
-    required this.eventRepository,
-  }) : super(
-          const AppState(),
+    required UserRepository userRepository,
+    required NpcRepository npcRepository,
+    required WalkRepository walkRepository,
+    required EventRepository eventRepository,
+    required QuestRepository questRepository,
+  })  : _userRepository = userRepository,
+        _npcRepository = npcRepository,
+        _walkRepository = walkRepository,
+        _eventRepository = eventRepository,
+        _questRepository = questRepository,
+        super(
+          AppState(),
         );
 
-  final UserRepository userRepository;
-  final NpcRepository npcRepository;
-  final WalkRepository walkRepository;
-  final EventRepository eventRepository;
+  final UserRepository _userRepository;
+  final NpcRepository _npcRepository;
+  final WalkRepository _walkRepository;
+  final EventRepository _eventRepository;
+  final QuestRepository _questRepository;
 
   Future<void> setCurrentUser({
     required AppUser user,
@@ -32,10 +41,10 @@ class AppCubit extends Cubit<AppState> {
 
   Future<void> logout() async {
     final logoutResult =
-        await userRepository.logout(isGuest: state.user?.isGuest ?? true);
+        await _userRepository.logout(isGuest: state.user?.isGuest ?? true);
     logoutResult.fold(
       onSuccess: (_) {
-        emit(const AppState(user: null));
+        emit(AppState(user: null));
       },
       onFailure: (error) {
         // TODO: Handle error if needed
@@ -44,7 +53,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<bool> updateUser(AppUser user) async {
-    final result = await userRepository.updateUserData(user: user);
+    final result = await _userRepository.updateUserData(user: user);
     bool successFullUpdate = false;
     result.fold(
       onSuccess: (_) {
@@ -60,7 +69,7 @@ class AppCubit extends Cubit<AppState> {
 
   Future<List<Npc>> getNpcsData() async {
     List<Npc> npcsList = [];
-    final npcsResult = await npcRepository.getAllNpcs();
+    final npcsResult = await _npcRepository.getAllNpcs();
     npcsResult.fold(
       onSuccess: (npcs) {
         npcsList = npcs;
@@ -75,7 +84,7 @@ class AppCubit extends Cubit<AppState> {
 
   Future<List<Walk>> getWalksData() async {
     List<Walk> walks = [];
-    final walksResult = await walkRepository.getAllWalks();
+    final walksResult = await _walkRepository.getAllWalks();
     walksResult.fold(
       onSuccess: (fetchedWalks) {
         walks = fetchedWalks;
@@ -90,7 +99,7 @@ class AppCubit extends Cubit<AppState> {
 
   Future<List<Event>> getEventsData() async {
     List<Event> events = [];
-    final eventsResult = await eventRepository.getAllEvents();
+    final eventsResult = await _eventRepository.getAllEvents();
     eventsResult.fold(
       onSuccess: (fetchedEvents) {
         events = fetchedEvents;
@@ -104,7 +113,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<bool> getIsDevMode() async {
-    final result = await userRepository.isDevUser();
+    final result = await _userRepository.isDevUser();
     bool isDev = false;
     result.fold(onSuccess: (devMode) {
       emit(state.copyWith(devMode: devMode));
@@ -133,13 +142,52 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<void> setDevMode(bool isDev) async {
-    final result = await userRepository.setDevMode(isDev);
+    final result = await _userRepository.setDevMode(isDev);
     result.fold(
       onSuccess: (_) {
         emit(state.copyWith(devMode: isDev));
       },
       onFailure: (error) {
         // Handle error if needed
+      },
+    );
+  }
+
+  Future<void> getNpcQuests(Npc npc) async {
+    final result = await _questRepository.getNpcQuest(npc, state.npcs);
+    result.fold(
+      onSuccess: (quests) {
+        emit(state.copyWith(allQuests: quests));
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error fetching NPC quests: $error');
+      },
+    );
+  }
+
+  Future<void> getLocalSavedQuests() async {
+    final result = await _questRepository.localSavedQuests();
+    result.fold(
+      onSuccess: (quests) {
+        emit(state.copyWith(allQuests: quests));
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error fetching local saved quests: $error');
+      },
+    );
+  }
+
+  Future<void> acceptQuest(Npc npc, BasicQuest quest) async {
+    final result = await _questRepository.acceptQuest(npc, quest);
+    result.fold(
+      onSuccess: (quests) {
+        emit(state.copyWith(allQuests: quests));
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error accepting quest: $error');
       },
     );
   }
