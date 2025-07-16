@@ -64,6 +64,21 @@ class NftTreasureQuestWidget extends StatelessWidget {
                   },
                 ),
                 SizedBox(height: 8),
+                Text(
+                  'E cliccando su quest\' icona:',
+                  style: AppTextStyles.labelOnPaletteLight,
+                ),
+                Center(
+                  child: SvgPicture.asset(
+                    AppIcons.treasure_hunt,
+                    height: 60,
+                    colorFilter: ColorFilter.mode(
+                      AppColors.palette_tertiary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 8),
               ],
             ),
           ),
@@ -88,9 +103,9 @@ class NftTreasureQuestWidget extends StatelessWidget {
                 Center(
                   child: SvgPicture.asset(
                     AppIcons.treasure_hide,
-                    height: 40,
+                    height: 60,
                     colorFilter: ColorFilter.mode(
-                      Colors.white,
+                      AppColors.palette_tertiary,
                       BlendMode.srcIn,
                     ),
                   ),

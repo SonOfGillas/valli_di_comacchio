@@ -9,6 +9,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_qu
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 
 class MapQuestItems {
   final BasicQuest quest;
@@ -61,21 +62,21 @@ class MapCubit extends Cubit<MapState> {
 
   List<Npc> get npcs => appCubit.state.npcs;
   List<QuestStaticMarker> get acceptedQuests =>
-      appCubit.state.allQuests.allAcceptedQuests
-          .expand((questByNpc) => questByNpc.quests)
-          .map(
-            (quest) => MapQuestItems(quest: quest),
-          )
-          .where(
-            (questItem) => questItem.geoPoints.isNotEmpty,
-          )
-          .expand((questItem) => questItem.geoPoints.map(
-                (geoPoint) => QuestStaticMarker(
+      getQuestStaticMarkers(appCubit.state.allQuests.allAcceptedQuests);
+
+  static List<QuestStaticMarker> getQuestStaticMarkers(
+      List<QuestsByNpc> questsByNpcList) {
+    return questsByNpcList
+        .expand((questByNpc) => questByNpc.quests)
+        .map((quest) => MapQuestItems(quest: quest))
+        .where((questItem) => questItem.geoPoints.isNotEmpty)
+        .expand((questItem) =>
+            questItem.geoPoints.map((geoPoint) => QuestStaticMarker(
                   icon: questItem.icon,
                   geoPoint: geoPoint,
-                ),
-              ))
-          .toList();
+                )))
+        .toList();
+  }
 
   void drawPositionToShowMarker() async {
     if (state.positionToShow != null) {
@@ -86,7 +87,7 @@ class MapCubit extends Cubit<MapState> {
         MarkerIcon(
           iconWidget: Container(
             key: const ValueKey('positionToShowMarker'),
-            child: const Icon(Icons.location_on, color: Colors.red, size: 40),
+            child: const Icon(Icons.location_on, color: Colors.red, size: 80),
           ),
         ),
       );
