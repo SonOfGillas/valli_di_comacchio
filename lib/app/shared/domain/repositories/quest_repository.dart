@@ -5,9 +5,9 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/quest_data_source/quest_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/all_quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/user_repository.dart';
 
 const questByNpc = 3;

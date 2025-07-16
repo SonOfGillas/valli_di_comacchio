@@ -3,6 +3,7 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 
 class QuestPageParameters {
   final Npc? selectedNpc;
@@ -21,7 +22,7 @@ class QuestsCubit extends Cubit<QuestsState> {
   final AppCubit appCubit;
 
   List<Npc> get npcs => appCubit.state.npcs;
-  List<BasicQuest> get acceptedQuests =>
+  List<QuestsByNpc> get acceptedQuests =>
       appCubit.state.allQuests.allAcceptedQuests;
   List<BasicQuest> get npcQuests => (state.selectedNpc != null)
       ? appCubit.state.allQuests.getNpcQuests(state.selectedNpc!)

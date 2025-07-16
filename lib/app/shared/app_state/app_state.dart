@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/event.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/all_quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 
 class AppState extends Equatable {
   AppState({

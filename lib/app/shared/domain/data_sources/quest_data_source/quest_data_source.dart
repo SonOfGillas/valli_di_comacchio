@@ -8,9 +8,9 @@ import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quiz_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/ai_generation_data_source/ai_generation_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/all_quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/nft_collection.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/repositories/quest_repository.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
