@@ -43,6 +43,9 @@ class MapScreen extends StatelessWidget {
                 state.questItemSelected!,
               );
             }
+            if (state.questCompleted != null) {
+              onQuestCompleated(context, state.questCompleted!);
+            }
           },
           builder: (context, state) {
             final npcStaticPoints = appState.npcs

@@ -39,6 +39,9 @@ class TalkToNpcQuest extends BasicQuest {
     );
   }
 
+  bool get allItemsFound =>
+      questItems.isEmpty ? true : questItems.every((item) => item.isFound);
+
   TalkToNpcQuest setItemAsFounded(GeoPoint itemLocation) {
     final List<QuestItem> updatedQuestItems = questItems
         .map((item) {

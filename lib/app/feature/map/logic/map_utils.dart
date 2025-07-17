@@ -23,15 +23,3 @@ bool userCanPickItem(
   );
   return distance <= userDistanceToPickItem;
 }
-
-BasicQuest getQuestRelatedToQuestItem(
-    AppState appState, QuestStaticMarker selectedQuestItem) {
-  final acceptedQuests = appState.allQuests.allAcceptedQuests
-      .expand((questByNpc) => questByNpc.quests)
-      .toList();
-  return acceptedQuests.firstWhere(
-    (quest) => quest.uuid == selectedQuestItem.relatedQuestId,
-    orElse: () => throw Exception(
-        'Quest not found for selected quest item: ${selectedQuestItem.relatedQuestId}'),
-  );
-}

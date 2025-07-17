@@ -5,6 +5,8 @@ import 'package:valli_di_comacchio/app/feature/map/domain/map_quest_items.dart';
 import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
@@ -30,8 +32,7 @@ class MapCubit extends Cubit<MapState> {
             questItem.geoPoints.map((geoPoint) => QuestStaticMarker(
                   icon: questItem.icon,
                   geoPoint: geoPoint,
-                  relatedQuestId: questItem.quest.uuid,
-                  relatedNpcId: questItem.quest.npc.id,
+                  relatedQuest: questItem.quest,
                 )))
         .toList();
   }
@@ -140,6 +141,20 @@ class MapCubit extends Cubit<MapState> {
     emit(state.copyWith(showWalk: !state.showWalk));
   }
 
+  BasicQuest? _checkTalkToNpcQuestCompletion(Npc selectedNpc) {
+    final List<TalkToNpcQuest> acceptedTalkToNpcQuests = appCubit
+        .state.allQuests
+        .getQuestByType(QuestType.talkToNpc)
+        .cast<TalkToNpcQuest>();
+    final completedQuest = acceptedTalkToNpcQuests
+        .where(
+          (quest) =>
+              quest.receiverNpc.id == selectedNpc.id && quest.allItemsFound,
+        )
+        .firstOrNull;
+    return completedQuest;
+  }
+
   void onGeoPointClicked(GeoPoint geoPoint) {
     final questMarker = acceptedQuests
         .where(
@@ -160,9 +175,17 @@ class MapCubit extends Cubit<MapState> {
         )
         .firstOrNull;
     if (selectedNpc != null) {
-      emit(state.copyWith(
-        npcLocationSelected: selectedNpc,
-      ));
+      final talkToNpcQuestCompleted =
+          _checkTalkToNpcQuestCompletion(selectedNpc);
+      if (talkToNpcQuestCompleted != null) {
+        emit(state.copyWith(
+          questCompleted: talkToNpcQuestCompleted,
+        ));
+      } else {
+        emit(state.copyWith(
+          npcLocationSelected: selectedNpc,
+        ));
+      }
     }
   }
 

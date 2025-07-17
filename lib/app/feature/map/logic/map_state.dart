@@ -3,6 +3,7 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
 
 class MapState extends Equatable {
@@ -13,6 +14,7 @@ class MapState extends Equatable {
     this.npcLocationSelected,
     this.questItemSelected,
     this.lastRecordedUserPosition,
+    this.questCompleted,
     this.enableTracking = false,
     this.showNpc = true,
     this.showWalk = false,
@@ -23,6 +25,7 @@ class MapState extends Equatable {
   final GeoPoint? positionToShow;
   final Npc? npcLocationSelected;
   final QuestStaticMarker? questItemSelected;
+  final BasicQuest? questCompleted;
   final GeoPoint? lastRecordedUserPosition;
   final bool enableTracking;
   final bool showNpc;
@@ -67,7 +70,8 @@ class MapState extends Equatable {
         showWalk,
         npcLocationSelected,
         questItemSelected,
-        lastRecordedUserPosition
+        lastRecordedUserPosition,
+        questCompleted
       ];
 
   MapState copyWith({
@@ -80,6 +84,7 @@ class MapState extends Equatable {
     QuestStaticMarker? questItemSelected,
     GeoPoint? positionToShow,
     GeoPoint? lastRecordedUserPosition,
+    BasicQuest? questCompleted,
   }) {
     return MapState(
       walk: walk ?? this.walk,
@@ -92,6 +97,7 @@ class MapState extends Equatable {
       positionToShow: positionToShow ?? this.positionToShow,
       lastRecordedUserPosition:
           lastRecordedUserPosition ?? this.lastRecordedUserPosition,
+      questCompleted: questCompleted ?? this.questCompleted,
     );
   }
 }

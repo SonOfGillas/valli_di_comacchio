@@ -49,6 +49,13 @@ class AllQuests {
         .quests;
   }
 
+  List<BasicQuest> getQuestByType(QuestType type) {
+    return npcsWithQuests
+        .expand((npcQuest) => npcQuest.quests)
+        .where((quest) => quest.type == type)
+        .toList();
+  }
+
   AllQuests acceptQuest(Npc npc, BasicQuest quest) {
     final npcQuests = getNpcQuests(npc);
     final updatedQuests = npcQuests.map((q) {

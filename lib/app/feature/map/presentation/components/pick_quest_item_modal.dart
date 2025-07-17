@@ -41,7 +41,7 @@ void showPickQuestItemModal(BuildContext context, AppState appState,
     MapState mapState, QuestStaticMarker selectedQuestItem) {
   final userCanPickTheItem =
       userCanPickItem(appState, mapState, selectedQuestItem.geoPoint);
-  final quest = getQuestRelatedToQuestItem(appState, selectedQuestItem);
+  final quest = selectedQuestItem.relatedQuest;
   showDialog(
     context: context,
     barrierDismissible: true,

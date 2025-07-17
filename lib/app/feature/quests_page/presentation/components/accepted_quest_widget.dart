@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
+import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h2/h2.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
@@ -15,54 +17,61 @@ class AcceptedQuestsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QuestsCubit, QuestsState>(
+    return BlocBuilder<AppCubit, AppState>(
+      buildWhen: (previous, current) =>
+          previous.allQuests.allAcceptedQuests !=
+          current.allQuests.allAcceptedQuests,
       builder: (context, state) {
-        final acceptedQuests = context.read<QuestsCubit>().acceptedQuests;
-        return state.status == QuestPageStatus.loading
-            ? const Center(
-                child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(),
-                ],
-              ))
-            : acceptedQuests.isEmpty
-                ? Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SvgPicture.asset(
-                            AppIcons.empty_folder,
-                            height: 64,
-                            colorFilter: ColorFilter.mode(
-                              AppColors.palette_primary,
-                              BlendMode.srcIn,
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          LabelText(
-                            'Non hai ancora accettato nessuna missione.',
-                            withBoarder: false,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                : SingleChildScrollView(
+        return BlocBuilder<QuestsCubit, QuestsState>(
+          builder: (context, state) {
+            final acceptedQuests = context.read<QuestsCubit>().acceptedQuests;
+            return state.status == QuestPageStatus.loading
+                ? const Center(
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      // Implement the UI for accepted quests
-                      children: [
-                        ...acceptedQuests.map((questByNpc) {
-                          return NpcAcceptedQuest(
-                            questsByNpc: questByNpc,
-                          );
-                        })
-                      ],
-                    ),
-                  );
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CircularProgressIndicator(),
+                    ],
+                  ))
+                : acceptedQuests.isEmpty
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                AppIcons.empty_folder,
+                                height: 64,
+                                colorFilter: ColorFilter.mode(
+                                  AppColors.palette_primary,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                              SizedBox(height: 16),
+                              LabelText(
+                                'Non hai ancora accettato nessuna missione.',
+                                withBoarder: false,
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // Implement the UI for accepted quests
+                          children: [
+                            ...acceptedQuests.map((questByNpc) {
+                              return NpcAcceptedQuest(
+                                questsByNpc: questByNpc,
+                              );
+                            })
+                          ],
+                        ),
+                      );
+          },
+        );
       },
     );
   }
