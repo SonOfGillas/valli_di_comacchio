@@ -7,8 +7,9 @@ import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart'
 
 class QuestPageParameters {
   final Npc? selectedNpc;
+  final BasicQuest? completedQuest;
 
-  QuestPageParameters({this.selectedNpc});
+  QuestPageParameters({this.selectedNpc, this.completedQuest});
 }
 
 class QuestsCubit extends Cubit<QuestsState> {
@@ -30,11 +31,14 @@ class QuestsCubit extends Cubit<QuestsState> {
 
   void loadQuests(QuestPageParameters parameters) {
     emit(state.copyWith(
-        selectedNpc: parameters.selectedNpc, status: QuestPageStatus.loading));
+        selectedNpc: parameters.selectedNpc,
+        status: QuestPageStatus.loading,
+        completedQuest: parameters.completedQuest));
     if (parameters.selectedNpc != null) {
       emit(state.copyWith(
           mode: QuestPageMode.npcQuests,
           selectedNpc: parameters.selectedNpc,
+          completedQuest: state.completedQuest,
           selectedTabIndex: 1)); // Switch to NPC quests tab
       _loadNpcQuests(parameters.selectedNpc!);
     } else {
@@ -47,13 +51,16 @@ class QuestsCubit extends Cubit<QuestsState> {
     emit(state.copyWith(
         mode: QuestPageMode.npcQuests,
         selectedNpc: npc,
+        completedQuest: state.completedQuest,
         status: QuestPageStatus.idle));
   }
 
   void _loadLocalSavedQuests() async {
     await appCubit.getLocalSavedQuests();
     emit(state.copyWith(
-        selectedNpc: state.selectedNpc, status: QuestPageStatus.idle));
+        selectedNpc: state.selectedNpc,
+        completedQuest: state.completedQuest,
+        status: QuestPageStatus.idle));
   }
 
   void acceptQuest(BasicQuest quest) async {

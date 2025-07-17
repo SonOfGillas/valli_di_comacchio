@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/quest_by_npc.dart';
 
 enum QuestPageMode { acceptedQuests, npcList, npcQuests }
 
@@ -17,6 +16,7 @@ class QuestsState extends Equatable {
   final QuestPageStatus status;
   final String? error;
   final int selectedTabIndex;
+  final BasicQuest? completedQuest;
 
   const QuestsState({
     required this.mode,
@@ -24,6 +24,7 @@ class QuestsState extends Equatable {
     this.status = QuestPageStatus.idle,
     this.error,
     this.selectedTabIndex = 0,
+    this.completedQuest,
   });
 
   factory QuestsState.initial() {
@@ -33,6 +34,7 @@ class QuestsState extends Equatable {
       status: QuestPageStatus.idle,
       error: null,
       selectedTabIndex: 0,
+      completedQuest: null,
     );
   }
 
@@ -42,6 +44,7 @@ class QuestsState extends Equatable {
     QuestPageStatus? status,
     String? error,
     int? selectedTabIndex,
+    BasicQuest? completedQuest,
   }) {
     return QuestsState(
       mode: mode ?? this.mode,
@@ -49,6 +52,7 @@ class QuestsState extends Equatable {
       status: status ?? this.status,
       error: error,
       selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
+      completedQuest: completedQuest,
     );
   }
 
@@ -59,5 +63,6 @@ class QuestsState extends Equatable {
         status,
         error,
         selectedTabIndex,
+        completedQuest,
       ];
 }

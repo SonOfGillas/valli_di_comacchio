@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
+import 'package:go_router/go_router.dart';
 import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_utils.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/nft_treasure_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/h2/h2.dart';
+import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/components/modal/base_modal.dart';
+import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
+import 'package:valli_di_comacchio/app/shared/domain/entities/talk_to_npc_data.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
+
+void onQuestCompleated(BuildContext context, BasicQuest quest) {
+  context.go(
+    RoutesPaths.quest,
+    extra: QuestPageParameters(completedQuest: quest),
+  );
+}
 
 void showPickQuestItemModal(
     BuildContext context, QuestStaticMarker selectedQuestItem) {
@@ -48,12 +62,21 @@ void showPickQuestItemModal(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const H3('Raccogli Oggetto'),
+                        H2(
+                          quest.type == QuestType.nftTreasureHunt
+                              ? 'Raccogli il tesoro'
+                              : quest.type == QuestType.talkToNpc
+                                  ? 'Raccogli l\'oggetto'
+                                  : 'Raccogli',
+                        ),
                         const SizedBox(height: 20),
                         if (quest.type == QuestType.nftTreasureHunt) ...[
                           NftQuestIcon(quest: quest as NftTreasureQuest),
                         ] else if (quest.type == QuestType.talkToNpc) ...[
-                          const Text('Talk to NPC'),
+                          TalkToNpcQuestIcon(
+                            quest: quest as TalkToNpcQuest,
+                            itemPosition: selectedQuestItem.geoPoint,
+                          ),
                         ],
                         const SizedBox(height: 20),
                         if (!userCanPickTheItem)
@@ -96,7 +119,8 @@ void showPickQuestItemModal(
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.of(context).pop();
+                                  onQuestCompleated(context, quest);
+                                  // Navigator.of(context).pop();
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: userCanPickTheItem
@@ -150,6 +174,44 @@ class NftQuestIcon extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: Image.file(quest.nft),
       ),
+    );
+  }
+}
+
+class TalkToNpcQuestIcon extends StatelessWidget {
+  final TalkToNpcQuest quest;
+  final GeoPoint itemPosition;
+
+  const TalkToNpcQuestIcon(
+      {super.key, required this.quest, required this.itemPosition});
+
+  @override
+  Widget build(BuildContext context) {
+    final QuestItem item = quest.questItems.firstWhere(
+      (item) => item.itemLocation == itemPosition,
+      orElse: () => QuestItem(itemName: 'Unknown', itemLocation: itemPosition),
+    );
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: AppColors.palette_primary,
+          ),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(width: 8),
+                LabelText(item.itemName),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

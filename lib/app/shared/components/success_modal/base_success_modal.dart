@@ -3,8 +3,10 @@ import 'package:confetti/confetti.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
 class BaseSuccessModal extends StatefulWidget {
-  const BaseSuccessModal({super.key, this.child, this.onClose});
+  const BaseSuccessModal(
+      {super.key, this.child, this.alternativeChild, this.onClose});
 
+  final Widget? alternativeChild;
   final Widget? child;
   final VoidCallback? onClose;
 
@@ -66,30 +68,31 @@ class _BaseSuccessModalState extends State<BaseSuccessModal> {
               },
               child: Padding(
                 padding: const EdgeInsets.all(32.0),
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(36),
-                    decoration: BoxDecoration(
-                      color: AppColors.utility_validation,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 16,
+                child: widget.alternativeChild ??
+                    Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(36),
+                        decoration: BoxDecoration(
+                          color: AppColors.utility_validation,
+                          borderRadius: BorderRadius.circular(24),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 16,
+                            ),
+                          ],
                         ),
-                      ],
+                        child: widget.child ??
+                            const Text(
+                              'Success',
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                      ),
                     ),
-                    child: widget.child ??
-                        const Text(
-                          'Success',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
-                          ),
-                        ),
-                  ),
-                ),
               ),
             ),
           ],
