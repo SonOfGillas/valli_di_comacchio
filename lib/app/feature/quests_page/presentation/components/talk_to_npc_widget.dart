@@ -129,7 +129,7 @@ class TalkToNpcQuestWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
-              'Per completare questa missione, devi raccogliere gli oggetti recondanti muovendoti sulla mappa e raggiungere la posizione di ${quest.receiverNpc.name} e parlare con lui.',
+              'Per completare questa missione, devi raccogliere gli oggetti elencati muovendoti sulla mappa, infine raggiungi la  posizione di ${quest.receiverNpc.name} e parlara con lui.',
               style: AppTextStyles.labelOnPaletteLight),
         ),
       ],

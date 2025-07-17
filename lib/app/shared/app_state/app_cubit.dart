@@ -228,6 +228,34 @@ class AppCubit extends Cubit<AppState> {
     emit(state.copyWith(collectedNFTs: updateNftCollection));
   }
 
+  Future<void> completeQuest(Npc npc, BasicQuest quest) async {
+    final result =
+        await _questRepository.completeQuest(npc, quest, state.user!);
+    CompleteQuestResponse? completeQuestResponse;
+    result.fold(
+      onSuccess: (response) {
+        completeQuestResponse = response;
+      },
+      onFailure: (error) {
+        // Handle error if needed
+        print('Error completing quest: $error');
+      },
+    );
+    if (completeQuestResponse != null) {
+      final updateNftCollection = await getCollectedNFTs();
+      emit(state.copyWith(
+        collectedNFTs: updateNftCollection,
+        allQuests: completeQuestResponse!.updatedQuests,
+        user: completeQuestResponse!.updatedUser,
+      ));
+    }
+  }
+
+  Future<void> updateQuests(AllQuests quests) async {
+    await _questRepository.updateQuests(quests);
+    emit(state.copyWith(allQuests: quests));
+  }
+
   Future<void> resetQuestsAndNftsCollection() async {
     await _questRepository.resetQuestsAndNftsCollection();
     emit(state.copyWith(allQuests: AllQuests(npcsWithQuests: const [])));

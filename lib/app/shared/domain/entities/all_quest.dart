@@ -18,6 +18,17 @@ class AllQuests {
         .toList();
   }
 
+  AllQuests editSingleQuest(BasicQuest quest) {
+    final npcQuests = getNpcQuests(quest.npc);
+    final updatedQuests = npcQuests.map((q) {
+      if (q.uuid == quest.uuid) {
+        return quest;
+      }
+      return q;
+    }).toList();
+    return editNpcQuests(quest.npc, updatedQuests);
+  }
+
   AllQuests editNpcQuests(Npc npc, List<BasicQuest> quests) {
     // Create a copy of the current list
     final updatedNpcsWithQuests = List<QuestsByNpc>.from(npcsWithQuests);

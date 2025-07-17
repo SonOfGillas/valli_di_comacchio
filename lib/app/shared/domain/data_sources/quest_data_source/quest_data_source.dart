@@ -157,10 +157,6 @@ class QuestDataSource {
   Future<List<File>> collectedNfts() async {
     final response = await appStorage.read(key: AppStorage.nftCollectionKey);
     if (response == null) {
-      await appStorage.write(
-        key: AppStorage.nftCollectionKey,
-        value: jsonEncode(NftCollection().toJson()),
-      );
       return Future.value([]);
     }
     final nftCollection = NftCollection.fromJson(jsonDecode(response));

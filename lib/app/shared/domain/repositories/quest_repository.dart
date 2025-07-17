@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/core/error/failures/failures.dart';
 import 'package:valli_di_comacchio/app/shared/core/result/result.dart';
@@ -93,11 +92,22 @@ class QuestRepository {
       throw UnknownFailure();
     }
   }
+
+  AsyncResult<void> updateQuests(AllQuests allQuests) async {
+    try {
+      await questDataSource.saveQuestsLocally(allQuests);
+      return Success(null);
+    } on Exception catch (e) {
+      return Error(Failure.fromException(e));
+    } catch (exception) {
+      return Error(UnknownFailure());
+    }
+  }
 }
 
 class CompleteQuestResponse {
   final AllQuests updatedQuests;
-  final User updatedUser;
+  final AppUser updatedUser;
 
   CompleteQuestResponse({
     required this.updatedQuests,

@@ -30,6 +30,10 @@ void onGetItem(BuildContext context, BasicQuest quest, AppState appState,
   } else if (quest.type == QuestType.talkToNpc) {
     final talkToNpcQuest = quest as TalkToNpcQuest;
     final updatedQuest = talkToNpcQuest.setItemAsFounded(item.geoPoint);
+    context.go(
+      RoutesPaths.quest,
+      extra: QuestPageParameters(updatedQuest: updatedQuest),
+    );
   }
 }
 
@@ -112,7 +116,8 @@ void showPickQuestItemModal(BuildContext context, AppState appState,
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () {
-                        onQuestCompleated(context, quest);
+                        onGetItem(context, quest, appState, mapState,
+                            selectedQuestItem);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
