@@ -38,6 +38,8 @@ class MapScreen extends StatelessWidget {
               context.read<MapCubit>().recordUserPosition();
               showPickQuestItemModal(
                 context,
+                appState,
+                state,
                 state.questItemSelected!,
               );
             }

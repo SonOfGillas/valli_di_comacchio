@@ -6,7 +6,6 @@ import 'package:valli_di_comacchio/app/feature/quests_page/logic/quests_state.da
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/accepted_quest_widget.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/basic_quest_component.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/npc_quests_widget.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
 import 'package:valli_di_comacchio/app/shared/components/success_modal/base_success_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
