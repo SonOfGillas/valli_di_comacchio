@@ -24,7 +24,7 @@ class QuestElementButton extends StatelessWidget {
           color: AppColors.palette_tertiary,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12.0),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

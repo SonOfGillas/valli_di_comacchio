@@ -5,6 +5,7 @@ import 'package:valli_di_comacchio/app/feature/map/domain/map_quest_items.dart';
 import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/map_page.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/nft_treasure_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/talk_to_npc_quest.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
@@ -21,6 +22,12 @@ class MapCubit extends Cubit<MapState> {
   List<Npc> get npcs => appCubit.state.npcs;
   List<QuestStaticMarker> get acceptedQuests =>
       getQuestStaticMarkers(appCubit.state.allQuests.allAcceptedQuests);
+  List<NftTreasureQuest> get acceptedNftTreasureQuests =>
+      appCubit.state.allQuests
+          .getQuestByType(QuestType.nftTreasureHide)
+          .where((quest) => (quest as NftTreasureQuest).accepted)
+          .cast<NftTreasureQuest>()
+          .toList();
 
   static List<QuestStaticMarker> getQuestStaticMarkers(
       List<QuestsByNpc> questsByNpcList) {

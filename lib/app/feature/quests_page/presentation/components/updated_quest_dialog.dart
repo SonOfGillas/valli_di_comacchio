@@ -17,16 +17,37 @@ class UpdatedQuestDialog extends StatelessWidget {
       child: Dialog(
         backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.zero,
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: BasicQuestComponent(quest: quest),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: BasicQuestComponent(quest: quest),
+                ),
+              ),
             ),
-          ),
+            // Close button positioned at top right
+            Positioned(
+              top: 16,
+              right: 16,
+              child: IconButton(
+                onPressed: () => Navigator.of(context).pop(),
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 32,
+                ),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.black.withOpacity(0.5),
+                  shape: CircleBorder(),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

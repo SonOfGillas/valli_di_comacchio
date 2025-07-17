@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/components/pick_quest_item_modal.dart';
+import 'package:valli_di_comacchio/app/feature/map/presentation/components/treasure_hide_dialog.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/app_icon_button/app_icon_button.dart';
@@ -81,9 +82,35 @@ class MapScreen extends StatelessWidget {
                     ),
                     [quest.geoPoint]))
                 .toList();
+            final acceptedNftTreasureQuests =
+                context.read<MapCubit>().acceptedNftTreasureQuests;
             return Scaffold(
                 appBar: ValliAppBar(),
                 backgroundColor: AppColors.palette_secondary,
+                floatingActionButton: acceptedNftTreasureQuests.isEmpty
+                    ? null
+                    : FloatingActionButton(
+                        backgroundColor: AppColors.palette_primary,
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => TreasureHideDialog(
+                              acceptedNftTreasureQuests:
+                                  acceptedNftTreasureQuests,
+                            ),
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          AppIcons.treasure_hide,
+                          height: 32,
+                          colorFilter: ColorFilter.mode(
+                            AppColors.palette_tertiary,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
                 body: Stack(
                   children: [
                     OSMFlutter(

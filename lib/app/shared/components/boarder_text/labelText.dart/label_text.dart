@@ -23,13 +23,15 @@ class LabelText extends StatelessWidget {
           Text(text,
               overflow: enableEndEllipsis ? TextOverflow.ellipsis : null,
               style: AppTextStyles.labelTextBorder,
+              maxLines: enableEndEllipsis ? 1 : null,
               textAlign: textAlign),
         Text(text,
             overflow: enableEndEllipsis ? TextOverflow.ellipsis : null,
             style: (withBoarder)
                 ? AppTextStyles.labelTextWithBoarder
                 : AppTextStyles.labelText,
-            textAlign: textAlign),
+            textAlign: textAlign,
+            maxLines: enableEndEllipsis ? 1 : null),
       ],
     );
   }
