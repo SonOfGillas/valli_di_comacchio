@@ -5,30 +5,32 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 class NpcItem {
   final String itemName;
+  final bool isFound;
 
-  NpcItem({required this.itemName});
+  NpcItem({required this.itemName, this.isFound = false});
 
   factory NpcItem.fromJson(Map<String, dynamic> json) {
     return NpcItem(
       itemName: json['itemName'] as String,
+      isFound: json['isFound'] as bool? ?? false,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'itemName': itemName,
+      'isFound': isFound,
     };
   }
 }
 
 class QuestItem extends NpcItem with EquatableMixin {
   final GeoPoint itemLocation;
-  final bool isFound;
 
   QuestItem({
     required super.itemName,
+    required super.isFound,
     required this.itemLocation,
-    this.isFound = false,
   });
 
   @override

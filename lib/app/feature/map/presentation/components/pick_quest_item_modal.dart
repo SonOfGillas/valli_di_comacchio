@@ -179,7 +179,8 @@ class TalkToNpcQuestIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final QuestItem item = quest.questItems.firstWhere(
       (item) => item.itemLocation == itemPosition,
-      orElse: () => QuestItem(itemName: 'Unknown', itemLocation: itemPosition),
+      orElse: () => QuestItem(
+          itemName: 'Unknown', itemLocation: itemPosition, isFound: false),
     );
     return Column(
       children: [

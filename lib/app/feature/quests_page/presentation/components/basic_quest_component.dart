@@ -63,7 +63,7 @@ class BasicQuestComponent extends StatelessWidget {
                     child: H2(switch (quest.type) {
                       QuestType.nftTreasureHunt => "Caccia al Tesoro",
                       QuestType.nftTreasureHide => "Nascondi il Tesoro",
-                      QuestType.talkToNpc => "Parla con col personaggio",
+                      QuestType.talkToNpc => "Parla col personaggio",
                       QuestType.quiz => "Quiz",
                     }),
                   ),

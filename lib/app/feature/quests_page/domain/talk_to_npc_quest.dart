@@ -23,6 +23,7 @@ class TalkToNpcQuest extends BasicQuest {
                 .map((item) => QuestItem(
                       itemName: item.itemName,
                       itemLocation: generateRandomLocationNearNpc(npc),
+                      isFound: item.isFound,
                     ))
                 .toList(),
         super(type: QuestType.talkToNpc);
