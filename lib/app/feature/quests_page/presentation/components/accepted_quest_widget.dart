@@ -86,7 +86,7 @@ class _NpcAcceptedQuestState extends State<NpcAcceptedQuest> {
         widget.questsByNpc.quests.where((quest) => quest.accepted).toList();
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+      margin: const EdgeInsets.symmetric(vertical: 4.0),
       color: AppColors.palette_secondary,
       child: ExpansionTile(
         backgroundColor: AppColors.palette_secondary,

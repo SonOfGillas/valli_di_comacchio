@@ -3,11 +3,15 @@ import 'package:valli_di_comacchio/app/shared/style/app_text_style.dart';
 
 class LabelText extends StatelessWidget {
   const LabelText(this.text,
-      {super.key, this.withBoarder = true, this.textAlign});
+      {super.key,
+      this.withBoarder = true,
+      this.textAlign,
+      this.enableEndEllipsis = false});
 
   final String text;
   final bool withBoarder;
   final TextAlign? textAlign;
+  final bool enableEndEllipsis;
 
   @override
   Widget build(
@@ -17,8 +21,11 @@ class LabelText extends StatelessWidget {
       children: [
         if (withBoarder)
           Text(text,
-              style: AppTextStyles.labelTextBorder, textAlign: textAlign),
+              overflow: enableEndEllipsis ? TextOverflow.ellipsis : null,
+              style: AppTextStyles.labelTextBorder,
+              textAlign: textAlign),
         Text(text,
+            overflow: enableEndEllipsis ? TextOverflow.ellipsis : null,
             style: (withBoarder)
                 ? AppTextStyles.labelTextWithBoarder
                 : AppTextStyles.labelText,

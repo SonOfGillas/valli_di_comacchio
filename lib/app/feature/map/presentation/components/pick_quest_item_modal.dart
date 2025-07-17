@@ -23,6 +23,16 @@ void onQuestCompleated(BuildContext context, BasicQuest quest) {
   );
 }
 
+void onGetItem(BuildContext context, BasicQuest quest, AppState appState,
+    MapState mapState, QuestStaticMarker item) {
+  if (quest.type == QuestType.nftTreasureHunt) {
+    onQuestCompleated(context, quest);
+  } else if (quest.type == QuestType.talkToNpc) {
+    final talkToNpcQuest = quest as TalkToNpcQuest;
+    final updatedQuest = talkToNpcQuest.setItemAsFounded(item.geoPoint);
+  }
+}
+
 void showPickQuestItemModal(BuildContext context, AppState appState,
     MapState mapState, QuestStaticMarker selectedQuestItem) {
   final userCanPickTheItem =

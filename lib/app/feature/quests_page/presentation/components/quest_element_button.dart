@@ -29,7 +29,7 @@ class QuestElementButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               icon,
-              LabelText(label),
+              LabelText(label, enableEndEllipsis: true),
             ],
           ),
         ),

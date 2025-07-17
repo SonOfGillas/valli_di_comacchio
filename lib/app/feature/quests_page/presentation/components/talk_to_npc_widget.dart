@@ -42,25 +42,88 @@ class TalkToNpcQuestWidget extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8),
-        LabelText('oggetti da trovare:'),
-        SizedBox(height: 4),
-        ...quest.questItems.map((item) => Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: QuestElementButton(
-                  icon: Icon(
-                    Icons.location_on,
-                    color: AppColors.palette_primary,
+        // Quest items table
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+            border: Border.all(color: AppColors.palette_primary, width: 1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Table(
+            columnWidths: const {
+              0: FlexColumnWidth(3),
+              1: FlexColumnWidth(1),
+            },
+            children: [
+              // Header row
+              TableRow(
+                decoration: BoxDecoration(
+                  color: AppColors.palette_primary.withOpacity(0.1),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
                   ),
-                  label: item.itemName,
-                  onPressed: () {
-                    context.go(
-                      RoutesPaths.map,
-                      extra: MapParameters(
-                        positionToShow: item.itemLocation,
+                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: LabelText(
+                      'Oggetti da trovare',
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: LabelText(
+                      'Status',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+              // Data rows
+              ...quest.questItems.map((item) => TableRow(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 100,
+                          child: QuestElementButton(
+                            icon: Icon(
+                              Icons.location_on,
+                              color: AppColors.palette_primary,
+                            ),
+                            label: item.itemName,
+                            onPressed: () {
+                              context.go(
+                                RoutesPaths.map,
+                                extra: MapParameters(
+                                  positionToShow: item.itemLocation,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                       ),
-                    );
-                  }),
-            )),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8.0, vertical: 16.0),
+                        child: item.isFound
+                            ? Icon(
+                                Icons.check_circle,
+                                color: AppColors.shade_green_100,
+                                size: 24,
+                              )
+                            : Icon(
+                                Icons.circle,
+                                color: AppColors.shade_red_100,
+                                size: 24,
+                              ),
+                      ),
+                    ],
+                  )),
+            ],
+          ),
+        ),
         SizedBox(height: 8),
         LabelText('Come funziona'),
         Padding(
