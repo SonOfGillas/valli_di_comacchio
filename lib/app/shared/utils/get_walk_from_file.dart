@@ -1,8 +1,8 @@
-import 'dart:math' as math;
 import 'package:flutter/services.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/home/domain/walk.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/walk_data_source/walk_data_source.dart';
+import 'package:valli_di_comacchio/app/shared/utils/haversine_distance.dart';
 import 'package:xml/xml.dart';
 
 Future<Walk> getWalkFromWalkInfo(WalkInfoLocation walkInfo) async {
@@ -86,30 +86,8 @@ double _calculateTrackDistance(List<GeoPoint> trackPoints) {
     final lat2 = currentPoint.latitude.toDouble();
     final lon2 = currentPoint.longitude.toDouble();
 
-    totalDistance += _haversineDistance(lat1, lon1, lat2, lon2);
+    totalDistance += haversineDistance(lat1, lon1, lat2, lon2);
   }
 
   return totalDistance;
-}
-
-// Haversine formula to calculate distance between two GPS points
-double _haversineDistance(double lat1, double lon1, double lat2, double lon2) {
-  const double earthRadius = 6371000; // Earth's radius in meters
-
-  final dLat = _toRadians(lat2 - lat1);
-  final dLon = _toRadians(lon2 - lon1);
-
-  final a = math.sin(dLat / 2) * math.sin(dLat / 2) +
-      math.cos(_toRadians(lat1)) *
-          math.cos(_toRadians(lat2)) *
-          math.sin(dLon / 2) *
-          math.sin(dLon / 2);
-
-  final c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a));
-
-  return earthRadius * c;
-}
-
-double _toRadians(double degrees) {
-  return degrees * (math.pi / 180);
 }

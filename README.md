@@ -31,29 +31,3 @@ the detail of the structure of the collections can be see in the user.dart and n
 
 ## WIKI About Birds on the Valli di comacchio
 https://www.salinadicomacchio.it/la-salina/fauna/avifauna/
-
-
-// TODO
-1) quando si clicca su un percorso navigare sulla mappa con il percorso visualizzato
-2) bottone hide npcs
-1) aggiungere eventi come catagoria
-2) categorizzare i luoghi
-2) aggiungere dettaglio ai luogi
-3) aggiungee dettaglio escursioni
-4) aggiungere dettalgio agli eventi 
-5) prendere i dati delle escursioni da app storage
-
-
-oggetto remoto walks
-{
-  id:
-  image:
-  price:
-  gpx_file:
-}
-
-//location
-attrazioni
-attivita
-monumenti
-natura

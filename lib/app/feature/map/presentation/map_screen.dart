@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
 import 'package:valli_di_comacchio/app/feature/map/presentation/components/pick_quest_item_modal.dart';
-
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/components/app_icon_button/app_icon_button.dart';
@@ -36,6 +35,7 @@ class MapScreen extends StatelessWidget {
               );
             }
             if (state.questItemSelected != null) {
+              context.read<MapCubit>().recordUserPosition();
               showPickQuestItemModal(
                 context,
                 state.questItemSelected!,

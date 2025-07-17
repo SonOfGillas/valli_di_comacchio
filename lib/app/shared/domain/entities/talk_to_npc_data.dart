@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 
 class NpcItem {
@@ -20,7 +21,7 @@ class NpcItem {
   }
 }
 
-class QuestItem extends NpcItem {
+class QuestItem extends NpcItem with EquatableMixin {
   final GeoPoint itemLocation;
   final bool isFound;
 
@@ -29,6 +30,19 @@ class QuestItem extends NpcItem {
     required this.itemLocation,
     this.isFound = false,
   });
+
+  @override
+  List<Object?> get props => [itemName, itemLocation, isFound];
+
+  copyWith({
+    bool? isFound,
+  }) {
+    return QuestItem(
+      itemName: itemName,
+      itemLocation: itemLocation,
+      isFound: isFound ?? this.isFound,
+    );
+  }
 }
 
 class TalkToNpcData {

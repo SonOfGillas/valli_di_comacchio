@@ -30,6 +30,8 @@ class MapCubit extends Cubit<MapState> {
             questItem.geoPoints.map((geoPoint) => QuestStaticMarker(
                   icon: questItem.icon,
                   geoPoint: geoPoint,
+                  relatedQuestId: questItem.quest.uuid,
+                  relatedNpcId: questItem.quest.npc.id,
                 )))
         .toList();
   }
@@ -161,6 +163,15 @@ class MapCubit extends Cubit<MapState> {
       emit(state.copyWith(
         npcLocationSelected: selectedNpc,
       ));
+    }
+  }
+
+  Future<void> recordUserPosition() async {
+    try {
+      final userPosition = await state.mapController.myLocation();
+      emit(state.copyWith(lastRecordedUserPosition: userPosition));
+    } catch (e) {
+      print('Error getting user location: $e');
     }
   }
 }

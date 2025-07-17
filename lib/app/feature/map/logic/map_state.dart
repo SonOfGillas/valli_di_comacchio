@@ -12,6 +12,7 @@ class MapState extends Equatable {
     this.positionToShow,
     this.npcLocationSelected,
     this.questItemSelected,
+    this.lastRecordedUserPosition,
     this.enableTracking = false,
     this.showNpc = true,
     this.showWalk = false,
@@ -22,6 +23,7 @@ class MapState extends Equatable {
   final GeoPoint? positionToShow;
   final Npc? npcLocationSelected;
   final QuestStaticMarker? questItemSelected;
+  final GeoPoint? lastRecordedUserPosition;
   final bool enableTracking;
   final bool showNpc;
   final bool showWalk;
@@ -64,7 +66,8 @@ class MapState extends Equatable {
         enableTracking,
         showWalk,
         npcLocationSelected,
-        questItemSelected
+        questItemSelected,
+        lastRecordedUserPosition
       ];
 
   MapState copyWith({
@@ -75,6 +78,8 @@ class MapState extends Equatable {
     bool? showWalk,
     Npc? npcLocationSelected,
     QuestStaticMarker? questItemSelected,
+    GeoPoint? positionToShow,
+    GeoPoint? lastRecordedUserPosition,
   }) {
     return MapState(
       walk: walk ?? this.walk,
@@ -84,6 +89,9 @@ class MapState extends Equatable {
       showWalk: showWalk ?? this.showWalk,
       npcLocationSelected: npcLocationSelected,
       questItemSelected: questItemSelected,
+      positionToShow: positionToShow ?? this.positionToShow,
+      lastRecordedUserPosition:
+          lastRecordedUserPosition ?? this.lastRecordedUserPosition,
     );
   }
 }
