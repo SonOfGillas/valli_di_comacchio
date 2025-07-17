@@ -140,28 +140,26 @@ class QuestDataSource {
       final nftQuest = quest as NftTreasureQuest;
       // read the current NFT collection from storage
       final collection = await collectedNfts();
-      final collectionFilePaths = collection.map((file) => file.path).toList();
-      // add the NFT to the collection
-      collectionFilePaths.add(nftQuest.nft.path);
+      final updatedCollection = collection.addFilePath(nftQuest.nft.path);
       // save the updated collection back to storage
       await appStorage.write(
           key: AppStorage.nftCollectionKey,
-          value: jsonEncode(collectionFilePaths));
+          value: jsonEncode(updatedCollection.toJson()));
     }
     final localSavedQuests = await getLocalSavedQuests();
-    localSavedQuests.removeQuest(npc, quest);
-    await saveQuestsLocally(localSavedQuests);
-    return Future.value(localSavedQuests);
+    final updatedQuests = localSavedQuests.removeQuest(npc, quest);
+    await saveQuestsLocally(updatedQuests);
+    return Future.value(updatedQuests);
   }
 
-  Future<List<File>> collectedNfts() async {
+  Future<NftCollection> collectedNfts() async {
     final response = await appStorage.read(key: AppStorage.nftCollectionKey);
     if (response == null) {
-      return Future.value([]);
+      return Future.value(NftCollection());
     }
     final nftCollection = NftCollection.fromJson(jsonDecode(response));
 
-    return Future.value(nftCollection.nftFiles);
+    return Future.value(nftCollection);
   }
 
   Future<void> resetQuestsAndNftsCollection() async {

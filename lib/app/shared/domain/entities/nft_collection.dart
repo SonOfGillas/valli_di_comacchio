@@ -19,4 +19,8 @@ class NftCollection {
       'filePaths': filePaths,
     };
   }
+
+  NftCollection addFilePath(String filePath) {
+    return NftCollection(filePaths: [...filePaths, filePath]);
+  }
 }

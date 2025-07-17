@@ -74,7 +74,8 @@ class QuestRepository {
 
   AsyncResult<List<File>> collectedNfts() async {
     try {
-      final nfts = await questDataSource.collectedNfts();
+      final nftCollection = await questDataSource.collectedNfts();
+      final nfts = nftCollection.filePaths.map((path) => File(path)).toList();
       return Success(nfts);
     } on Exception catch (e) {
       return Error(Failure.fromException(e));
