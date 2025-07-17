@@ -4,6 +4,7 @@ import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
 import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_cubit.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
+import 'package:valli_di_comacchio/app/feature/quests_page/domain/nft_treasure_quest.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_cubit.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
@@ -81,13 +82,11 @@ void showPickQuestItemModal(
                       children: [
                         const H3('Raccogli Oggetto'),
                         const SizedBox(height: 20),
-                        switch (quest.type) {
-                          QuestType.nftTreasureHunt => const Text(
-                              'Nft Treasure Hunt',
-                            ),
-                          QuestType.talkToNpc => const Text('Talk to NPC'),
-                          _ => Container(),
-                        },
+                        if (quest.type == QuestType.nftTreasureHunt) ...[
+                          NftQuestIcon(quest: quest as NftTreasureQuest),
+                        ] else if (quest.type == QuestType.talkToNpc) ...[
+                          const Text('Talk to NPC'),
+                        ],
                         const SizedBox(height: 20),
                         if (!userCanPickTheItem)
                           const Text(
@@ -164,4 +163,25 @@ void showPickQuestItemModal(
       ),
     ),
   );
+}
+
+class NftQuestIcon extends StatelessWidget {
+  final NftTreasureQuest quest;
+
+  const NftQuestIcon({super.key, required this.quest});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: Image.file(quest.nft),
+      ),
+    );
+  }
 }

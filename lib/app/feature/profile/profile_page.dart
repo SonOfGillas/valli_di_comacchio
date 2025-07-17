@@ -195,6 +195,13 @@ class DevModeWidget extends StatelessWidget {
                         ),
                       );
                 },
+              ),
+              ElevatedButton(
+                child: Text('Resetta le missioni ed i tesori'),
+                onPressed: () {
+                  if (state.user == null) return;
+                  context.read<AppCubit>().resetQuestsAndNftsCollection();
+                },
               )
             ],
           ],

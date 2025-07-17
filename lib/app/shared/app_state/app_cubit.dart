@@ -227,4 +227,10 @@ class AppCubit extends Cubit<AppState> {
     final updateNftCollection = await getCollectedNFTs();
     emit(state.copyWith(collectedNFTs: updateNftCollection));
   }
+
+  Future<void> resetQuestsAndNftsCollection() async {
+    await _questRepository.resetQuestsAndNftsCollection();
+    emit(state.copyWith(allQuests: AllQuests(npcsWithQuests: const [])));
+    emit(state.copyWith(collectedNFTs: const []));
+  }
 }

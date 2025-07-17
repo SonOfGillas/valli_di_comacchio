@@ -83,6 +83,16 @@ class QuestRepository {
       return Error(UnknownFailure());
     }
   }
+
+  Future<void> resetQuestsAndNftsCollection() async {
+    try {
+      await questDataSource.resetQuestsAndNftsCollection();
+    } on Exception catch (e) {
+      throw Failure.fromException(e);
+    } catch (exception) {
+      throw UnknownFailure();
+    }
+  }
 }
 
 class CompleteQuestResponse {

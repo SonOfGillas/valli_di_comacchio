@@ -157,10 +157,27 @@ class QuestDataSource {
   Future<List<File>> collectedNfts() async {
     final response = await appStorage.read(key: AppStorage.nftCollectionKey);
     if (response == null) {
+      await appStorage.write(
+        key: AppStorage.nftCollectionKey,
+        value: jsonEncode(NftCollection().toJson()),
+      );
       return Future.value([]);
     }
     final nftCollection = NftCollection.fromJson(jsonDecode(response));
 
     return Future.value(nftCollection.nftFiles);
+  }
+
+  Future<void> resetQuestsAndNftsCollection() async {
+    // reset quests
+    await appStorage.write(
+      key: AppStorage.questsKey,
+      value: jsonEncode(AllQuests().toJson()),
+    );
+    // reset NFT collection
+    await appStorage.write(
+      key: AppStorage.nftCollectionKey,
+      value: jsonEncode(NftCollection().toJson()),
+    );
   }
 }

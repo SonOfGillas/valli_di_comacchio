@@ -6,7 +6,7 @@ class NftCollection {
 
   List<File> get nftFiles => filePaths.map((path) => File(path)).toList();
 
-  NftCollection({required this.filePaths});
+  NftCollection({this.filePaths = const []});
 
   factory NftCollection.fromJson(Map<String, dynamic> json) {
     return NftCollection(
