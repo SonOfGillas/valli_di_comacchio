@@ -17,6 +17,7 @@ class NftTreasureQuest extends BasicQuest {
     required this.nft,
     required super.type,
     required super.npc,
+    super.userShouldReceiveReward = true,
     super.accepted = false,
   })  : location = type == QuestType.nftTreasureHunt
             ? generateRandomLocationNearNpc(npc)
@@ -48,6 +49,7 @@ class NftTreasureQuest extends BasicQuest {
   @override
   NftTreasureQuest copyWith({
     bool? accepted,
+    bool? userShouldReceiveReward,
   }) {
     return NftTreasureQuest(
       uuid: uuid,
@@ -55,6 +57,8 @@ class NftTreasureQuest extends BasicQuest {
       type: type,
       npc: npc,
       accepted: accepted ?? this.accepted,
+      userShouldReceiveReward:
+          userShouldReceiveReward ?? this.userShouldReceiveReward,
     );
   }
 }

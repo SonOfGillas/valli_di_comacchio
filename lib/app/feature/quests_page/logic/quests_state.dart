@@ -18,6 +18,7 @@ class QuestsState extends Equatable {
   final int selectedTabIndex;
   final BasicQuest? completedQuest;
   final BasicQuest? updatedQuest;
+  final BasicQuest? failedQuest;
 
   const QuestsState({
     required this.mode,
@@ -27,6 +28,7 @@ class QuestsState extends Equatable {
     this.selectedTabIndex = 0,
     this.completedQuest,
     this.updatedQuest,
+    this.failedQuest,
   });
 
   factory QuestsState.initial() {
@@ -38,6 +40,7 @@ class QuestsState extends Equatable {
       selectedTabIndex: 0,
       completedQuest: null,
       updatedQuest: null,
+      failedQuest: null,
     );
   }
 
@@ -49,16 +52,17 @@ class QuestsState extends Equatable {
     int? selectedTabIndex,
     BasicQuest? completedQuest,
     BasicQuest? updatedQuest,
+    BasicQuest? failedQuest,
   }) {
     return QuestsState(
-      mode: mode ?? this.mode,
-      selectedNpc: selectedNpc,
-      status: status ?? this.status,
-      error: error,
-      selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
-      completedQuest: completedQuest,
-      updatedQuest: updatedQuest,
-    );
+        mode: mode ?? this.mode,
+        selectedNpc: selectedNpc,
+        status: status ?? this.status,
+        error: error,
+        selectedTabIndex: selectedTabIndex ?? this.selectedTabIndex,
+        completedQuest: completedQuest,
+        updatedQuest: updatedQuest,
+        failedQuest: failedQuest);
   }
 
   @override
@@ -69,5 +73,7 @@ class QuestsState extends Equatable {
         error,
         selectedTabIndex,
         completedQuest,
+        failedQuest,
+        updatedQuest,
       ];
 }

@@ -8,7 +8,6 @@ import 'package:valli_di_comacchio/app/feature/quests_page/presentation/componen
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/npc_quests_widget.dart';
 import 'package:valli_di_comacchio/app/feature/quests_page/presentation/components/updated_quest_dialog.dart';
 import 'package:valli_di_comacchio/app/shared/components/footer_nav_bar/footer_nav_bar.dart';
-import 'package:valli_di_comacchio/app/shared/components/modal/base_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/success_modal/base_success_modal.dart';
 import 'package:valli_di_comacchio/app/shared/components/valli_app_bar/valli_app_bar.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
@@ -51,7 +50,8 @@ class _QuestsScreenState extends State<QuestsScreen>
                 return BaseSuccessModal(
                   alternativeChild: Center(
                       child: BasicQuestComponent(
-                          quest: state.completedQuest!, isCompleted: true)),
+                          quest: state.completedQuest!,
+                          mode: BasicQuestComponentMode.questCompleted)),
                   onClose: () {},
                 );
               });
@@ -62,6 +62,22 @@ class _QuestsScreenState extends State<QuestsScreen>
               builder: (context) {
                 return UpdatedQuestDialog(
                   quest: state.updatedQuest!,
+                );
+              });
+        }
+        if (state.failedQuest != null) {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return Dialog(
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.palette_primary,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: BasicQuestComponent(
+                          quest: state.failedQuest!,
+                          mode: BasicQuestComponentMode.questFailed)),
                 );
               });
         }

@@ -35,14 +35,12 @@ class QuestsCubit extends Cubit<QuestsState> {
     emit(state.copyWith(
       selectedNpc: parameters.selectedNpc,
       status: QuestPageStatus.loading,
-      completedQuest: parameters.completedQuest,
       updatedQuest: parameters.updatedQuest,
     ));
     if (parameters.selectedNpc != null) {
       emit(state.copyWith(
           mode: QuestPageMode.npcQuests,
           selectedNpc: parameters.selectedNpc,
-          completedQuest: state.completedQuest,
           updatedQuest: state.updatedQuest,
           selectedTabIndex: 1)); // Switch to NPC quests tab
       _loadNpcQuests(parameters.selectedNpc!);
@@ -58,6 +56,19 @@ class QuestsCubit extends Cubit<QuestsState> {
     if (parameters.completedQuest != null) {
       appCubit.completeQuest(
           parameters.completedQuest!.npc, parameters.completedQuest!);
+      if (parameters.completedQuest!.userShouldReceiveReward) {
+        emit(state.copyWith(
+          completedQuest: parameters.completedQuest,
+          selectedNpc: state.selectedNpc,
+          status: QuestPageStatus.idle,
+        ));
+      } else {
+        emit(state.copyWith(
+          failedQuest: parameters.completedQuest,
+          selectedNpc: state.selectedNpc,
+          status: QuestPageStatus.idle,
+        ));
+      }
     }
     if (parameters.updatedQuest != null) {
       final allQuest = appCubit.state.allQuests;
@@ -71,7 +82,6 @@ class QuestsCubit extends Cubit<QuestsState> {
     emit(state.copyWith(
         mode: QuestPageMode.npcQuests,
         selectedNpc: npc,
-        completedQuest: state.completedQuest,
         updatedQuest: state.updatedQuest,
         status: QuestPageStatus.idle));
   }
@@ -80,7 +90,6 @@ class QuestsCubit extends Cubit<QuestsState> {
     await appCubit.getLocalSavedQuests();
     emit(state.copyWith(
         selectedNpc: state.selectedNpc,
-        completedQuest: state.completedQuest,
         updatedQuest: state.updatedQuest,
         status: QuestPageStatus.idle));
   }

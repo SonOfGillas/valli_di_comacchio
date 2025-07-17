@@ -15,6 +15,7 @@ class TalkToNpcQuest extends BasicQuest {
     required this.receiverNpc,
     required this.talkToNpcData,
     required super.npc,
+    super.userShouldReceiveReward = true,
     super.accepted = false,
     super.coinReward = packetCost * 2,
     List<QuestItem>? items,
@@ -71,6 +72,7 @@ class TalkToNpcQuest extends BasicQuest {
   @override
   TalkToNpcQuest copyWith({
     bool? accepted,
+    bool? userShouldReceiveReward,
     List<QuestItem>? items,
   }) {
     return TalkToNpcQuest(
@@ -81,6 +83,8 @@ class TalkToNpcQuest extends BasicQuest {
       accepted: accepted ?? this.accepted,
       coinReward: coinReward,
       items: items ?? questItems,
+      userShouldReceiveReward:
+          userShouldReceiveReward ?? this.userShouldReceiveReward,
     );
   }
 }

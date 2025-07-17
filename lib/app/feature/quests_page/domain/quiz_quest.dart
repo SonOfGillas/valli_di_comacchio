@@ -13,6 +13,7 @@ class QuizQuest extends BasicQuest {
     required this.quiz,
     required super.npc,
     super.accepted = false,
+    super.userShouldReceiveReward = true,
   }) : super(type: QuestType.quiz, coinReward: packetCost);
 
   factory QuizQuest.fromJson(Map<String, dynamic> json) {
@@ -35,12 +36,14 @@ class QuizQuest extends BasicQuest {
   }
 
   @override
-  QuizQuest copyWith({bool? accepted}) {
+  QuizQuest copyWith({bool? accepted, bool? userShouldReceiveReward}) {
     return QuizQuest(
       uuid: uuid,
       quiz: quiz,
       npc: npc,
       accepted: accepted ?? this.accepted,
+      userShouldReceiveReward:
+          userShouldReceiveReward ?? this.userShouldReceiveReward,
     );
   }
 }

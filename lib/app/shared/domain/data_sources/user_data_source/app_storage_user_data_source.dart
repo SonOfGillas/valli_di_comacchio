@@ -1,12 +1,8 @@
 import 'dart:convert';
 
-import 'package:valli_di_comacchio/app/feature/trade/domain/entities/need_level.dart';
-import 'package:valli_di_comacchio/app/feature/trade/domain/entities/production_level.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/npc_data_source/npc_reset_data.dart';
 import 'package:valli_di_comacchio/app/shared/domain/data_sources/user_data_source/user_data_source.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/app_user.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resource_inventory.dart';
-import 'package:valli_di_comacchio/app/shared/domain/entities/trade_resources.dart';
 import 'package:valli_di_comacchio/app/shared/utils/storage.dart';
 
 class AppStorageUserDataSource extends LocalUserDataSource {

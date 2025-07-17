@@ -16,7 +16,10 @@ import 'package:valli_di_comacchio/app/shared/core/routes/routes_paths.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/talk_to_npc_data.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 
-void onQuestCompleated(BuildContext context, BasicQuest quest) {
+void onQuestCompleated(
+  BuildContext context,
+  BasicQuest quest,
+) {
   context.go(
     RoutesPaths.quest,
     extra: QuestPageParameters(completedQuest: quest),

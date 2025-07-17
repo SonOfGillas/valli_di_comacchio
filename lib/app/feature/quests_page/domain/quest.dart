@@ -18,7 +18,8 @@ class BasicQuest extends Equatable {
   final Npc npc;
   final int coinReward;
   final bool accepted;
-//  final List<TradeResourceInventory> resourceReward;
+  // this field is used to indicate if the user should receive a reward for completing the quest
+  final bool userShouldReceiveReward;
 
   const BasicQuest({
     required this.uuid,
@@ -26,6 +27,7 @@ class BasicQuest extends Equatable {
     required this.npc,
     this.coinReward = 0,
     this.accepted = false,
+    this.userShouldReceiveReward = true,
   });
 
   Map<String, dynamic> toJson() {
@@ -58,6 +60,7 @@ class BasicQuest extends Equatable {
 
   BasicQuest copyWith({
     bool? accepted,
+    bool? userShouldReceiveReward,
   }) {
     return BasicQuest(
       uuid: uuid,
@@ -65,6 +68,8 @@ class BasicQuest extends Equatable {
       npc: npc,
       coinReward: coinReward,
       accepted: accepted ?? this.accepted,
+      userShouldReceiveReward:
+          userShouldReceiveReward ?? this.userShouldReceiveReward,
     );
   }
 }

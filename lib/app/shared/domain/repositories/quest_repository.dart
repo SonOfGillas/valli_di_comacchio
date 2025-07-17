@@ -54,11 +54,14 @@ class QuestRepository {
   }
 
   AsyncResult<CompleteQuestResponse> completeQuest(
-      Npc npc, BasicQuest quest, AppUser user) async {
+      Npc npc, BasicQuest quest, AppUser user,
+      {bool completedSuccessfully = true}) async {
     try {
-      final updatedUser = user.copyWith(
-        wealth: (user.wealth + quest.coinReward),
-      );
+      final updatedUser = completedSuccessfully
+          ? user.copyWith(
+              wealth: (user.wealth + quest.coinReward),
+            )
+          : user;
       final updatedQuestList = await questDataSource.completeQuest(npc, quest);
       await userRepository.updateUserData(user: updatedUser);
       return Success(CompleteQuestResponse(
