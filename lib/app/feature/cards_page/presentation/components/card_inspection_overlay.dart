@@ -64,7 +64,8 @@ class _CardInspectionOverlayState extends State<CardInspectionOverlay>
           child: GestureDetector(
             onTap: _closeInspection,
             child: Container(
-              color: Colors.black.withOpacity(0.8 * _inspectAnimation.value),
+              color:
+                  Colors.black.withValues(alpha: 0.8 * _inspectAnimation.value),
               alignment: Alignment.center,
               child: Transform.scale(
                 scale: 0.8 + (0.2 * _inspectAnimation.value),

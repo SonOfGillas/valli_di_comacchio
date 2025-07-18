@@ -106,7 +106,7 @@ class RetroGoldButton extends StatelessWidget {
                   width: 3.76,
                   height: 9.92,
                   decoration: BoxDecoration(
-                    color: const Color(0xdd3d01),
+                    color: const Color(0x00dd3d01),
                     borderRadius:
                         BorderRadius.circular(2), // Optional: subtle rounding
                   ),

@@ -118,7 +118,6 @@ class TradeResourceOffer extends Equatable {
 
   TradeData updateTradeData(int offerQuantity) {
     final tradeResource = tradeResourceInventory.tradeResource;
-    // TODO fix maxExchangebleQuantity and idealExchangebleQuantity
     if (offerType == OfferType.buy) {
       // the user is buying the resource from the NPC
       return TradeData.buy(

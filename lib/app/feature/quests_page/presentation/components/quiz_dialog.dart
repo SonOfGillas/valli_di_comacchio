@@ -100,7 +100,8 @@ class QuizDialog extends StatelessWidget {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.1),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     ),
@@ -138,7 +139,7 @@ class QuizDialog extends StatelessWidget {
                   size: 24,
                 ),
                 style: IconButton.styleFrom(
-                  backgroundColor: Colors.black.withOpacity(0.3),
+                  backgroundColor: Colors.black.withValues(alpha: 0.3),
                   shape: CircleBorder(),
                 ),
               ),

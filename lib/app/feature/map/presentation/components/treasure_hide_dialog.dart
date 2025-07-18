@@ -76,7 +76,7 @@ class TreasureHideDialog extends StatelessWidget {
                   size: 24,
                 ),
                 style: IconButton.styleFrom(
-                  backgroundColor: Colors.black.withOpacity(0.3),
+                  backgroundColor: Colors.black.withValues(alpha: 0.3),
                   shape: CircleBorder(),
                 ),
               ),

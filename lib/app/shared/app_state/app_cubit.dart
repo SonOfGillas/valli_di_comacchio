@@ -78,8 +78,7 @@ class AppCubit extends Cubit<AppState> {
         npcsList = npcs;
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error fetching NPCs: $error');
+        // TODO: Handle error if needed
       },
     );
     return npcsList;
@@ -93,8 +92,7 @@ class AppCubit extends Cubit<AppState> {
         walks = fetchedWalks;
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error fetching walks: $error');
+        // TODO: Handle error if needed
       },
     );
     return walks;
@@ -108,8 +106,7 @@ class AppCubit extends Cubit<AppState> {
         events = fetchedEvents;
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error fetching events: $error');
+        // TODO: Handle error if needed
       },
     );
     return events;
@@ -133,8 +130,7 @@ class AppCubit extends Cubit<AppState> {
         nfts = fetchedNfts;
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error fetching collected NFTs: $error');
+        // TODO: Handle error if needed
       },
     );
     return nfts;
@@ -177,7 +173,7 @@ class AppCubit extends Cubit<AppState> {
         emit(state.copyWith(devMode: isDev));
       },
       onFailure: (error) {
-        // Handle error if needed
+        // TODO: Handle error if needed
       },
     );
   }
@@ -189,8 +185,7 @@ class AppCubit extends Cubit<AppState> {
         emit(state.copyWith(allQuests: quests));
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error fetching NPC quests: $error');
+        // TODO: Handle error if needed
       },
     );
   }
@@ -206,8 +201,7 @@ class AppCubit extends Cubit<AppState> {
         localSavedQuests = quests;
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error fetching local saved quests: $error');
+        // TODO: Handle error if needed
       },
     );
     return localSavedQuests;
@@ -220,8 +214,7 @@ class AppCubit extends Cubit<AppState> {
         emit(state.copyWith(allQuests: quests));
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error accepting quest: $error');
+        // TODO: Handle error if needed
       },
     );
     final updateNftCollection = await getCollectedNFTs();
@@ -237,8 +230,7 @@ class AppCubit extends Cubit<AppState> {
         completeQuestResponse = response;
       },
       onFailure: (error) {
-        // Handle error if needed
-        print('Error completing quest: $error');
+        // TODO: Handle error if needed
       },
     );
     if (completeQuestResponse != null) {

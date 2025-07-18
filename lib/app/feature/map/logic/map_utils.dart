@@ -1,7 +1,5 @@
 import 'package:flutter_osm_plugin/flutter_osm_plugin.dart';
-import 'package:valli_di_comacchio/app/feature/map/domain/quest_static_marker.dart';
 import 'package:valli_di_comacchio/app/feature/map/logic/map_state.dart';
-import 'package:valli_di_comacchio/app/feature/quests_page/domain/quest.dart';
 import 'package:valli_di_comacchio/app/shared/app_state/app_state.dart';
 import 'package:valli_di_comacchio/app/shared/utils/haversine_distance.dart';
 

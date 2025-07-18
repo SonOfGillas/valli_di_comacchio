@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/npc.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class NpcLoadingModal extends StatefulWidget {
   const NpcLoadingModal({super.key, required this.npc});
@@ -44,7 +43,7 @@ class _NpcLoadingModalState extends State<NpcLoadingModal> {
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
             child: Container(
-              color: Colors.black.withOpacity(0.3),
+              color: Colors.black.withValues(alpha: 0.3),
             ),
           ),
         ),

@@ -38,7 +38,7 @@ class NpcLocationDetail extends StatelessWidget {
             ),
           ),
           Container(
-            color: AppColors.palette_secondary.withOpacity(0.2),
+            color: AppColors.palette_secondary.withValues(alpha: 0.2),
           ),
           SingleChildScrollView(
             child: SafeArea(
@@ -287,12 +287,12 @@ class SubLocationOrActivityWidget extends StatelessWidget {
                 color: AppColors.primary_light,
                 borderRadius: BorderRadius.circular(16.0),
                 border: Border.all(
-                  color: AppColors.background_white.withOpacity(0.3),
+                  color: AppColors.background_white.withValues(alpha: 0.3),
                   width: 1,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withValues(alpha: 0.3),
                     blurRadius: 4,
                     offset: const Offset(0, 2),
                   ),

@@ -201,7 +201,7 @@ class MapCubit extends Cubit<MapState> {
       final userPosition = await state.mapController.myLocation();
       emit(state.copyWith(lastRecordedUserPosition: userPosition));
     } catch (e) {
-      print('Error getting user location: $e');
+      // TODO: Handle error if needed
     }
   }
 }

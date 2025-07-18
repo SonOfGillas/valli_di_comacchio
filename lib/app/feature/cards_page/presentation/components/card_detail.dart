@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'dart:math';
 
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
-import 'package:valli_di_comacchio/app/shared/components/boarder_text/labelText.dart/label_text.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_icons.dart';
 
@@ -218,7 +217,7 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                 color: Colors.transparent,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.35),
+                    color: Colors.black.withValues(alpha: 0.35),
                     blurRadius: 28,
                     offset: const Offset(0, 14),
                     spreadRadius: 3,
@@ -274,12 +273,12 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
                                 colors: [
-                                  Colors.white
-                                      .withOpacity(0.3), // Reduced from 0.9
-                                  Colors.white.withOpacity(0.0),
-                                  Colors.white
-                                      .withOpacity(0.3), // Reduced from 0.9
-                                  Colors.white.withOpacity(0.0),
+                                  Colors.white.withValues(
+                                      alpha: 0.3), // Reduced from 0.9
+                                  Colors.white.withValues(alpha: 0.0),
+                                  Colors.white.withValues(
+                                      alpha: 0.3), // Reduced from 0.9
+                                  Colors.white.withValues(alpha: 0.0),
                                 ],
                                 stops: const [0.0, 0.3, 0.6, 1.0],
                               ),
@@ -302,8 +301,10 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                           ),
                           radius: 0.8,
                           colors: [
-                            Colors.white.withOpacity(0.2), // Reduced from 0.4
-                            Colors.white.withOpacity(0.1), // Reduced from 0.2
+                            Colors.white
+                                .withValues(alpha: 0.2), // Reduced from 0.4
+                            Colors.white
+                                .withValues(alpha: 0.1), // Reduced from 0.2
                             Colors.transparent,
                           ],
                           stops: const [0.0, 0.3, 0.7],
@@ -357,7 +358,7 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                           ),
                           colors: [
                             Colors.transparent,
-                            Colors.white.withOpacity(0.3),
+                            Colors.white.withValues(alpha: 0.3),
                             Colors.transparent,
                           ],
                           stops: const [0.3, 0.5, 0.7], // Thinner line
@@ -381,7 +382,8 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                           ),
                           colors: [
                             Colors.transparent,
-                            Colors.white.withOpacity(0.3), // Reduced from 0.6
+                            Colors.white
+                                .withValues(alpha: 0.3), // Reduced from 0.6
                             Colors.transparent,
                           ],
                           stops: const [0.3, 0.5, 0.7], // Thinner line
@@ -405,7 +407,8 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                           ),
                           colors: [
                             Colors.transparent,
-                            Colors.white.withOpacity(0.25), // Reduced from 0.6
+                            Colors.white
+                                .withValues(alpha: 0.25), // Reduced from 0.6
                             Colors.transparent,
                           ],
                           stops: const [0.4, 0.5, 0.6], // Even thinner line
@@ -419,8 +422,8 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Colors.white.withOpacity(
-                                0.4), // Further reduced from 0.6 to 0.4
+                            color: Colors.white.withValues(
+                                alpha: 0.4), // Further reduced from 0.6 to 0.4
                             width: 1.2, // Further reduced from 1.5 to 1.2
                           ),
                           borderRadius: BorderRadius.circular(15),
@@ -434,11 +437,11 @@ class _CardDetailState extends State<CardDetail> with TickerProviderStateMixin {
                               -(_gradientOffsetY - 0.5) * 2,
                             ),
                             colors: [
-                              Colors.white
-                                  .withOpacity(0.3), // Reduced from 0.4 to 0.3
+                              Colors.white.withValues(
+                                  alpha: 0.3), // Reduced from 0.4 to 0.3
                               Colors.transparent,
-                              Colors.white
-                                  .withOpacity(0.3), // Reduced from 0.4 to 0.3
+                              Colors.white.withValues(
+                                  alpha: 0.3), // Reduced from 0.4 to 0.3
                             ],
                           ),
                         ),

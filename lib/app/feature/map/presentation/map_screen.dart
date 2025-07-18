@@ -28,7 +28,7 @@ class MapScreen extends StatelessWidget {
             if (state.npcLocationSelected != null) {
               showDialog(
                 context: context,
-                barrierColor: Colors.black.withOpacity(0.85),
+                barrierColor: Colors.black.withValues(alpha: 0.85),
                 builder: (context) => NpcLocationDetail(
                   npc: state.npcLocationSelected!,
                   onBack: () => Navigator.of(context).pop(),

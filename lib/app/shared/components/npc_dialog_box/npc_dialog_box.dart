@@ -151,7 +151,7 @@ class _NpcDialogueBoxState extends State<NpcDialogueBox>
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
+                            color: Colors.black.withValues(alpha: 0.5),
                             offset: const Offset(4, 4),
                             blurRadius: 4,
                           ),

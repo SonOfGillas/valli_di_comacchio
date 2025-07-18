@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/logic/card_state.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class PackWidget extends StatefulWidget {
   const PackWidget({
-    Key? key,
+    super.key,
     required this.state,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final CardState state;
   final VoidCallback onTap;
@@ -84,7 +83,7 @@ class _PackWidgetState extends State<PackWidget>
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     blurRadius: 15,
                     spreadRadius: 2,
                     offset: const Offset(0, 5),

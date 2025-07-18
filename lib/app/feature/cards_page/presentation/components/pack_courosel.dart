@@ -10,19 +10,16 @@ import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class PackCarousel extends StatefulWidget {
   final Function(CardPack) onPackSelected;
+  final List<CardPack> packs;
 
   PackCarousel({
     super.key,
     int packCount = packetCarouselSize,
     required this.onPackSelected,
-  }) {
-    packs = List.generate(
-      packCount,
-      (index) => getRandomPacket(),
-    );
-  }
-
-  late List<CardPack> packs;
+  }) : packs = List.generate(
+          packCount,
+          (index) => getRandomPacket(),
+        );
 
   @override
   State<PackCarousel> createState() => _PackCarouselState();
@@ -35,9 +32,6 @@ class _PackCarouselState extends State<PackCarousel>
 
   // Current rotation angle in radians
   double _rotationAngle = 0.0;
-
-  // Selected pack index
-  int _selectedPackIndex = 0;
 
   // Touch start position for calculating drag direction
   double? _startDragX;
@@ -108,8 +102,6 @@ class _PackCarouselState extends State<PackCarousel>
 
     setState(() {
       _rotationAngle += adjustedDiff;
-      _selectedPackIndex =
-          (widget.packs.length - nearestIndex) % widget.packs.length;
     });
   }
 
@@ -217,7 +209,8 @@ class _PackCarouselState extends State<PackCarousel>
                                 boxShadow: [
                                   if (isFrontmost)
                                     BoxShadow(
-                                      color: Colors.yellow.withOpacity(0.6),
+                                      color:
+                                          Colors.yellow.withValues(alpha: 0.6),
                                       blurRadius: 25,
                                       spreadRadius: 5,
                                     )

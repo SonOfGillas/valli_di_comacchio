@@ -11,7 +11,6 @@ import 'package:valli_di_comacchio/app/shared/components/appButton/glowing_butto
 import 'package:valli_di_comacchio/app/shared/components/boarder_text/h3/h3.dart';
 import 'package:valli_di_comacchio/app/shared/domain/entities/offer_type.dart';
 import 'package:valli_di_comacchio/app/shared/style/app_colors.dart';
-import 'package:valli_di_comacchio/app/shared/style/app_images.dart';
 
 class SelectOfferTypeStep extends StatelessWidget {
   const SelectOfferTypeStep({

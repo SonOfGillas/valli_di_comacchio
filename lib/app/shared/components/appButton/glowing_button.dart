@@ -87,22 +87,27 @@ class GlowingButtonState extends State<GlowingButton>
                       ? []
                       : [
                           BoxShadow(
-                            color: widget.color1.withOpacity(0.6),
-                            spreadRadius: 20 * (_pulse.value - 1) + 4 * (_pulse.value - 1) * 10,
-                            blurRadius: 32 * (_pulse.value - 1) + 24 * (_pulse.value - 1) * 10,
+                            color: widget.color1.withValues(alpha: 0.6),
+                            spreadRadius: 20 * (_pulse.value - 1) +
+                                4 * (_pulse.value - 1) * 10,
+                            blurRadius: 32 * (_pulse.value - 1) +
+                                24 * (_pulse.value - 1) * 10,
                             offset: const Offset(-8, 0),
                           ),
                           BoxShadow(
-                            color: widget.color2.withOpacity(0.6),
-                            spreadRadius: 20 * (_pulse.value - 1) + 4 * (_pulse.value - 1) * 10,
-                            blurRadius: 32 * (_pulse.value - 1) + 24 * (_pulse.value - 1) * 10,
+                            color: widget.color2.withValues(alpha: 0.6),
+                            spreadRadius: 20 * (_pulse.value - 1) +
+                                4 * (_pulse.value - 1) * 10,
+                            blurRadius: 32 * (_pulse.value - 1) +
+                                24 * (_pulse.value - 1) * 10,
                             offset: const Offset(8, 0),
                           ),
                         ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: widget.expanded ? MainAxisSize.max : MainAxisSize.min,
+                  mainAxisSize:
+                      widget.expanded ? MainAxisSize.max : MainAxisSize.min,
                   children: [
                     if (widget.icon != null)
                       Icon(

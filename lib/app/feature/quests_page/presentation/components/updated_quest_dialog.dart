@@ -42,7 +42,7 @@ class UpdatedQuestDialog extends StatelessWidget {
                   size: 32,
                 ),
                 style: IconButton.styleFrom(
-                  backgroundColor: Colors.black.withOpacity(0.5),
+                  backgroundColor: Colors.black.withValues(alpha: 0.5),
                   shape: CircleBorder(),
                 ),
               ),

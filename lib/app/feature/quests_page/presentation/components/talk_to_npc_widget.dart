@@ -59,7 +59,7 @@ class TalkToNpcQuestWidget extends StatelessWidget {
                 // Header row
                 TableRow(
                   decoration: BoxDecoration(
-                    color: AppColors.palette_primary.withOpacity(0.1),
+                    color: AppColors.palette_primary.withValues(alpha: 0.1),
                     borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(8),
                       topRight: Radius.circular(8),

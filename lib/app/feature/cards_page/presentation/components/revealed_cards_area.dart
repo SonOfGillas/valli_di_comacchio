@@ -92,7 +92,7 @@ class _RevealedCardsAreaState extends State<RevealedCardsArea>
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.4),
+                            color: Colors.black.withValues(alpha: 0.4),
                             blurRadius: 5,
                             offset: const Offset(0, 2),
                           )
