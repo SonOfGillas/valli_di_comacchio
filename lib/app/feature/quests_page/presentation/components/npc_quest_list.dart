@@ -11,7 +11,12 @@ class NpcQuestList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<QuestsCubit, QuestsState>(
+    return BlocConsumer<QuestsCubit, QuestsState>(
+      listener: (context, state) {
+        if (state.selectedNpc == null) {
+          context.read<QuestsCubit>().changeTab(1);
+        }
+      },
       builder: (context, state) {
         final npcQuests = context.read<QuestsCubit>().npcQuests;
         return SingleChildScrollView(
@@ -20,11 +25,13 @@ class NpcQuestList extends StatelessWidget {
             children: [
               Stack(
                 children: [
-                  NpcDisplayHeader(
-                    npc: state.selectedNpc!,
-                    npcMessage: 'Completa una missione per guardagnare monete!',
-                    showBalance: false,
-                  ),
+                  if (state.selectedNpc != null)
+                    NpcDisplayHeader(
+                      npc: state.selectedNpc!,
+                      npcMessage:
+                          'Completa una missione per guardagnare monete!',
+                      showBalance: false,
+                    ),
                   Positioned(
                     top: 16,
                     right: 16,
