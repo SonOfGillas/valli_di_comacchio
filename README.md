@@ -26,8 +26,13 @@ flutter build apk --debug
   guest user have a random generated account to safely access the database
 
 2) Clode firestore
-there are two collection one for the User and one For the Npc
-the detail of the structure of the collections can be see in the user.dart and npc.dart
+there are 4 collection:
+users -> data and user card collection
+npcs -> npc data, one for the npc data and the location detail data
+event -> event list
+walks -> walks and cycling path, all the information are in the walks foulder
+
+the detail of the structure of the collections can be see in the user.dart, npc.dart, walk.dart, event.dart
 
 ## WIKI About Birds on the Valli di comacchio
 https://www.salinadicomacchio.it/la-salina/fauna/avifauna/
