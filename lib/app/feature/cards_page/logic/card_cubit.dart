@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/card_pack.dart';
 import 'package:valli_di_comacchio/app/feature/cards_page/domain/cards.dart';
@@ -36,6 +37,101 @@ class CardCubit extends Cubit<CardState> {
   }
 
   Future<void> cardRevealed(CollectibleCard card) async {}
+
+  // Initialize pack opening
+  void startPackOpening(CardPack pack) {
+    emit(state.copyWith(
+      currentPack: pack,
+      packOpeningStage: PackOpeningStage.initial,
+      remainingCards: List.from(pack.cards),
+      revealedCards: [],
+      currentRevealedCard: null,
+      isRevealingCard: false,
+    ));
+  }
+
+  // Start revealing cards from the pack
+  void startRevealingCards() {
+    if (state.packOpeningStage != PackOpeningStage.initial) return;
+
+    emit(state.copyWith(packOpeningStage: PackOpeningStage.openingCards));
+    revealNextCard();
+  }
+
+  // Reveal the next card
+  void revealNextCard() {
+    if (state.packOpeningStage != PackOpeningStage.openingCards) return;
+    if (state.isRevealingCard) return;
+    if (state.remainingCards.isEmpty) return;
+
+    // Pick a random card from the remaining cards
+    final random = Random();
+    final index = random.nextInt(state.remainingCards.length);
+    final card = state.remainingCards[index];
+
+    // Remove the card from remaining cards
+    final updatedRemainingCards =
+        List<CollectibleCard>.from(state.remainingCards);
+    updatedRemainingCards.removeAt(index);
+
+    emit(state.copyWith(
+      isRevealingCard: true,
+      currentRevealedCard: card,
+      remainingCards: updatedRemainingCards,
+    ));
+
+    // Add the card to the user's collection
+    cardRevealed(card);
+  }
+
+  // Complete the card reveal animation
+  void completeCardReveal() {
+    if (!state.isRevealingCard || state.currentRevealedCard == null) return;
+
+    final updatedRevealedCards =
+        List<CollectibleCard>.from(state.revealedCards);
+    updatedRevealedCards.add(state.currentRevealedCard!);
+
+    final isLastCard = state.remainingCards.isEmpty;
+
+    emit(state.copyWith(
+      revealedCards: updatedRevealedCards,
+      currentRevealedCard: null,
+      isRevealingCard: false,
+      packOpeningStage: isLastCard
+          ? PackOpeningStage.completed
+          : PackOpeningStage.openingCards,
+    ));
+  }
+
+  // Skip card reveal animation
+  void skipCardRevealAnimation() {
+    if (!state.isRevealingCard || state.currentRevealedCard == null) return;
+    completeCardReveal();
+  }
+
+  // Inspect a card
+  void inspectCard(CollectibleCard card) {
+    emit(state.copyWith(selectedCardForInspection: card));
+  }
+
+  // Close card inspection
+  void closeCardInspection() {
+    emit(state.copyWith(selectedCardForInspection: null));
+  }
+
+  // Reset pack opening state
+  void resetPackOpening() {
+    emit(state.copyWith(
+      currentPack: null,
+      packOpeningStage: PackOpeningStage.initial,
+      remainingCards: [],
+      revealedCards: [],
+      currentRevealedCard: null,
+      isRevealingCard: false,
+      selectedCardForInspection: null,
+    ));
+  }
 
   Future<void> openAPack(CardPack pack) async {
     if (currentUser != null) {
