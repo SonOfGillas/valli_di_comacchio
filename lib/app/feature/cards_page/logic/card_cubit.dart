@@ -133,6 +133,26 @@ class CardCubit extends Cubit<CardState> {
     ));
   }
 
+  // Navigation methods
+  void showPackCarousel() {
+    emit(state.copyWith(currentView: CardPageView.packCarousel));
+  }
+
+  void showMainCollection() {
+    emit(state.copyWith(
+      currentView: CardPageView.collection,
+      selectedPack: null,
+    ));
+  }
+
+  void showPackOpening(CardPack pack) {
+    emit(state.copyWith(
+      currentView: CardPageView.packOpening,
+      selectedPack: pack,
+    ));
+    startPackOpening(pack);
+  }
+
   Future<void> openAPack(CardPack pack) async {
     if (currentUser != null) {
       final Set<CollectibleCard> newCollection = {};

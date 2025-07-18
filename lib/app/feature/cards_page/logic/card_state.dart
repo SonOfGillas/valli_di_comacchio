@@ -8,6 +8,12 @@ enum PackOpeningStage {
   completed, // All cards revealed
 }
 
+enum CardPageView {
+  collection, // Main collection view
+  packCarousel, // Pack selection screen
+  packOpening, // Pack opening screen
+}
+
 class CardState extends Equatable {
   const CardState({
     this.userCards = const {},
@@ -19,6 +25,8 @@ class CardState extends Equatable {
     this.currentRevealedCard,
     this.isRevealingCard = false,
     this.selectedCardForInspection,
+    this.currentView = CardPageView.collection,
+    this.selectedPack,
   });
 
   final Set<CollectibleCard> userCards;
@@ -30,6 +38,8 @@ class CardState extends Equatable {
   final CollectibleCard? currentRevealedCard;
   final bool isRevealingCard;
   final CollectibleCard? selectedCardForInspection;
+  final CardPageView currentView;
+  final CardPack? selectedPack;
 
   CardState copyWith({
     Set<CollectibleCard>? userCards,
@@ -41,6 +51,8 @@ class CardState extends Equatable {
     CollectibleCard? currentRevealedCard,
     bool? isRevealingCard,
     CollectibleCard? selectedCardForInspection,
+    CardPageView? currentView,
+    CardPack? selectedPack,
   }) {
     return CardState(
       userCards: userCards ?? this.userCards,
@@ -53,6 +65,8 @@ class CardState extends Equatable {
       currentRevealedCard: currentRevealedCard,
       isRevealingCard: isRevealingCard ?? this.isRevealingCard,
       selectedCardForInspection: selectedCardForInspection,
+      currentView: currentView ?? this.currentView,
+      selectedPack: selectedPack ?? this.selectedPack,
     );
   }
 
@@ -67,5 +81,7 @@ class CardState extends Equatable {
         currentRevealedCard,
         isRevealingCard,
         selectedCardForInspection,
+        currentView,
+        selectedPack,
       ];
 }
